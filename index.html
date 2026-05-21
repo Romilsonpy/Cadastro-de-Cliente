@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Stúdio Emily Lash Designer | Agendamento + Manutenção</title>
+    <title>Stúdio Emily Lash Designer | Login</title>
     <style>
         * {
             margin: 0;
@@ -15,15 +15,136 @@
         body {
             background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
             min-height: 100vh;
-            padding: 2rem 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 2rem;
         }
 
-        /* Container principal */
-        .app-container {
+        /* Tela de Login */
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: #0b0b0b;
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 2px #f5b700, 0 0 0 6px #1e1e1e;
+            overflow: hidden;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            background: radial-gradient(circle at 20% 30%, #f5b700, #e09d00);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-size: 2.2rem;
+            color: #0f0f0f;
+            font-weight: 800;
+        }
+
+        .login-header h1 span {
+            background: black;
+            color: #f5b700;
+            padding: 0 0.5rem;
+            border-radius: 40px;
+            display: inline-block;
+        }
+
+        .login-header p {
+            color: #1e1e1e;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .login-form {
+            padding: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: #ffdd88;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            background: #1f1f1f;
+            border: 1.5px solid #333;
+            border-radius: 1rem;
+            font-size: 1rem;
+            color: #f0f0f0;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #f5b700;
+            box-shadow: 0 0 0 3px rgba(245, 183, 0, 0.3);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: #f5b700;
+            color: #000;
+            font-weight: 800;
+            font-size: 1.2rem;
+            padding: 1rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+            box-shadow: 0 5px 0 #b47c00;
+        }
+
+        .btn-login:hover {
+            background: #ffcd42;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #b47c00;
+        }
+
+        .btn-login:active {
+            transform: translateY(2px);
+        }
+
+        .error-msg {
+            background: #3a1a1a;
+            color: #ffaa88;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-left: 4px solid #ff6600;
+            font-size: 0.9rem;
+        }
+
+        /* Conteúdo principal (protegido) - estilo já desenvolvido */
+        .main-content {
+            display: none;
+            width: 100%;
             max-width: 1400px;
+        }
+
+        .app-container {
             width: 100%;
             background: #000000dd;
             backdrop-filter: blur(2px);
@@ -32,7 +153,6 @@
             overflow: hidden;
         }
 
-        /* Cabeçalho */
         .hero {
             background: radial-gradient(circle at 20% 30%, #f5b700, #e09d00);
             padding: 1.5rem 2rem;
@@ -67,7 +187,31 @@
             margin-top: 0.5rem;
         }
 
-        /* Abas */
+        .logout-bar {
+            display: flex;
+            justify-content: flex-end;
+            background: #0a0a0a;
+            padding: 0.6rem 2rem;
+            border-bottom: 1px solid #f5b70033;
+        }
+
+        .btn-logout {
+            background: #2c2c2c;
+            border: 1px solid #f5b700;
+            color: #f5b700;
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-logout:hover {
+            background: #f5b700;
+            color: #000;
+        }
+
         .tabs {
             display: flex;
             background: #0a0a0a;
@@ -86,7 +230,6 @@
             cursor: pointer;
             transition: 0.2s;
             border-radius: 1rem 1rem 0 0;
-            position: relative;
         }
 
         .tab-btn:hover {
@@ -100,7 +243,6 @@
             border-bottom: 3px solid #f5b700;
         }
 
-        /* Conteúdo das abas */
         .tab-content {
             display: none;
             padding: 2rem;
@@ -117,7 +259,6 @@
             to { opacity: 1; transform: translateY(0);}
         }
 
-        /* Layout do agendamento (igual ao anterior) */
         .dashboard {
             display: flex;
             flex-wrap: wrap;
@@ -345,7 +486,6 @@
             color: #000;
         }
 
-        /* Estilos da aba manutenção */
         .manutencao-container {
             display: flex;
             flex-wrap: wrap;
@@ -361,7 +501,6 @@
             flex: 1;
             min-width: 260px;
             text-align: center;
-            transition: 0.2s;
         }
 
         .card-manutencao h3 {
@@ -387,7 +526,6 @@
             font-size: 1rem;
             transition: 0.2s;
             margin: 0.3rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         .btn-manutencao:hover {
@@ -439,119 +577,211 @@
     </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="hero">
-        <h1>👁️ Stúdio <span>Emily Lash Designer</span></h1>
-        <p>✨ Agendamento profissional • Backup seguro ✨</p>
+
+<!-- TELA DE LOGIN -->
+<div id="loginScreen" class="login-container">
+    <div class="login-header">
+        <h1>👁️ Stúdio <span>Emily</span></h1>
+        <p>Lash Designer • Área Restrita</p>
     </div>
-
-    <!-- Sistema de Abas -->
-    <div class="tabs">
-        <button class="tab-btn active" data-tab="agenda">📅 Agendamentos</button>
-        <button class="tab-btn" data-tab="manutencao">⚙️ Manutenção • Backup</button>
+    <div class="login-form">
+        <div id="loginError" class="error-msg" style="display: none;">❌ Usuário ou senha incorretos. Tente novamente.</div>
+        <div class="input-group">
+            <label>👤 Usuário</label>
+            <input type="text" id="loginUser" placeholder="Digite seu usuário" autocomplete="off">
+        </div>
+        <div class="input-group">
+            <label>🔒 Senha</label>
+            <input type="password" id="loginPass" placeholder="Digite sua senha">
+        </div>
+        <button id="btnLogin" class="btn-login">🔓 ENTRAR</button>
     </div>
+</div>
 
-    <!-- ABA AGENDAMENTOS -->
-    <div id="tab-agenda" class="tab-content active">
-        <div class="dashboard">
-            <!-- Formulário -->
-            <div class="form-section">
-                <h2>✍️ Novo Agendamento</h2>
-                <form id="formAgendamento">
-                    <div class="form-group">
-                        <label>👤 Nome completo *</label>
-                        <input type="text" id="nome" placeholder="Ex: Emily Souza" required>
-                    </div>
-                    <div class="form-group">
-                        <label>📱 WhatsApp / Telefone *</label>
-                        <input type="tel" id="telefone" placeholder="(99) 99999-9999" required>
-                    </div>
-                    <div class="form-group">
-                        <label>📅 Data *</label>
-                        <input type="date" id="data" required>
-                    </div>
-                    <div class="form-group">
-                        <label>⏰ Horário *</label>
-                        <select id="horario" required>
-                            <option value="">Selecione um horário</option>
-                            <option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option>
-                            <option>11:00</option><option>11:30</option><option>12:00</option><option>13:00</option>
-                            <option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option>
-                            <option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option>
-                            <option>17:30</option><option>18:00</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>💅 Tipo de Serviço *</label>
-                        <select id="servico" required>
-                            <option value="">Escolha o serviço</option>
-                            <option>Volume Brasileiro</option><option>Volume Egípcio</option>
-                            <option>Fio a Fio Clássico</option><option>Lash Lifting + Tintura</option>
-                            <option>Manutenção de Cílios</option><option>Remoção Profissional</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>📝 Observações</label>
-                        <textarea id="obs" placeholder="Alguma alergia, preferência ou recado..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-agendar">💛 AGENDAR HORÁRIO 💛</button>
-                </form>
-            </div>
+<!-- CONTEÚDO PRINCIPAL (PROTEGIDO) -->
+<div id="mainApp" class="main-content">
+    <div class="app-container">
+        <div class="hero">
+            <h1>👁️ Stúdio <span>Emily Lash Designer</span></h1>
+            <p>✨ Agendamento profissional • Backup seguro ✨</p>
+        </div>
+        <div class="logout-bar">
+            <button id="logoutBtn" class="btn-logout">🚪 Sair</button>
+        </div>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="agenda">📅 Agendamentos</button>
+            <button class="tab-btn" data-tab="manutencao">⚙️ Manutenção • Backup</button>
+        </div>
 
-            <!-- Listagem -->
-            <div class="list-section">
-                <div class="list-header">
-                    <h2>📋 Próximos Atendimentos</h2>
-                    <div class="badge-count" id="contadorAgendamentos">0 agendamentos</div>
+        <!-- ABA AGENDAMENTOS -->
+        <div id="tab-agenda" class="tab-content active">
+            <div class="dashboard">
+                <div class="form-section">
+                    <h2>✍️ Novo Agendamento</h2>
+                    <form id="formAgendamento">
+                        <div class="form-group">
+                            <label>👤 Nome completo *</label>
+                            <input type="text" id="nome" placeholder="Ex: Emily Souza" required>
+                        </div>
+                        <div class="form-group">
+                            <label>📱 WhatsApp / Telefone *</label>
+                            <input type="tel" id="telefone" placeholder="(99) 99999-9999" required>
+                        </div>
+                        <div class="form-group">
+                            <label>📅 Data *</label>
+                            <input type="date" id="data" required>
+                        </div>
+                        <div class="form-group">
+                            <label>⏰ Horário *</label>
+                            <select id="horario" required>
+                                <option value="">Selecione um horário</option>
+                                <option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option>
+                                <option>11:00</option><option>11:30</option><option>12:00</option><option>13:00</option>
+                                <option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option>
+                                <option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option>
+                                <option>17:30</option><option>18:00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>💅 Tipo de Serviço *</label>
+                            <select id="servico" required>
+                                <option value="">Escolha o serviço</option>
+                                <option>Volume Brasileiro</option><option>Volume Egípcio</option>
+                                <option>Fio a Fio Clássico</option><option>Lash Lifting + Tintura</option>
+                                <option>Manutenção de Cílios</option><option>Remoção Profissional</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Observações</label>
+                            <textarea id="obs" placeholder="Alguma alergia, preferência ou recado..."></textarea>
+                        </div>
+                        <button type="submit" class="btn-agendar">💛 AGENDAR HORÁRIO 💛</button>
+                    </form>
                 </div>
-                <div class="filtro">
-                    <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome, serviço ou telefone...">
-                    <button id="btnLimparFiltro" class="btn-limpar">Limpar filtro</button>
-                </div>
-                <div id="listaCards" class="cards-container">
-                    <div class="sem-agendamentos">✨ Carregando agendamentos... ✨</div>
+                <div class="list-section">
+                    <div class="list-header">
+                        <h2>📋 Próximos Atendimentos</h2>
+                        <div class="badge-count" id="contadorAgendamentos">0 agendamentos</div>
+                    </div>
+                    <div class="filtro">
+                        <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome, serviço ou telefone...">
+                        <button id="btnLimparFiltro" class="btn-limpar">Limpar filtro</button>
+                    </div>
+                    <div id="listaCards" class="cards-container">
+                        <div class="sem-agendamentos">✨ Carregando... ✨</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- ABA MANUTENÇÃO / BACKUP -->
-    <div id="tab-manutencao" class="tab-content">
-        <div class="manutencao-container">
-            <div class="card-manutencao">
-                <h3>💾 Backup</h3>
-                <p>Exportar todos os agendamentos atuais em um arquivo JSON.<br>Ideal para guardar uma cópia segura.</p>
-                <button id="btnFazerBackup" class="btn-manutencao">📀 Baixar Backup (JSON)</button>
-                <div class="info-backup">✔️ Os dados são salvos localmente no seu navegador. O backup exporta todos os agendamentos.</div>
-            </div>
-            <div class="card-manutencao">
-                <h3>🔄 Restaurar Backup</h3>
-                <p>Importe um arquivo JSON previamente exportado.<br>Substitui TODOS os agendamentos atuais.</p>
-                <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
-                <button id="btnSelecionarRestore" class="btn-manutencao">📂 Selecionar arquivo</button>
-                <button id="btnRestaurar" class="btn-manutencao btn-perigo" style="margin-top: 10px;">⚠️ RESTAURAR BACKUP</button>
-                <div class="info-backup" id="infoRestoreMsg">Nenhum arquivo selecionado.</div>
-            </div>
-            <div class="card-manutencao">
-                <h3>🧹 Limpeza Total</h3>
-                <p>Remove TODOS os agendamentos permanentemente.<br>Use com cuidado!</p>
-                <button id="btnLimparTudo" class="btn-manutencao btn-perigo">🗑️ Apagar todos os dados</button>
-                <div class="info-backup">Essa ação não pode ser desfeita. Faça backup antes.</div>
+        <!-- ABA MANUTENÇÃO -->
+        <div id="tab-manutencao" class="tab-content">
+            <div class="manutencao-container">
+                <div class="card-manutencao">
+                    <h3>💾 Backup</h3>
+                    <p>Exportar todos os agendamentos atuais em um arquivo JSON.<br>Ideal para guardar uma cópia segura.</p>
+                    <button id="btnFazerBackup" class="btn-manutencao">📀 Baixar Backup (JSON)</button>
+                    <div class="info-backup">✔️ Os dados são salvos localmente no seu navegador.</div>
+                </div>
+                <div class="card-manutencao">
+                    <h3>🔄 Restaurar Backup</h3>
+                    <p>Importe um arquivo JSON previamente exportado.<br>Substitui TODOS os agendamentos atuais.</p>
+                    <input type="file" id="restoreFileInput" accept=".json" style="display: none;">
+                    <button id="btnSelecionarRestore" class="btn-manutencao">📂 Selecionar arquivo</button>
+                    <button id="btnRestaurar" class="btn-manutencao btn-perigo" style="margin-top: 10px;">⚠️ RESTAURAR BACKUP</button>
+                    <div class="info-backup" id="infoRestoreMsg">Nenhum arquivo selecionado.</div>
+                </div>
+                <div class="card-manutencao">
+                    <h3>🧹 Limpeza Total</h3>
+                    <p>Remove TODOS os agendamentos permanentemente.<br>Use com cuidado!</p>
+                    <button id="btnLimparTudo" class="btn-manutencao btn-perigo">🗑️ Apagar todos os dados</button>
+                    <div class="info-backup">Essa ação não pode ser desfeita. Faça backup antes.</div>
+                </div>
             </div>
         </div>
+        <footer>
+            💛 Stúdio Emily Lash Designer • Beleza que transforma olhares • Agendamentos com responsabilidade + Backup seguro 💛
+        </footer>
     </div>
-
-    <footer>
-        💛 Stúdio Emily Lash Designer • Beleza que transforma olhares • Agendamentos com responsabilidade + Backup seguro 💛
-    </footer>
 </div>
 
 <script>
-    // ---------- CONFIGURAÇÕES GLOBAIS ----------
+    // CREDENCIAIS
+    const VALID_USER = "emily";
+    const VALID_PASS = "emily";
+
+    // Controle de sessão (simples)
+    function isAuthenticated() {
+        return sessionStorage.getItem("studioAuth") === "true";
+    }
+
+    function setAuthenticated(value) {
+        if (value) sessionStorage.setItem("studioAuth", "true");
+        else sessionStorage.removeItem("studioAuth");
+    }
+
+    const loginScreen = document.getElementById("loginScreen");
+    const mainApp = document.getElementById("mainApp");
+    const loginUser = document.getElementById("loginUser");
+    const loginPass = document.getElementById("loginPass");
+    const btnLogin = document.getElementById("btnLogin");
+    const loginError = document.getElementById("loginError");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    function showLogin() {
+        loginScreen.style.display = "block";
+        mainApp.style.display = "none";
+        if (loginUser) loginUser.value = "";
+        if (loginPass) loginPass.value = "";
+    }
+
+    function showApp() {
+        loginScreen.style.display = "none";
+        mainApp.style.display = "block";
+        // Inicializar os dados do app após mostrar (já carrega)
+        if (typeof carregarAgendamentosApp === "function") {
+            carregarAgendamentosApp();
+        }
+    }
+
+    function doLogin() {
+        const user = loginUser.value.trim();
+        const pass = loginPass.value.trim();
+        if (user === VALID_USER && pass === VALID_PASS) {
+            setAuthenticated(true);
+            loginError.style.display = "none";
+            showApp();
+            // Forçar carregamento após login
+            if (typeof inicializarApp === "function") inicializarApp();
+        } else {
+            loginError.style.display = "block";
+            loginUser.value = "";
+            loginPass.value = "";
+            loginUser.focus();
+        }
+    }
+
+    function doLogout() {
+        setAuthenticated(false);
+        showLogin();
+    }
+
+    // Verificar ao carregar página
+    if (isAuthenticated()) {
+        showApp();
+    } else {
+        showLogin();
+    }
+
+    btnLogin.addEventListener("click", doLogin);
+    if (logoutBtn) logoutBtn.addEventListener("click", doLogout);
+    loginUser.addEventListener("keypress", (e) => { if(e.key === "Enter") doLogin(); });
+    loginPass.addEventListener("keypress", (e) => { if(e.key === "Enter") doLogin(); });
+
+    // ---------- TODAS AS FUNÇÕES DO APP (Agendamento/Backup) ----------
     const STORAGE_KEY = "studio_emily_agendamentos";
     let agendamentos = [];
 
-    // Elementos da aba agendamento
     const form = document.getElementById("formAgendamento");
     const nomeInput = document.getElementById("nome");
     const telefoneInput = document.getElementById("telefone");
@@ -563,8 +793,6 @@
     const contadorSpan = document.getElementById("contadorAgendamentos");
     const filtroInput = document.getElementById("filtroNome");
     const btnLimparFiltro = document.getElementById("btnLimparFiltro");
-
-    // Elementos da aba manutenção
     const btnBackup = document.getElementById("btnFazerBackup");
     const btnSelecionarRestore = document.getElementById("btnSelecionarRestore");
     const btnRestaurar = document.getElementById("btnRestaurar");
@@ -575,12 +803,11 @@
 
     // Abas
     const tabBtns = document.querySelectorAll(".tab-btn");
-    const tabContents = {
+    const tabContentsApp = {
         agenda: document.getElementById("tab-agenda"),
         manutencao: document.getElementById("tab-manutencao")
     };
 
-    // Utilitários
     function formatarDataLegivel(dataStr) {
         if (!dataStr) return "Data inválida";
         const partes = dataStr.split("-");
@@ -609,17 +836,14 @@
         });
     }
 
-    // Carregar dados iniciais
-    function carregarAgendamentos() {
+    function carregarAgendamentosApp() {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
             try {
                 agendamentos = JSON.parse(stored);
                 if (!Array.isArray(agendamentos)) agendamentos = [];
-                agendamentos = agendamentos.filter(ag => ag && ag.id).map(ag => ({ ...ag }));
             } catch(e) { agendamentos = []; }
-        } 
-        // Se não tiver dados ou estiver vazio, colocar exemplos apenas se vazio
+        }
         if (!agendamentos.length) {
             const hoje = new Date();
             const amanha = new Date(hoje);
@@ -627,7 +851,7 @@
             const dataHojeStr = hoje.toISOString().slice(0,10);
             const dataAmanhaStr = amanha.toISOString().slice(0,10);
             agendamentos = [
-                { id: 1001, nome: "Fernanda Lima", telefone: "(11) 98765-4321", data: dataHojeStr, horario: "14:00", servico: "Volume Brasileiro", obs: "Primeira vez, quer volume mega efeito" },
+                { id: 1001, nome: "Fernanda Lima", telefone: "(11) 98765-4321", data: dataHojeStr, horario: "14:00", servico: "Volume Brasileiro", obs: "Primeira vez" },
                 { id: 1002, nome: "Carolina Mendes", telefone: "(21) 99888-7766", data: dataAmanhaStr, horario: "10:30", servico: "Lash Lifting + Tintura", obs: "Cílios sensíveis" },
                 { id: 1003, nome: "Rafaela Dias", telefone: "(31) 97777-5555", data: dataHojeStr, horario: "16:00", servico: "Fio a Fio Clássico", obs: "Natural" }
             ];
@@ -653,26 +877,20 @@
         else contadorSpan.innerText = `${filtradosCount} de ${total} (filtrado)`;
 
         if (listaFiltrada.length === 0) {
-            listaContainer.innerHTML = `<div class="sem-agendamentos">🕊️ Nenhum agendamento encontrado. Agende agora! 🕊️</div>`;
+            listaContainer.innerHTML = `<div class="sem-agendamentos">🕊️ Nenhum agendamento encontrado.</div>`;
             return;
         }
         let html = "";
         for (let ag of listaFiltrada) {
-            const dataLegivel = formatarDataLegivel(ag.data);
             html += `
                 <div class="card">
                     <div class="card-header">
                         <div class="nome-cliente">👁️ ${escapeHtml(ag.nome)}</div>
-                        <div class="data-hora">📅 ${dataLegivel} • ⏰ ${ag.horario}</div>
+                        <div class="data-hora">📅 ${formatarDataLegivel(ag.data)} • ⏰ ${ag.horario}</div>
                     </div>
-                    <div class="servico">
-                        <span>💎 ${escapeHtml(ag.servico)}</span>
-                        <span>📞 ${escapeHtml(ag.telefone)}</span>
-                    </div>
+                    <div class="servico"><span>💎 ${escapeHtml(ag.servico)}</span><span>📞 ${escapeHtml(ag.telefone)}</span></div>
                     <div class="observacao">📌 ${escapeHtml(ag.obs || "Sem observações")}</div>
-                    <div style="display: flex; justify-content: flex-end;">
-                        <button class="btn-remover" data-id="${ag.id}">❌ Cancelar</button>
-                    </div>
+                    <div style="display: flex; justify-content: flex-end;"><button class="btn-remover" data-id="${ag.id}">❌ Cancelar</button></div>
                 </div>
             `;
         }
@@ -680,7 +898,7 @@
         document.querySelectorAll('.btn-remover').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = Number(btn.getAttribute('data-id'));
-                if (confirm("Remover este agendamento?")) {
+                if (confirm("Remover?")) {
                     agendamentos = agendamentos.filter(ag => ag.id !== id);
                     ordenarAgendamentos();
                     salvarAgendamentos();
@@ -698,144 +916,118 @@
         const horario = horarioSelect.value;
         const servico = servicoSelect.value;
         const obs = obsTextarea.value.trim();
-        if (!nome || !telefone || !data || !horario || !servico) {
-            alert("❌ Preencha todos os campos obrigatórios.");
-            return;
-        }
-        const hoje = new Date();
-        hoje.setHours(0,0,0,0);
-        if (new Date(data) < hoje) {
-            alert("⚠️ Não agende em datas passadas.");
-            return;
-        }
-        if (agendamentos.some(ag => ag.data === data && ag.horario === horario)) {
-            alert(`❗ Horário conflitante: ${formatarDataLegivel(data)} às ${horario} já ocupado.`);
-            return;
-        }
+        if (!nome || !telefone || !data || !horario || !servico) return alert("Preencha todos os campos.");
+        const hoje = new Date(); hoje.setHours(0,0,0,0);
+        if (new Date(data) < hoje) return alert("Data inválida (passado).");
+        if (agendamentos.some(ag => ag.data === data && ag.horario === horario)) return alert("Horário já ocupado.");
         const novoId = Date.now() + Math.floor(Math.random() * 10000);
-        const novo = { id: novoId, nome, telefone, data, horario, servico, obs: obs || "Sem observações" };
-        agendamentos.push(novo);
+        agendamentos.push({ id: novoId, nome, telefone, data, horario, servico, obs: obs || "Sem observações" });
         ordenarAgendamentos();
         salvarAgendamentos();
         renderizarAgendamentos();
         form.reset();
         nomeInput.focus();
-        alert("✅ Agendamento realizado!");
+        alert("✅ Agendado!");
     }
 
-    // BACKUP: exportar JSON
     function fazerBackup() {
         const dataStr = JSON.stringify(agendamentos, null, 2);
         const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
-        const dataAtual = new Date().toISOString().slice(0,19).replace(/:/g, "-");
-        a.download = `studio_emily_backup_${dataAtual}.json`;
+        a.download = `studio_emily_backup_${new Date().toISOString().slice(0,19).replace(/:/g, "-")}.json`;
         a.href = url;
         a.click();
         URL.revokeObjectURL(url);
-        alert("✅ Backup gerado com sucesso!");
+        alert("Backup gerado!");
     }
 
-    // Restaurar - selecionar arquivo
     btnSelecionarRestore.addEventListener("click", () => restoreFileInput.click());
     restoreFileInput.addEventListener("change", (e) => {
-        if (restoreFileInput.files.length > 0) {
+        if (restoreFileInput.files.length) {
             arquivoSelecionado = restoreFileInput.files[0];
-            infoRestoreMsg.innerText = `📁 Arquivo selecionado: ${arquivoSelecionado.name}`;
-        } else {
-            arquivoSelecionado = null;
-            infoRestoreMsg.innerText = "Nenhum arquivo selecionado.";
-        }
+            infoRestoreMsg.innerText = `📁 ${arquivoSelecionado.name}`;
+        } else { arquivoSelecionado = null; infoRestoreMsg.innerText = "Nenhum arquivo."; }
     });
 
     function restaurarBackup() {
-        if (!arquivoSelecionado) {
-            alert("❌ Nenhum arquivo selecionado. Clique em 'Selecionar arquivo' primeiro.");
-            return;
-        }
+        if (!arquivoSelecionado) return alert("Selecione um arquivo JSON.");
         const reader = new FileReader();
         reader.onload = function(evt) {
             try {
-                const dadosImportados = JSON.parse(evt.target.result);
-                if (!Array.isArray(dadosImportados)) throw new Error("Formato inválido: não é uma lista.");
-                // validar estrutura básica
-                const valido = dadosImportados.every(item => item.nome && item.data && item.horario && item.servico);
-                if (!valido) throw new Error("Arquivo corrompido ou faltam campos essenciais.");
-                if (confirm(`ATENÇÃO: Isso substituirá todos os ${agendamentos.length} agendamentos atuais por ${dadosImportados.length} novos registros. Deseja continuar?`)) {
-                    agendamentos = dadosImportados.map((ag, idx) => {
-                        if (!ag.id) ag.id = Date.now() + idx;
-                        return ag;
-                    });
+                const dados = JSON.parse(evt.target.result);
+                if (!Array.isArray(dados)) throw new Error("Inválido");
+                if (confirm(`Substituir ${agendamentos.length} agendamentos por ${dados.length}?`)) {
+                    agendamentos = dados.map((ag, idx) => ({ ...ag, id: ag.id || Date.now() + idx }));
                     ordenarAgendamentos();
                     salvarAgendamentos();
                     renderizarAgendamentos();
-                    alert(`✅ Backup restaurado! ${agendamentos.length} agendamentos carregados.`);
-                    arquivoSelecionado = null;
+                    alert("Restaurado!");
                     restoreFileInput.value = "";
-                    infoRestoreMsg.innerText = "Nenhum arquivo selecionado.";
+                    arquivoSelecionado = null;
+                    infoRestoreMsg.innerText = "Nenhum arquivo.";
                 }
-            } catch(e) {
-                alert("❌ Erro ao restaurar backup: " + e.message);
-            }
+            } catch(e) { alert("Erro no arquivo."); }
         };
         reader.readAsText(arquivoSelecionado);
     }
 
-    function limparTodosAgendamentos() {
-        if (confirm("⚠️ ISSO APAGARÁ TODOS OS AGENDAMENTOS. Tem certeza? Faça backup antes.")) {
-            if (confirm("Última confirmação: remover todos os agendamentos permanentemente?")) {
-                agendamentos = [];
-                salvarAgendamentos();
-                renderizarAgendamentos();
-                alert("🧹 Todos os agendamentos foram removidos.");
-            }
+    function limparTudo() {
+        if (confirm("⚠️ APAGAR TUDO? Faça backup primeiro.") && confirm("Confirmação final?")) {
+            agendamentos = [];
+            salvarAgendamentos();
+            renderizarAgendamentos();
+            alert("Todos os agendamentos foram removidos.");
         }
     }
 
-    // Alternância de abas
     function ativarAba(abaId) {
-        tabContents.agenda.classList.remove("active");
-        tabContents.manutencao.classList.remove("active");
-        tabContents[abaId].classList.add("active");
+        tabContentsApp.agenda.classList.remove("active");
+        tabContentsApp.manutencao.classList.remove("active");
+        tabContentsApp[abaId].classList.add("active");
         tabBtns.forEach(btn => {
             if (btn.getAttribute("data-tab") === abaId) btn.classList.add("active");
             else btn.classList.remove("active");
         });
     }
 
-    tabBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const tab = btn.getAttribute("data-tab");
-            if (tab === "agenda") ativarAba("agenda");
-            else if (tab === "manutencao") ativarAba("manutencao");
-        });
-    });
-
-    // Data mínima
     function setMinDate() {
         const today = new Date();
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, '0');
         const dd = String(today.getDate()).padStart(2, '0');
-        dataInput.setAttribute('min', `${yyyy}-${mm}-${dd}`);
+        if (dataInput) dataInput.setAttribute('min', `${yyyy}-${mm}-${dd}`);
     }
 
-    // Eventos finais
-    form.addEventListener("submit", adicionarAgendamento);
-    btnBackup.addEventListener("click", fazerBackup);
-    btnRestaurar.addEventListener("click", restaurarBackup);
-    btnLimparTudo.addEventListener("click", limparTodosAgendamentos);
-    filtroInput.addEventListener("input", () => renderizarAgendamentos());
-    btnLimparFiltro.addEventListener("click", () => {
-        filtroInput.value = "";
-        renderizarAgendamentos();
-    });
-
-    window.addEventListener("DOMContentLoaded", () => {
+    function inicializarApp() {
+        if (!document.getElementById("formAgendamento")) return;
+        carregarAgendamentosApp();
         setMinDate();
-        carregarAgendamentos();
-    });
+        form?.addEventListener("submit", adicionarAgendamento);
+        btnBackup?.addEventListener("click", fazerBackup);
+        btnRestaurar?.addEventListener("click", restaurarBackup);
+        btnLimparTudo?.addEventListener("click", limparTudo);
+        filtroInput?.addEventListener("input", () => renderizarAgendamentos());
+        btnLimparFiltro?.addEventListener("click", () => { filtroInput.value = ""; renderizarAgendamentos(); });
+        tabBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const tab = btn.getAttribute("data-tab");
+                if (tab === "agenda") ativarAba("agenda");
+                else if (tab === "manutencao") ativarAba("manutencao");
+            });
+        });
+    }
+
+    if (isAuthenticated()) {
+        inicializarApp();
+    } else {
+        const checkInterval = setInterval(() => {
+            if (isAuthenticated()) {
+                clearInterval(checkInterval);
+                inicializarApp();
+            }
+        }, 200);
+    }
 </script>
 </body>
 </html>
