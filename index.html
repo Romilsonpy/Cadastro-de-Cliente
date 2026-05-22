@@ -2,8 +2,8 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stúdio Emily Lash Designer | Agenda Local</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Agenda Lash Designer | Sistema Profissional</title>
     <style>
         * {
             margin: 0;
@@ -15,19 +15,162 @@
         body {
             background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
             min-height: 100vh;
-            padding: 2rem 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 2rem;
         }
 
-        .app-container {
+        .auth-container {
+            width: 100%;
+            max-width: 500px;
+            background: #0b0b0b;
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 2px #f5b700, 0 0 0 6px #1e1e1e;
+            overflow: hidden;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .auth-header {
+            background: radial-gradient(circle at 20% 30%, #f5b700, #e09d00);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+            color: #0f0f0f;
+            font-weight: 800;
+        }
+
+        .auth-header h1 span {
+            background: black;
+            color: #f5b700;
+            padding: 0 0.5rem;
+            border-radius: 40px;
+            display: inline-block;
+        }
+
+        .auth-header p {
+            color: #1e1e1e;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .auth-form {
+            padding: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: #ffdd88;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            background: #1f1f1f;
+            border: 1.5px solid #333;
+            border-radius: 1rem;
+            font-size: 1rem;
+            color: #f0f0f0;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #f5b700;
+            box-shadow: 0 0 0 3px rgba(245, 183, 0, 0.3);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: #f5b700;
+            color: #000;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 1rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            box-shadow: 0 5px 0 #b47c00;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #ffcd42;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #2c2c2c;
+            color: #f5b700;
+            box-shadow: none;
+            border: 1px solid #f5b700;
+        }
+
+        .error-msg {
+            background: #3a1a1a;
+            color: #ffaa88;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-left: 4px solid #ff6600;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .info-msg {
+            background: #1a2a1a;
+            color: #aaffaa;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .warning-msg {
+            background: #2a1a0a;
+            color: #ffaa44;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .success-msg {
+            background: #1a3a1a;
+            color: #aaffaa;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .main-container {
             max-width: 1400px;
             width: 100%;
             background: #000000dd;
             border-radius: 2.5rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 2px #f5b700, 0 0 0 6px #1e1e1e;
             overflow: hidden;
+            display: none;
         }
 
         .hero {
@@ -36,8 +179,35 @@
             text-align: center;
         }
 
-        .hero h1 {
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 2.5rem;
+            border: 2px solid #f5b700;
+            overflow: hidden;
+        }
+
+        .logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
             font-weight: 800;
             color: #0f0f0f;
         }
@@ -50,26 +220,44 @@
             display: inline-block;
         }
 
-        .hero p {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1e1e1e;
-            background: #fff0b5;
-            display: inline-block;
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
+        .company-info {
             margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #1e1e1e;
+            background: #fff0b5aa;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 20px;
         }
 
-        .logout-bar {
+        .warning-banner {
+            background: #2a1a0a;
+            color: #ffaa44;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #f5b70055;
+        }
+
+        .profile-bar {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             background: #0a0a0a;
             padding: 0.6rem 2rem;
             border-bottom: 1px solid #f5b70033;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .btn-logout {
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #f5b700;
+        }
+
+        .btn-profile, .btn-logout {
             background: #2c2c2c;
             border: 1px solid #f5b700;
             color: #f5b700;
@@ -77,9 +265,10 @@
             border-radius: 2rem;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
         }
 
-        .btn-logout:hover {
+        .btn-profile:hover, .btn-logout:hover {
             background: #f5b700;
             color: #000;
         }
@@ -90,6 +279,7 @@
             border-bottom: 2px solid #f5b70055;
             padding: 0 1rem;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -101,6 +291,7 @@
             color: #ddd;
             cursor: pointer;
             border-radius: 1rem 1rem 0 0;
+            transition: 0.2s;
         }
 
         .tab-btn.active {
@@ -117,6 +308,12 @@
 
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px);}
+            to { opacity: 1; transform: translateY(0);}
         }
 
         .dashboard {
@@ -125,26 +322,20 @@
             gap: 2rem;
         }
 
-        .form-section, .list-section {
+        .form-section, .list-section, .finance-section {
             background: #121212;
             border-radius: 1.8rem;
             padding: 1.8rem;
             border: 1px solid #f5b70055;
         }
 
-        .form-section {
-            flex: 1.2;
-            min-width: 280px;
-        }
+        .form-section { flex: 1.2; min-width: 280px; }
+        .list-section { flex: 2; min-width: 320px; }
+        .finance-section { flex: 1; min-width: 260px; }
 
-        .list-section {
-            flex: 2;
-            min-width: 320px;
-        }
-
-        .form-section h2, .list-header h2 {
+        h2 {
             color: #f5b700;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             border-left: 6px solid #f5b700;
             padding-left: 1rem;
             margin-bottom: 1.5rem;
@@ -172,77 +363,33 @@
             outline: none;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus, select:focus {
             border-color: #f5b700;
             box-shadow: 0 0 0 3px rgba(245, 183, 0, 0.3);
         }
 
-        .btn-agendar {
-            width: 100%;
-            background: #f5b700;
-            color: #000;
-            font-weight: 800;
-            font-size: 1.2rem;
+        .total-faturamento {
+            background: #1f1f1f;
             padding: 1rem;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
+            border-radius: 1rem;
+            text-align: center;
             margin-top: 1rem;
-            box-shadow: 0 5px 0 #b47c00;
         }
 
-        .btn-agendar:hover {
-            background: #ffcd42;
-            transform: translateY(-2px);
-        }
-
-        .list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-
-        .badge-count {
-            background: #f5b700;
-            color: #000;
-            font-weight: bold;
-            padding: 0.3rem 0.9rem;
-            border-radius: 40px;
-        }
-
-        .filtro {
-            margin-bottom: 1.5rem;
-            display: flex;
-            gap: 0.7rem;
-        }
-
-        .filtro input {
-            flex: 2;
-        }
-
-        .btn-limpar {
-            background: #2c2c2c;
-            border: 1px solid #f5b700;
+        .total-faturamento h3 {
             color: #f5b700;
-            padding: 0.6rem 1.2rem;
-            border-radius: 2rem;
-            cursor: pointer;
-        }
-
-        .cards-container {
-            max-height: 500px;
-            overflow-y: auto;
+            font-size: 2rem;
         }
 
         .card {
             background: #1c1c1c;
             border-radius: 1.2rem;
             margin-bottom: 1rem;
-            padding: 1rem 1.2rem;
+            padding: 1rem;
             border-left: 8px solid #f5b700;
         }
+
+        .card:hover { background: #242424; }
 
         .card-header {
             display: flex;
@@ -252,35 +399,9 @@
         }
 
         .nome-cliente {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #ffde9e;
-        }
-
-        .data-hora {
-            background: #2a2a2a;
-            padding: 0.2rem 0.7rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #f5b700;
-        }
-
-        .servico span {
-            background: #2c2c2c;
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #f5e1a0;
-            display: inline-block;
-            margin-right: 0.5rem;
-            margin-top: 0.3rem;
-        }
-
-        .observacao {
-            font-size: 0.85rem;
-            color: #b0b0b0;
-            margin-top: 0.3rem;
-            font-style: italic;
         }
 
         .btn-remover {
@@ -298,53 +419,69 @@
             color: #000;
         }
 
-        .manutencao-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
+        .badge-count {
+            background: #f5b700;
+            color: #000;
+            font-weight: bold;
+            padding: 0.3rem 0.9rem;
+            border-radius: 40px;
         }
 
-        .card-manutencao {
-            background: #121212;
-            border: 1px solid #f5b70055;
-            border-radius: 1.8rem;
-            padding: 2rem;
-            flex: 1;
-            min-width: 260px;
+        .filtro { margin-bottom: 1rem; }
+
+        .preview-logo {
+            margin-top: 1rem;
             text-align: center;
         }
 
-        .card-manutencao h3 {
-            color: #f5b700;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+        .preview-logo img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+            border: 2px solid #f5b700;
         }
 
-        .btn-manutencao {
-            background: #f5b700;
-            color: #000;
-            border: none;
-            padding: 0.8rem 1.8rem;
-            font-weight: bold;
-            border-radius: 2rem;
-            cursor: pointer;
-            margin: 0.3rem;
-        }
-
-        .btn-perigo {
-            background: #2c2c2c;
-            color: #ffaa66;
-            border: 1px solid #f5b700;
-        }
-
-        .info-backup {
+        .license-card {
             background: #1f1f1f;
             border-radius: 1rem;
-            padding: 0.8rem;
+            padding: 1rem;
             margin-top: 1rem;
-            font-size: 0.8rem;
-            color: #f5b700aa;
+            text-align: center;
+        }
+
+        .license-card h4 {
+            color: #f5b700;
+            margin-bottom: 0.5rem;
+        }
+
+        .activate-section {
+            background: #1a1a1a;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .activate-section h4 {
+            color: #f5b700;
+            margin-bottom: 0.8rem;
+        }
+
+        .activate-input {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .activate-input input {
+            flex: 2;
+            min-width: 180px;
+        }
+
+        .activate-input button {
+            flex: 1;
+            min-width: 100px;
+            margin-top: 0;
         }
 
         footer {
@@ -355,424 +492,741 @@
             font-size: 0.8rem;
         }
 
-        .login-container {
-            max-width: 450px;
-            background: #0b0b0b;
-            border-radius: 2.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 2px #f5b700;
-        }
-
-        .login-header {
-            background: radial-gradient(circle at 20% 30%, #f5b700, #e09d00);
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .login-header h1 {
-            font-size: 2.2rem;
-            color: #0f0f0f;
-        }
-
-        .login-header h1 span {
-            background: black;
-            color: #f5b700;
-            padding: 0 0.5rem;
-            border-radius: 40px;
-        }
-
-        .login-form {
-            padding: 2rem;
-        }
-
-        .btn-login {
-            width: 100%;
-            background: #f5b700;
-            color: #000;
-            font-weight: 800;
-            font-size: 1.2rem;
-            padding: 1rem;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
-            margin-top: 0.5rem;
-        }
-
-        .error-msg {
-            background: #3a1a1a;
-            color: #ffaa88;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            margin-bottom: 1rem;
-            text-align: center;
-            display: none;
-        }
-
         @media (max-width: 780px) {
             body { padding: 1rem; }
-            .hero h1 { font-size: 1.8rem; }
-            .tab-btn { padding: 0.7rem 1rem; }
+            .tab-btn { padding: 0.7rem 1rem; font-size: 0.9rem; }
             .tab-content { padding: 1rem; }
+            .activate-input { flex-direction: column; }
+            .activate-input button { margin-top: 0.5rem; }
         }
     </style>
 </head>
 <body>
-
-<div id="loginScreen" class="login-container">
-    <div class="login-header">
-        <h1>👁️ Stúdio <span>Emily</span></h1>
-        <p>Lash Designer • Área Restrita</p>
-    </div>
-    <div class="login-form">
-        <div id="loginError" class="error-msg">❌ Usuário ou senha incorretos.</div>
-        <div class="input-group">
-            <label>👤 Usuário</label>
-            <input type="text" id="loginUser" placeholder="Digite seu usuário">
-        </div>
-        <div class="input-group">
-            <label>🔒 Senha</label>
-            <input type="password" id="loginPass" placeholder="Digite sua senha">
-        </div>
-        <button id="btnLogin" class="btn-login">🔓 ENTRAR</button>
-    </div>
-</div>
-
-<div id="mainApp" style="display: none; width: 100%;">
-    <div class="app-container">
-        <div class="hero">
-            <h1>👁️ Stúdio <span>Emily Lash Designer</span></h1>
-            <p>✨ Agendamento Profissional • Dados Salvos Localmente ✨</p>
-        </div>
-        <div class="logout-bar">
-            <button id="logoutBtn" class="btn-logout">🚪 Sair</button>
-        </div>
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="agenda">📅 Agendamentos</button>
-            <button class="tab-btn" data-tab="manutencao">⚙️ Manutenção • Backup</button>
-        </div>
-
-        <div id="tab-agenda" class="tab-content active">
-            <div class="dashboard">
-                <div class="form-section">
-                    <h2>✍️ Novo Agendamento</h2>
-                    <form id="formAgendamento">
-                        <div class="form-group">
-                            <label>👤 Nome completo *</label>
-                            <input type="text" id="nome" required>
-                        </div>
-                        <div class="form-group">
-                            <label>📱 WhatsApp / Telefone *</label>
-                            <input type="tel" id="telefone" required>
-                        </div>
-                        <div class="form-group">
-                            <label>📅 Data *</label>
-                            <input type="date" id="data" required>
-                        </div>
-                        <div class="form-group">
-                            <label>⏰ Horário *</label>
-                            <select id="horario" required>
-                                <option value="">Selecione</option>
-                                <option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option>
-                                <option>11:00</option><option>11:30</option><option>12:00</option><option>13:00</option>
-                                <option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option>
-                                <option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option>
-                                <option>17:30</option><option>18:00</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>💅 Serviço *</label>
-                            <select id="servico" required>
-                                <option value="">Escolha</option>
-                                <option>Volume Brasileiro</option>
-                                <option>Volume Egípcio</option>
-                                <option>Fio a Fio Clássico</option>
-                                <option>Lash Lifting + Tintura</option>
-                                <option>Manutenção de Cílios</option>
-                                <option>Remoção Profissional</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>📝 Observações</label>
-                            <textarea id="obs" placeholder="Alergias, preferências..."></textarea>
-                        </div>
-                        <button type="submit" class="btn-agendar">💛 AGENDAR HORÁRIO 💛</button>
-                    </form>
-                </div>
-                <div class="list-section">
-                    <div class="list-header">
-                        <h2>📋 Próximos Atendimentos</h2>
-                        <div class="badge-count" id="contadorAgendamentos">0</div>
-                    </div>
-                    <div class="filtro">
-                        <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome ou serviço...">
-                        <button id="btnLimparFiltro" class="btn-limpar">Limpar</button>
-                    </div>
-                    <div id="listaCards" class="cards-container"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-manutencao" class="tab-content">
-            <div class="manutencao-container">
-                <div class="card-manutencao">
-                    <h3>💾 Backup</h3>
-                    <p>Exportar todos os agendamentos</p>
-                    <button id="btnFazerBackup" class="btn-manutencao">📀 Baixar Backup</button>
-                </div>
-                <div class="card-manutencao">
-                    <h3>🔄 Restaurar</h3>
-                    <p>Importar backup JSON</p>
-                    <input type="file" id="restoreFileInput" accept=".json" style="display:none">
-                    <button id="btnSelecionarRestore" class="btn-manutencao">📂 Selecionar</button>
-                    <button id="btnRestaurar" class="btn-manutencao btn-perigo">⚠️ Restaurar</button>
-                </div>
-                <div class="card-manutencao">
-                    <h3>🧹 Limpar Tudo</h3>
-                    <p>Remover todos os agendamentos</p>
-                    <button id="btnLimparTudo" class="btn-manutencao btn-perigo">🗑️ Apagar Tudo</button>
-                </div>
-            </div>
-        </div>
-        <footer>💛 Dados salvos localmente no seu navegador • Stúdio Emily Lash Designer 💛</footer>
-    </div>
-</div>
+<div id="appRoot"></div>
 
 <script>
-    // CREDENCIAIS
-    const VALID_USER = "emily";
-    const VALID_PASS = "emily";
-    const STORAGE_KEY = "studio_emily_agendamentos";
-
-    let agendamentos = [];
-
-    // Autenticação
-    function isAuthenticated() { return sessionStorage.getItem("studioAuth") === "true"; }
-    function setAuthenticated(value) { value ? sessionStorage.setItem("studioAuth","true") : sessionStorage.removeItem("studioAuth"); }
-
-    const loginScreen = document.getElementById("loginScreen");
-    const mainApp = document.getElementById("mainApp");
-    const loginError = document.getElementById("loginError");
-
-    function showLogin() { loginScreen.style.display = "block"; mainApp.style.display = "none"; }
-    function showApp() { loginScreen.style.display = "none"; mainApp.style.display = "block"; carregarAgendamentos(); }
-
-    document.getElementById("btnLogin").addEventListener("click", () => {
-        const user = document.getElementById("loginUser").value.trim();
-        const pass = document.getElementById("loginPass").value.trim();
-        if(user === VALID_USER && pass === VALID_PASS) {
-            setAuthenticated(true);
-            loginError.style.display = "none";
-            showApp();
-        } else {
-            loginError.style.display = "block";
+    // ========== AGENDA LASH DESIGNER - SISTEMA DE LICENÇAS ==========
+    const STORAGE_KEY = "agenda_lash_designer_data";
+    
+    // ⚠️ CHAVES DE ATIVAÇÃO (APENAS PARA PLANOS PAGOS)
+    // TESTE GRÁTIS DE 7 DIAS É AUTOMÁTICO - NÃO PRECISA DE CHAVE!
+    const CHAVES_ATIVACAO = {
+        "MENSAL-EMILY2024-BRL25": { 
+            plano: "MENSAL", 
+            nome: "Plano Mensal", 
+            dias: 30, 
+            preco: 25.00,
+            descricao: "💰 Plano Mensal - R$ 25,00 (30 dias)"
+        },
+        "SEMESTRAL-EMILY2024-BRL80": { 
+            plano: "SEMESTRAL", 
+            nome: "Plano Semestral", 
+            dias: 180, 
+            preco: 80.00,
+            descricao: "📆 Plano Semestral - R$ 80,00 (180 dias)"
+        },
+        "ANUAL-EMILY2024-BRL130": { 
+            plano: "ANUAL", 
+            nome: "Plano Anual", 
+            dias: 365, 
+            preco: 130.00,
+            descricao: "🌟 Plano Anual - R$ 130,00 (365 dias)"
         }
-    });
+    };
 
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-        setAuthenticated(false);
-        showLogin();
-    });
+    const PLANOS_INFO = {
+        TESTE: { nome: "Teste Grátis", dias: 7, preco: 0 },
+        MENSAL: { nome: "Plano Mensal", dias: 30, preco: 25.00 },
+        SEMESTRAL: { nome: "Plano Semestral", dias: 180, preco: 80.00 },
+        ANUAL: { nome: "Plano Anual", dias: 365, preco: 130.00 }
+    };
 
-    if(isAuthenticated()) showApp(); else showLogin();
-
-    // Funções do App
-    function salvarAgendamentos() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(agendamentos));
+    // Validar e ativar chave (apenas para planos pagos)
+    function validarEAtivarChave(chave) {
+        if (!chave) return { sucesso: false, mensagem: "Digite uma chave de ativação." };
+        
+        const chaveUpper = chave.trim().toUpperCase();
+        const planoInfo = CHAVES_ATIVACAO[chaveUpper];
+        
+        if (planoInfo) {
+            const expiracao = new Date();
+            expiracao.setDate(expiracao.getDate() + planoInfo.dias);
+            return { 
+                sucesso: true, 
+                plano: planoInfo.plano,
+                nome: planoInfo.nome,
+                descricao: planoInfo.descricao,
+                dias: planoInfo.dias,
+                preco: planoInfo.preco,
+                expiracao: expiracao
+            };
+        }
+        
+        return { sucesso: false, mensagem: "❌ Chave inválida! Verifique e tente novamente." };
     }
 
-    function carregarAgendamentos() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if(stored) {
-            agendamentos = JSON.parse(stored);
+    // ========== DADOS DO APLICATIVO ==========
+    let appData = {
+        empresa: null,
+        usuario: null,
+        licenca: null,
+        agendamentos: [],
+        valorServicoPadrao: 120.00,
+        configuracoes: { logo: "👁️", logoBase64: null, nomeStudio: "Agenda Lash Designer" }
+    };
+
+    function salvarDados() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    }
+
+    function carregarDados() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if(saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                appData = { ...appData, ...parsed };
+            } catch(e) {}
         }
-        if(!agendamentos.length) {
+    }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+        });
+    }
+
+    function alterarSenha(novaSenha) {
+        if(appData.usuario) {
+            appData.usuario.senha = novaSenha;
+            salvarDados();
+            return true;
+        }
+        return false;
+    }
+
+    function calcularFaturamentoMensal() {
+        const hoje = new Date();
+        const mesAtual = hoje.getMonth();
+        const anoAtual = hoje.getFullYear();
+        let total = 0;
+        appData.agendamentos.forEach(ag => {
+            const dataAg = new Date(ag.data);
+            if(dataAg.getMonth() === mesAtual && dataAg.getFullYear() === anoAtual) {
+                total += (ag.valor || appData.valorServicoPadrao);
+            }
+        });
+        return total;
+    }
+
+    function getDiasRestantes() {
+        if(!appData.licenca) return 0;
+        const diff = Math.ceil((new Date(appData.licenca.expiracao) - new Date()) / (1000 * 60 * 60 * 24));
+        return diff > 0 ? diff : 0;
+    }
+
+    function validarLicenca() {
+        if (!appData.licenca || !appData.licenca.ativo) return false;
+        return new Date(appData.licenca.expiracao) > new Date();
+    }
+
+    // Ativar licença com chave (após teste expirar)
+    function ativarLicenca(chave) {
+        const resultado = validarEAtivarChave(chave);
+        if(resultado.sucesso) {
+            appData.licenca = { 
+                chave: chave.toUpperCase(), 
+                plano: resultado.plano, 
+                expiracao: resultado.expiracao.toISOString(), 
+                ativo: true 
+            };
+            salvarDados();
+        }
+        return resultado;
+    }
+
+    // Ativar teste grátis automático (primeiro acesso - SEM CHAVE)
+    function ativarTesteGratis() {
+        const expiracao = new Date();
+        expiracao.setDate(expiracao.getDate() + 7);
+        appData.licenca = { 
+            chave: "TESTE_AUTOMATICO", 
+            plano: "TESTE", 
+            expiracao: expiracao.toISOString(), 
+            ativo: true 
+        };
+        salvarDados();
+    }
+
+    // ========== TELA DE CADASTRO (PRIMEIRO ACESSO) ==========
+    function showCadastro() {
+        const html = `
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>👁️ Agenda <span>Lash Designer</span></h1>
+                    <p>Cadastro • Primeiro Acesso</p>
+                </div>
+                <div class="auth-form">
+                    <div class="info-msg">
+                        ✨ Bem-vindo ao Agenda Lash Designer! ✨<br>
+                        <strong>🎁 Teste grátis de 7 dias ativado automaticamente!</strong>
+                    </div>
+                    <div id="cadastroError" class="error-msg"></div>
+                    <div class="input-group">
+                        <label>👤 Nome do Usuário</label>
+                        <input type="text" id="newUsername" placeholder="Ex: Emily Designer">
+                    </div>
+                    <div class="input-group">
+                        <label>🔒 Senha</label>
+                        <input type="password" id="newPassword" placeholder="Crie uma senha">
+                    </div>
+                    <div class="input-group">
+                        <label>🔒 Confirmar Senha</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirme a senha">
+                    </div>
+                    <div class="input-group">
+                        <label>🏢 Nome do Studio</label>
+                        <input type="text" id="studioName" placeholder="Ex: Studio Lash Designer">
+                    </div>
+                    <button id="btnCadastrar" class="btn-primary">✨ CRIAR CONTA E INICIAR TESTE ✨</button>
+                    <div class="info-msg" style="margin-top: 1rem; background: #1a2a3a;">
+                        ⚡ Após o cadastro, você terá <strong>7 dias de teste grátis</strong>!<br>
+                        Após esse período, será necessário adquirir uma licença.
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById("appRoot").innerHTML = html;
+
+        document.getElementById("btnCadastrar").addEventListener("click", () => {
+            const username = document.getElementById("newUsername").value.trim();
+            const password = document.getElementById("newPassword").value;
+            const confirm = document.getElementById("confirmPassword").value;
+            const studioName = document.getElementById("studioName").value.trim();
+
+            if(!username) {
+                document.getElementById("cadastroError").innerText = "❌ Digite um nome de usuário!";
+                document.getElementById("cadastroError").style.display = "block";
+                return;
+            }
+            if(!password) {
+                document.getElementById("cadastroError").innerText = "❌ Digite uma senha!";
+                document.getElementById("cadastroError").style.display = "block";
+                return;
+            }
+            if(password !== confirm) {
+                document.getElementById("cadastroError").innerText = "❌ As senhas não coincidem!";
+                document.getElementById("cadastroError").style.display = "block";
+                return;
+            }
+            if(!studioName) {
+                document.getElementById("cadastroError").innerText = "❌ Digite o nome do Studio!";
+                document.getElementById("cadastroError").style.display = "block";
+                return;
+            }
+
+            appData.usuario = { nome: username, senha: password };
+            appData.empresa = { nome: studioName, criadoEm: new Date().toISOString() };
+            appData.configuracoes.nomeStudio = studioName;
+            appData.configuracoes.logo = "👁️";
+
+            // Ativar teste grátis de 7 dias (SEM CHAVE)
+            ativarTesteGratis();
+
+            // Dados de exemplo
             const hoje = new Date().toISOString().slice(0,10);
             const amanha = new Date();
             amanha.setDate(amanha.getDate() + 1);
-            const amanhaStr = amanha.toISOString().slice(0,10);
-            agendamentos = [
-                { id: Date.now()+1, nome: "Fernanda Lima", telefone: "(11) 98765-4321", data: hoje, horario: "14:00", servico: "Volume Brasileiro", obs: "Primeira vez" },
-                { id: Date.now()+2, nome: "Carolina Mendes", telefone: "(21) 99888-7766", data: amanhaStr, horario: "10:30", servico: "Lash Lifting + Tintura", obs: "Cílios sensíveis" },
-                { id: Date.now()+3, nome: "Rafaela Dias", telefone: "(31) 97777-5555", data: hoje, horario: "16:00", servico: "Fio a Fio Clássico", obs: "Natural" }
+            appData.agendamentos = [
+                { id: Date.now()+1, nome: "Fernanda Lima", telefone: "(11) 98765-4321", data: hoje, horario: "14:00", servico: "Volume Brasileiro", valor: 150.00, obs: "Primeira vez" },
+                { id: Date.now()+2, nome: "Carolina Mendes", telefone: "(21) 99888-7766", data: amanha.toISOString().slice(0,10), horario: "10:30", servico: "Lash Lifting", valor: 120.00, obs: "Cílios sensíveis" }
             ];
-            salvarAgendamentos();
-        }
-        ordenarAgendamentos();
-        renderizarAgendamentos();
-    }
 
-    function ordenarAgendamentos() {
-        agendamentos.sort((a,b) => {
-            if(a.data === b.data) return a.horario.localeCompare(b.horario);
-            return a.data.localeCompare(b.data);
+            salvarDados();
+            
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "success-msg";
+            msgDiv.innerHTML = `✅ Cadastro realizado! Teste grátis de 7 dias ativado!<br>Redirecionando para o login...`;
+            document.querySelector(".auth-form").insertBefore(msgDiv, document.querySelector(".auth-form").firstChild);
+            
+            setTimeout(() => {
+                showLogin();
+            }, 2000);
         });
     }
 
-    function formatarData(dataStr) {
-        const partes = dataStr.split("-");
-        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    // ========== TELA DE LOGIN ==========
+    function showLogin() {
+        const html = `
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>👁️ Agenda <span>Lash Designer</span></h1>
+                    <p>Área Restrita</p>
+                </div>
+                <div class="auth-form">
+                    <div id="loginError" class="error-msg"></div>
+                    <div class="input-group">
+                        <label>👤 Usuário</label>
+                        <input type="text" id="loginUsername" placeholder="Digite seu usuário">
+                    </div>
+                    <div class="input-group">
+                        <label>🔒 Senha</label>
+                        <input type="password" id="loginPassword" placeholder="Digite sua senha">
+                    </div>
+                    <button id="btnLogin" class="btn-primary">🔓 ENTRAR</button>
+                </div>
+            </div>
+        `;
+        document.getElementById("appRoot").innerHTML = html;
+
+        document.getElementById("btnLogin").addEventListener("click", () => {
+            const username = document.getElementById("loginUsername").value.trim();
+            const password = document.getElementById("loginPassword").value;
+
+            if(appData.usuario && username === appData.usuario.nome && password === appData.usuario.senha) {
+                renderizarApp();
+            } else {
+                document.getElementById("loginError").innerText = "❌ Usuário ou senha incorretos!";
+                document.getElementById("loginError").style.display = "block";
+            }
+        });
+
+        document.getElementById("loginPassword")?.addEventListener("keypress", (e) => {
+            if(e.key === "Enter") document.getElementById("btnLogin").click();
+        });
     }
 
-    function renderizarAgendamentos() {
-        const filtro = document.getElementById("filtroNome").value.toLowerCase();
-        let filtrados = agendamentos.filter(ag => 
-            ag.nome.toLowerCase().includes(filtro) || 
-            ag.servico.toLowerCase().includes(filtro)
-        );
-        document.getElementById("contadorAgendamentos").innerText = `${filtrados.length} de ${agendamentos.length}`;
+    // ========== TELA DE ATIVAÇÃO (QUANDO TESTE EXPIRAR) ==========
+    function showTelaAtivacao() {
+        const html = `
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h1>👁️ Agenda <span>Lash Designer</span></h1>
+                    <p>Ativação de Licença</p>
+                </div>
+                <div class="auth-form">
+                    <div class="warning-msg">
+                        ⚠️ SEU PERÍODO DE TESTE DE 7 DIAS EXPIROU! ⚠️<br>
+                        Adquira uma licença para continuar usando o sistema.
+                    </div>
+                    <div id="ativacaoError" class="error-msg"></div>
+                    <div class="input-group">
+                        <label>🔑 Chave de Ativação</label>
+                        <input type="text" id="activationKey" placeholder="Cole sua chave de ativação aqui">
+                    </div>
+                    <button id="btnAtivar" class="btn-primary">🔓 ATIVAR LICENÇA</button>
+                    <div class="info-msg" style="margin-top: 1rem;">
+                        💡 Entre em contato com o administrador para adquirir sua licença.<br>
+                        Após o pagamento, você receberá uma chave de ativação.
+                    </div>
+                    <div class="info-msg" style="margin-top: 1rem; background: #1a2a3a;">
+                        📋 Planos disponíveis:<br>
+                        • Mensal (30 dias) - R$ 25,00<br>
+                        • Semestral (180 dias) - R$ 80,00<br>
+                        • Anual (365 dias) - R$ 130,00
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById("appRoot").innerHTML = html;
+
+        document.getElementById("btnAtivar").addEventListener("click", () => {
+            const chave = document.getElementById("activationKey").value.trim();
+            
+            if(!chave) {
+                document.getElementById("ativacaoError").innerText = "❌ Digite a chave de ativação!";
+                document.getElementById("ativacaoError").style.display = "block";
+                return;
+            }
+            
+            const resultado = ativarLicenca(chave);
+            
+            if(resultado.sucesso) {
+                const msgDiv = document.createElement("div");
+                msgDiv.className = "success-msg";
+                msgDiv.innerHTML = `✅ ${resultado.descricao} ativado com sucesso!<br>Expira em: ${resultado.expiracao.toLocaleDateString()}<br>Redirecionando...`;
+                document.querySelector(".auth-form").insertBefore(msgDiv, document.querySelector(".auth-form").firstChild);
+                
+                setTimeout(() => {
+                    renderizarApp();
+                }, 2000);
+            } else {
+                document.getElementById("ativacaoError").innerHTML = resultado.mensagem || "❌ Chave inválida! Verifique e tente novamente.";
+                document.getElementById("ativacaoError").style.display = "block";
+            }
+        });
+    }
+
+    // ========== APLICATIVO PRINCIPAL ==========
+    function renderizarApp() {
+        const licencaValida = validarLicenca();
+        const diasRestantes = getDiasRestantes();
         
-        const container = document.getElementById("listaCards");
-        if(filtrados.length === 0) {
-            container.innerHTML = '<div class="sem-agendamentos" style="text-align:center;padding:2rem;color:#f5b700aa;">✨ Nenhum agendamento encontrado ✨</div>';
+        // Se não tiver licença válida, mostrar tela de ativação
+        if(!licencaValida) {
+            showTelaAtivacao();
             return;
         }
         
-        let html = "";
-        for(let ag of filtrados) {
-            html += `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="nome-cliente">👁️ ${ag.nome}</div>
-                        <div class="data-hora">📅 ${formatarData(ag.data)} • ⏰ ${ag.horario}</div>
-                    </div>
-                    <div class="servico">
-                        <span>💎 ${ag.servico}</span>
-                        <span>📞 ${ag.telefone}</span>
-                    </div>
-                    <div class="observacao">📌 ${ag.obs || "Sem observações"}</div>
-                    <button class="btn-remover" data-id="${ag.id}">❌ Cancelar</button>
-                </div>
-            `;
-        }
-        container.innerHTML = html;
+        const planoNome = appData.licenca ? PLANOS_INFO[appData.licenca.plano]?.nome || "Premium" : "Desconhecido";
+        const isPlanoPago = appData.licenca?.plano !== "TESTE";
         
-        document.querySelectorAll('.btn-remover').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = parseInt(btn.getAttribute('data-id'));
-                if(confirm("Remover este agendamento?")) {
-                    agendamentos = agendamentos.filter(ag => ag.id !== id);
-                    salvarAgendamentos();
-                    renderizarAgendamentos();
+        const logoHtml = appData.configuracoes.logoBase64 
+            ? `<img src="${appData.configuracoes.logoBase64}" alt="Logo">` 
+            : `<span style="font-size:2.5rem;">${appData.configuracoes.logo || "👁️"}</span>`;
+
+        const html = `
+            <div class="main-container" id="mainContainer" style="display:block;">
+                <div class="hero">
+                    <div class="logo-area">
+                        <div class="logo-img">${logoHtml}</div>
+                        <div>
+                            <h1>${appData.empresa?.nome || "Agenda Lash Designer"}</h1>
+                            <div class="company-info">✨ ${planoNome} ✨</div>
+                        </div>
+                    </div>
+                </div>
+                ${!isPlanoPago ? `<div class="warning-banner">⚠️ Você está usando o período de avaliação grátis. Expira em ${diasRestantes} dias. Adquira uma licença para continuar usando.</div>` : `
+                <div class="warning-banner" style="background:#1a2a1a;">✅ Licença ativa! Expira em ${diasRestantes} dias.</div>`}
+                <div class="profile-bar">
+                    <div class="profile-info">
+                        <span>👤 ${appData.usuario?.nome || "Usuário"}</span>
+                        <span>📅 ${diasRestantes} dias restantes</span>
+                    </div>
+                    <div>
+                        <button id="btnConfigPerfil" class="btn-profile">⚙️ Perfil</button>
+                        <button id="btnLogout" class="btn-logout">🚪 Sair</button>
+                    </div>
+                </div>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="agenda">📅 Agendamentos</button>
+                    <button class="tab-btn" data-tab="financeiro">💰 Financeiro</button>
+                    <button class="tab-btn" data-tab="config">⚙️ Configurações</button>
+                </div>
+
+                <div id="tab-agenda" class="tab-content active">
+                    <div class="dashboard">
+                        <div class="form-section">
+                            <h2>✍️ Novo Agendamento</h2>
+                            <form id="formAgendamento">
+                                <div class="form-group"><label>👤 Nome</label><input type="text" id="nome" required></div>
+                                <div class="form-group"><label>📱 Telefone</label><input type="tel" id="telefone" required></div>
+                                <div class="form-group"><label>📅 Data</label><input type="date" id="data" required></div>
+                                <div class="form-group"><label>⏰ Horário</label>
+                                    <select id="horario" required>
+                                        <option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option>
+                                        <option>11:00</option><option>11:30</option><option>12:00</option><option>13:00</option>
+                                        <option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option>
+                                        <option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option>
+                                        <option>17:30</option><option>18:00</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>💅 Serviço</label><input type="text" id="servico" required placeholder="Ex: Volume Brasileiro"></div>
+                                <div class="form-group"><label>💰 Valor (R$)</label><input type="number" id="valor" step="0.01" value="${appData.valorServicoPadrao}"></div>
+                                <div class="form-group"><label>📝 Obs</label><textarea id="obs"></textarea></div>
+                                <button type="submit" class="btn-primary">💛 AGENDAR</button>
+                            </form>
+                        </div>
+                        <div class="list-section">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                                <h2>📋 Agendamentos</h2>
+                                <span class="badge-count" id="contador">${appData.agendamentos.length}</span>
+                            </div>
+                            <div class="filtro">
+                                <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome ou serviço...">
+                            </div>
+                            <div id="listaCards"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-financeiro" class="tab-content">
+                    <div class="dashboard">
+                        <div class="finance-section">
+                            <h2>💰 Faturamento Mensal</h2>
+                            <div class="total-faturamento">
+                                <h3>R$ ${calcularFaturamentoMensal().toFixed(2)}</h3>
+                                <p>Mês atual</p>
+                            </div>
+                            <div style="margin-top:1.5rem;">
+                                <h3 style="color:#f5b700;font-size:1.2rem;">Valor Padrão</h3>
+                                <input type="number" id="valorPadraoGlobal" step="0.01" value="${appData.valorServicoPadrao}">
+                                <button id="btnAtualizarValorPadrao" class="btn-primary" style="margin-top:0.5rem;">Atualizar</button>
+                            </div>
+                        </div>
+                        <div class="list-section">
+                            <h2>📊 Serviços do Mês</h2>
+                            <div id="listaFinanceiro"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-config" class="tab-content">
+                    <div class="dashboard">
+                        <div class="form-section">
+                            <h2>🏢 Empresa</h2>
+                            <div class="form-group"><label>Nome do Studio</label><input type="text" id="configNomeStudio" value="${appData.empresa?.nome || ''}"></div>
+                            <div class="form-group">
+                                <label>Logomarca (JPEG/PNG)</label>
+                                <input type="file" id="configLogoUpload" accept="image/jpeg,image/png">
+                                <div class="preview-logo" id="previewLogo"></div>
+                            </div>
+                            <button id="btnSalvarConfig" class="btn-primary">Salvar Configurações</button>
+                        </div>
+                        <div class="form-section">
+                            <h2>🔐 Segurança</h2>
+                            <div class="form-group"><label>Nova Senha</label><input type="password" id="novaSenha" placeholder="Digite a nova senha"></div>
+                            <div class="form-group"><label>Confirmar Senha</label><input type="password" id="confirmarSenha" placeholder="Confirme a nova senha"></div>
+                            <button id="btnAlterarSenha" class="btn-primary">Alterar Senha</button>
+                        </div>
+                        <div class="form-section">
+                            <h2>🔑 Sua Licença</h2>
+                            <div class="license-card">
+                                <h4>${planoNome}</h4>
+                                <p>Expira em: <strong>${new Date(appData.licenca?.expiracao).toLocaleDateString()}</strong></p>
+                                <p>Dias restantes: <strong>${diasRestantes}</strong></p>
+                                ${!isPlanoPago ? `
+                                <div class="activate-section">
+                                    <h4>🔓 Após o teste, ative sua licença</h4>
+                                    <div class="activate-input">
+                                        <input type="text" id="chaveAtivacao" placeholder="Digite sua chave de ativação">
+                                        <button id="btnAtivarLicenca" class="btn-primary">ATIVAR</button>
+                                    </div>
+                                    <small style="color:#ffdd88;">Adquira uma chave com o administrador</small>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer>💛 Agenda Lash Designer • Sistema Profissional de Agendamento 💛</footer>
+            </div>
+        `;
+
+        document.getElementById("appRoot").innerHTML = html;
+
+        // Preview da logo
+        const previewDiv = document.getElementById("previewLogo");
+        if(previewDiv && appData.configuracoes.logoBase64) {
+            previewDiv.innerHTML = `<img src="${appData.configuracoes.logoBase64}" alt="Preview" style="max-width:100px;max-height:100px;border-radius:50%;border:2px solid #f5b700;">`;
+        } else if(previewDiv) {
+            previewDiv.innerHTML = `<div style="width:80px;height:80px;background:#1f1f1f;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;">${appData.configuracoes.logo || "👁️"}</div>`;
+        }
+
+        // Botão de ativação dentro das configurações
+        document.getElementById("btnAtivarLicenca")?.addEventListener("click", () => {
+            const chave = document.getElementById("chaveAtivacao").value.trim();
+            if(!chave) {
+                alert("Digite a chave de ativação!");
+                return;
+            }
+            const resultado = ativarLicenca(chave);
+            if(resultado.sucesso) {
+                alert(`✅ ${resultado.descricao} ativado! Expira em: ${resultado.expiracao.toLocaleDateString()}`);
+                renderizarApp();
+            } else {
+                alert(resultado.mensagem);
+            }
+        });
+
+        document.getElementById("configLogoUpload")?.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if(file && (file.type === "image/jpeg" || file.type === "image/png")) {
+                const base64 = await fileToBase64(file);
+                appData.configuracoes.logoBase64 = base64;
+                appData.configuracoes.logo = "📷";
+                salvarDados();
+                alert("Logomarca carregada!");
+                const preview = document.getElementById("previewLogo");
+                if(preview) preview.innerHTML = `<img src="${base64}" alt="Preview" style="max-width:100px;max-height:100px;border-radius:50%;border:2px solid #f5b700;">`;
+            } else {
+                alert("Selecione um arquivo JPEG ou PNG.");
+            }
+        });
+
+        document.getElementById("btnSalvarConfig")?.addEventListener("click", () => {
+            const novoNome = document.getElementById("configNomeStudio").value;
+            if(novoNome) appData.empresa.nome = novoNome;
+            if(!appData.configuracoes.logoBase64) {
+                appData.configuracoes.logo = appData.configuracoes.logo || "👁️";
+            }
+            salvarDados();
+            alert("Configurações salvas!");
+            renderizarApp();
+        });
+
+        document.getElementById("btnAlterarSenha")?.addEventListener("click", () => {
+            const novaSenha = document.getElementById("novaSenha").value;
+            const confirmar = document.getElementById("confirmarSenha").value;
+            if(!novaSenha) return alert("Digite uma nova senha!");
+            if(novaSenha !== confirmar) return alert("As senhas não coincidem!");
+            alterarSenha(novaSenha);
+            alert("Senha alterada com sucesso!");
+            document.getElementById("novaSenha").value = "";
+            document.getElementById("confirmarSenha").value = "";
+        });
+
+        document.getElementById("formAgendamento")?.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const nome = document.getElementById("nome").value.trim();
+            const telefone = document.getElementById("telefone").value.trim();
+            const data = document.getElementById("data").value;
+            const horario = document.getElementById("horario").value;
+            const servico = document.getElementById("servico").value.trim();
+            const valor = parseFloat(document.getElementById("valor").value) || appData.valorServicoPadrao;
+            const obs = document.getElementById("obs").value.trim();
+            if(!nome || !telefone || !data || !horario || !servico) return alert("Preencha todos os campos!");
+            
+            if(appData.agendamentos.some(ag => ag.data === data && ag.horario === horario)) {
+                return alert("Horário já ocupado!");
+            }
+            
+            appData.agendamentos.push({
+                id: Date.now(), nome, telefone, data, horario, servico, valor, obs: obs || "Sem obs"
+            });
+            salvarDados();
+            renderizarApp();
+        });
+
+        function renderizarListas() {
+            const filtro = document.getElementById("filtroNome")?.value.toLowerCase() || "";
+            let filtrados = appData.agendamentos.filter(ag => 
+                ag.nome.toLowerCase().includes(filtro) || ag.servico.toLowerCase().includes(filtro));
+            filtrados.sort((a,b) => a.data.localeCompare(b.data));
+            
+            const container = document.getElementById("listaCards");
+            if(container) {
+                if(filtrados.length === 0) container.innerHTML = "<div style='text-align:center;padding:2rem;color:#f5b700aa;'>Nenhum agendamento</div>";
+                else {
+                    container.innerHTML = filtrados.map(ag => `
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="nome-cliente">👁️ ${ag.nome}</div>
+                                <div>📅 ${ag.data} • ⏰ ${ag.horario}</div>
+                            </div>
+                            <div>💎 ${ag.servico} • R$ ${(ag.valor || appData.valorServicoPadrao).toFixed(2)}</div>
+                            <div class="observacao">📌 ${ag.obs}</div>
+                            <button class="btn-remover" data-id="${ag.id}">❌ Cancelar</button>
+                        </div>
+                    `).join("");
+                    document.querySelectorAll('.btn-remover').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = parseInt(btn.getAttribute('data-id'));
+                            if(confirm("Cancelar este agendamento?")) {
+                                appData.agendamentos = appData.agendamentos.filter(ag => ag.id !== id);
+                                salvarDados();
+                                renderizarApp();
+                            }
+                        });
+                    });
                 }
+            }
+            
+            const containerFinanceiro = document.getElementById("listaFinanceiro");
+            if(containerFinanceiro) {
+                const mesAtual = new Date().getMonth();
+                const faturamentoMes = appData.agendamentos.filter(ag => new Date(ag.data).getMonth() === mesAtual);
+                if(faturamentoMes.length === 0) containerFinanceiro.innerHTML = "<div style='text-align:center;padding:1rem;color:#f5b700aa;'>Nenhum serviço este mês</div>";
+                else {
+                    containerFinanceiro.innerHTML = faturamentoMes.map(ag => `
+                        <div class="card">
+                            <div><strong>${ag.nome}</strong> - ${ag.servico}</div>
+                            <div>📅 ${ag.data} • 💰 R$ ${(ag.valor || appData.valorServicoPadrao).toFixed(2)}</div>
+                        </div>
+                    `).join("");
+                }
+            }
+            
+            const contador = document.getElementById("contador");
+            if(contador) contador.innerText = appData.agendamentos.length;
+        }
+
+        document.getElementById("filtroNome")?.addEventListener("input", () => renderizarListas());
+        document.getElementById("btnAtualizarValorPadrao")?.addEventListener("click", () => {
+            const novoValor = parseFloat(document.getElementById("valorPadraoGlobal").value);
+            if(!isNaN(novoValor) && novoValor > 0) {
+                appData.valorServicoPadrao = novoValor;
+                salvarDados();
+                alert(`Valor padrão atualizado para R$ ${novoValor.toFixed(2)}`);
+                renderizarApp();
+            }
+        });
+
+        document.getElementById("btnConfigPerfil")?.addEventListener("click", () => {
+            alert(`👤 Perfil\n\nUsuário: ${appData.usuario?.nome}\nStudio: ${appData.empresa?.nome}\nPlano: ${planoNome}\nExpira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}\nDias restantes: ${diasRestantes}`);
+        });
+
+        document.getElementById("btnLogout")?.addEventListener("click", () => {
+            location.reload();
+        });
+
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const tab = btn.getAttribute("data-tab");
+                document.querySelectorAll(".tab-content").forEach(tc => tc.classList.remove("active"));
+                document.getElementById(`tab-${tab}`).classList.add("active");
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                if(tab === "financeiro" || tab === "agenda") renderizarListas();
             });
         });
+
+        document.getElementById("data")?.setAttribute("min", new Date().toISOString().slice(0,10));
+        renderizarListas();
     }
 
-    // Adicionar agendamento
-    document.getElementById("formAgendamento").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const nome = document.getElementById("nome").value.trim();
-        const telefone = document.getElementById("telefone").value.trim();
-        const data = document.getElementById("data").value;
-        const horario = document.getElementById("horario").value;
-        const servico = document.getElementById("servico").value;
-        const obs = document.getElementById("obs").value.trim();
+    // ========== INICIALIZAÇÃO ==========
+    function init() {
+        carregarDados();
         
-        if(!nome || !telefone || !data || !horario || !servico) {
-            alert("Preencha todos os campos obrigatórios!");
-            return;
-        }
-        
-        const hoje = new Date();
-        hoje.setHours(0,0,0,0);
-        if(new Date(data) < hoje) {
-            alert("Não é possível agendar em datas passadas!");
-            return;
-        }
-        
-        if(agendamentos.some(ag => ag.data === data && ag.horario === horario)) {
-            alert(`Horário ${formatarData(data)} às ${horario} já está ocupado!`);
-            return;
-        }
-        
-        const novoAgendamento = {
-            id: Date.now(),
-            nome, telefone, data, horario, servico,
-            obs: obs || "Sem observações"
-        };
-        
-        agendamentos.push(novoAgendamento);
-        ordenarAgendamentos();
-        salvarAgendamentos();
-        renderizarAgendamentos();
-        document.getElementById("formAgendamento").reset();
-        document.getElementById("nome").focus();
-        alert("✅ Agendamento realizado com sucesso!");
-    });
-
-    // Filtro
-    document.getElementById("filtroNome").addEventListener("input", () => renderizarAgendamentos());
-    document.getElementById("btnLimparFiltro").addEventListener("click", () => {
-        document.getElementById("filtroNome").value = "";
-        renderizarAgendamentos();
-    });
-
-    // Data mínima
-    document.getElementById("data").setAttribute("min", new Date().toISOString().slice(0,10));
-
-    // Backup
-    document.getElementById("btnFazerBackup").addEventListener("click", () => {
-        const dataStr = JSON.stringify(agendamentos, null, 2);
-        const blob = new Blob([dataStr], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.download = `studio_emily_backup_${new Date().toISOString().slice(0,19).replace(/:/g, "-")}.json`;
-        a.href = url;
-        a.click();
-        URL.revokeObjectURL(url);
-        alert("Backup gerado!");
-    });
-
-    // Restaurar
-    let arquivoSelecionado = null;
-    const restoreInput = document.getElementById("restoreFileInput");
-    document.getElementById("btnSelecionarRestore").addEventListener("click", () => restoreInput.click());
-    restoreInput.addEventListener("change", (e) => {
-        arquivoSelecionado = restoreInput.files[0];
-    });
-
-    document.getElementById("btnRestaurar").addEventListener("click", () => {
-        if(!arquivoSelecionado) return alert("Selecione um arquivo JSON primeiro!");
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-            try {
-                const dados = JSON.parse(evt.target.result);
-                if(!Array.isArray(dados)) throw new Error("Formato inválido");
-                if(confirm(`Substituir ${agendamentos.length} agendamentos por ${dados.length}?`)) {
-                    agendamentos = dados;
-                    salvarAgendamentos();
-                    renderizarAgendamentos();
-                    alert("Backup restaurado!");
-                    restoreInput.value = "";
-                    arquivoSelecionado = null;
-                }
-            } catch(e) {
-                alert("Erro ao ler o arquivo: " + e.message);
+        // Se não tem usuário, mostrar cadastro (com teste grátis automático)
+        if(!appData.usuario) {
+            showCadastro();
+        } 
+        // Se tem usuário, verificar licença
+        else {
+            // Se não tem licença ou licença expirada, mostrar tela de ativação
+            if(!appData.licenca || !validarLicenca()) {
+                showTelaAtivacao();
+            } else {
+                showLogin();
             }
-        };
-        reader.readAsText(arquivoSelecionado);
-    });
-
-    // Limpar tudo
-    document.getElementById("btnLimparTudo").addEventListener("click", () => {
-        if(confirm("⚠️ Isso apagará TODOS os agendamentos! Tem certeza?") && confirm("Confirmação final?")) {
-            agendamentos = [];
-            salvarAgendamentos();
-            renderizarAgendamentos();
-            alert("Todos os agendamentos foram removidos.");
         }
-    });
+    }
 
-    // Abas
-    document.querySelectorAll(".tab-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const tab = btn.getAttribute("data-tab");
-            document.getElementById("tab-agenda").classList.remove("active");
-            document.getElementById("tab-manutencao").classList.remove("active");
-            document.getElementById(`tab-${tab}`).classList.add("active");
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-        });
-    });
+    // Função para mostrar as chaves (apenas para você - administrador)
+    window.mostrarChavesAdmin = function() {
+        console.log("%c╔══════════════════════════════════════════════════════════════════╗", "color: #f5b700");
+        console.log("%c║                    CHAVES DE ATIVAÇÃO                           ║", "color: #f5b700");
+        console.log("%c║                   AGENDA LASH DESIGNER                          ║", "color: #f5b700");
+        console.log("%c╠══════════════════════════════════════════════════════════════════╣", "color: #f5b700");
+        console.log("%c║                                                                  ║", "color: #f5b700");
+        console.log("%c║  ⚠️ TESTE GRÁTIS DE 7 DIAS É AUTOMÁTICO - NÃO PRECISA DE CHAVE   ║", "color: #ffaa44");
+        console.log("%c║                                                                  ║", "color: #f5b700");
+        console.log("%c║  💰 PLANO MENSAL (30 dias) - R$ 25,00                            ║", "color: #f5b700");
+        console.log("%c║     Chave: MENSAL-EMILY2024-BRL25                                ║", "color: #ffaa44");
+        console.log("%c║                                                                  ║", "color: #f5b700");
+        console.log("%c║  📆 PLANO SEMESTRAL (180 dias) - R$ 80,00                        ║", "color: #f5b700");
+        console.log("%c║     Chave: SEMESTRAL-EMILY2024-BRL80                             ║", "color: #ffaa44");
+        console.log("%c║                                                                  ║", "color: #f5b700");
+        console.log("%c║  🌟 PLANO ANUAL (365 dias) - R$ 130,00                           ║", "color: #f5b700");
+        console.log("%c║     Chave: ANUAL-EMILY2024-BRL130                                ║", "color: #ffaa44");
+        console.log("%c║                                                                  ║", "color: #f5b700");
+        console.log("%c╚══════════════════════════════════════════════════════════════════╝", "color: #f5b700");
+        
+        alert("🔑 CHAVES DE ATIVAÇÃO - AGENDA LASH DESIGNER:\n\n" +
+              "⚠️ TESTE GRÁTIS DE 7 DIAS É AUTOMÁTICO!\n\n" +
+              "💰 MENSAL (R$25,00): MENSAL-EMILY2024-BRL25\n\n" +
+              "📆 SEMESTRAL (R$80,00): SEMESTRAL-EMILY2024-BRL80\n\n" +
+              "🌟 ANUAL (R$130,00): ANUAL-EMILY2024-BRL130\n\n" +
+              "📋 GUARDE ESTAS CHAVES EM UM DOCUMENTO SEGURO!");
+    };
+    
+    console.log("%c💡 AGENDA LASH DESIGNER - Digite 'mostrarChavesAdmin()' para ver as chaves de ativação", "color: #f5b700; font-size: 12px;");
+    
+    init();
 </script>
 </body>
 </html>
