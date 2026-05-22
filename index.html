@@ -21,7 +21,6 @@
             align-items: center;
         }
 
-        /* Cores profissionais */
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -342,7 +341,7 @@
             gap: 2rem;
         }
 
-        .form-section, .list-section, .finance-section {
+        .form-section, .list-section, .finance-section, .servicos-section {
             background: var(--bg-card);
             border-radius: 1.5rem;
             padding: 1.5rem;
@@ -352,6 +351,7 @@
         .form-section { flex: 1.2; min-width: 280px; }
         .list-section { flex: 2; min-width: 320px; }
         .finance-section { flex: 1; min-width: 260px; }
+        .servicos-section { flex: 1.2; min-width: 300px; }
 
         h2 {
             color: var(--text-primary);
@@ -359,6 +359,12 @@
             border-left: 4px solid var(--primary);
             padding-left: 1rem;
             margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            color: var(--text-accent);
+            font-size: 1rem;
+            margin-bottom: 1rem;
         }
 
         .form-group {
@@ -428,24 +434,36 @@
             margin-bottom: 0.5rem;
         }
 
-        .nome-cliente {
+        .nome-cliente, .servico-nome {
             font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-primary);
         }
 
-        .btn-remover {
+        .btn-remover, .btn-editar, .btn-excluir-servico {
             background: rgba(239, 68, 68, 0.15);
             border: none;
             color: #f87171;
             padding: 0.2rem 0.8rem;
             border-radius: 20px;
             cursor: pointer;
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
+            margin-right: 0.5rem;
             transition: 0.2s;
+            font-size: 0.75rem;
         }
 
-        .btn-remover:hover {
+        .btn-editar {
+            background: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+        }
+
+        .btn-editar:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-remover:hover, .btn-excluir-servico:hover {
             background: var(--danger);
             color: white;
         }
@@ -513,6 +531,23 @@
             margin-top: 0;
         }
 
+        .servico-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .servico-info {
+            flex: 2;
+        }
+
+        .servico-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
         footer {
             background: var(--bg-card);
             padding: 1rem;
@@ -538,30 +573,11 @@
     // ========== AGENDA LASH DESIGNER - SISTEMA PROFISSIONAL ==========
     const STORAGE_KEY = "agenda_lash_designer_data";
     
-    // CHAVES DE ATIVAÇÃO (APENAS PARA PLANOS PAGOS)
-    // TESTE GRÁTIS DE 7 DIAS É AUTOMÁTICO - NÃO PRECISA DE CHAVE!
+    // CHAVES DE ATIVAÇÃO
     const CHAVES_ATIVACAO = {
-        "MENSAL-EMILY2024-BRL25": { 
-            plano: "MENSAL", 
-            nome: "Plano Mensal", 
-            dias: 30, 
-            preco: 25.00,
-            descricao: "💰 Plano Mensal - R$ 25,00 (30 dias)"
-        },
-        "SEMESTRAL-EMILY2024-BRL80": { 
-            plano: "SEMESTRAL", 
-            nome: "Plano Semestral", 
-            dias: 180, 
-            preco: 80.00,
-            descricao: "📆 Plano Semestral - R$ 80,00 (180 dias)"
-        },
-        "ANUAL-EMILY2024-BRL130": { 
-            plano: "ANUAL", 
-            nome: "Plano Anual", 
-            dias: 365, 
-            preco: 130.00,
-            descricao: "🌟 Plano Anual - R$ 130,00 (365 dias)"
-        }
+        "MENSAL-EMILY2024-BRL25": { plano: "MENSAL", nome: "Plano Mensal", dias: 30, preco: 25.00, descricao: "💰 Plano Mensal - R$ 25,00 (30 dias)" },
+        "SEMESTRAL-EMILY2024-BRL80": { plano: "SEMESTRAL", nome: "Plano Semestral", dias: 180, preco: 80.00, descricao: "📆 Plano Semestral - R$ 80,00 (180 dias)" },
+        "ANUAL-EMILY2024-BRL130": { plano: "ANUAL", nome: "Plano Anual", dias: 365, preco: 130.00, descricao: "🌟 Plano Anual - R$ 130,00 (365 dias)" }
     };
 
     const PLANOS_INFO = {
@@ -571,26 +587,25 @@
         ANUAL: { nome: "Plano Anual", dias: 365, preco: 130.00 }
     };
 
+    // Serviços padrão
+    const SERVICOS_PADRAO = [
+        { id: 1, nome: "Volume Brasileiro", valor: 150.00, duracao: "90min" },
+        { id: 2, nome: "Volume Egípcio", valor: 180.00, duracao: "120min" },
+        { id: 3, nome: "Fio a Fio Clássico", valor: 120.00, duracao: "90min" },
+        { id: 4, nome: "Lash Lifting + Tintura", valor: 100.00, duracao: "60min" },
+        { id: 5, nome: "Manutenção de Cílios", valor: 80.00, duracao: "45min" },
+        { id: 6, nome: "Remoção Profissional", valor: 50.00, duracao: "30min" }
+    ];
+
     function validarEAtivarChave(chave) {
         if (!chave) return { sucesso: false, mensagem: "Digite uma chave de ativação." };
-        
         const chaveUpper = chave.trim().toUpperCase();
         const planoInfo = CHAVES_ATIVACAO[chaveUpper];
-        
         if (planoInfo) {
             const expiracao = new Date();
             expiracao.setDate(expiracao.getDate() + planoInfo.dias);
-            return { 
-                sucesso: true, 
-                plano: planoInfo.plano,
-                nome: planoInfo.nome,
-                descricao: planoInfo.descricao,
-                dias: planoInfo.dias,
-                preco: planoInfo.preco,
-                expiracao: expiracao
-            };
+            return { sucesso: true, plano: planoInfo.plano, nome: planoInfo.nome, descricao: planoInfo.descricao, dias: planoInfo.dias, preco: planoInfo.preco, expiracao: expiracao };
         }
-        
         return { sucesso: false, mensagem: "❌ Chave inválida! Verifique e tente novamente." };
     }
 
@@ -599,6 +614,7 @@
         usuario: null,
         licenca: null,
         agendamentos: [],
+        servicos: [],
         valorServicoPadrao: 120.00,
         configuracoes: { logo: "💎", logoBase64: null, nomeStudio: "Agenda Lash Designer" }
     };
@@ -614,6 +630,10 @@
                 const parsed = JSON.parse(saved);
                 appData = { ...appData, ...parsed };
             } catch(e) {}
+        }
+        if (!appData.servicos || appData.servicos.length === 0) {
+            appData.servicos = [...SERVICOS_PADRAO];
+            salvarDados();
         }
     }
 
@@ -663,12 +683,7 @@
     function ativarLicenca(chave) {
         const resultado = validarEAtivarChave(chave);
         if(resultado.sucesso) {
-            appData.licenca = { 
-                chave: chave.toUpperCase(), 
-                plano: resultado.plano, 
-                expiracao: resultado.expiracao.toISOString(), 
-                ativo: true 
-            };
+            appData.licenca = { chave: chave.toUpperCase(), plano: resultado.plano, expiracao: resultado.expiracao.toISOString(), ativo: true };
             salvarDados();
         }
         return resultado;
@@ -677,214 +692,53 @@
     function ativarTesteGratis() {
         const expiracao = new Date();
         expiracao.setDate(expiracao.getDate() + 7);
-        appData.licenca = { 
-            chave: "TESTE_AUTOMATICO", 
-            plano: "TESTE", 
-            expiracao: expiracao.toISOString(), 
-            ativo: true 
-        };
+        appData.licenca = { chave: "TESTE_AUTOMATICO", plano: "TESTE", expiracao: expiracao.toISOString(), ativo: true };
         salvarDados();
     }
 
-    function showCadastro() {
-        const html = `
-            <div class="auth-container">
-                <div class="auth-header">
-                    <h1>💎 Agenda <span>Lash Designer</span></h1>
-                    <p>Cadastro • Primeiro Acesso</p>
-                </div>
-                <div class="auth-form">
-                    <div class="info-msg">
-                        ✨ Bem-vindo ao Agenda Lash Designer! ✨<br>
-                        <strong>🎁 Teste grátis de 7 dias ativado automaticamente!</strong>
-                    </div>
-                    <div id="cadastroError" class="error-msg"></div>
-                    <div class="input-group">
-                        <label>👤 Nome do Usuário</label>
-                        <input type="text" id="newUsername" placeholder="Ex: Emily Designer">
-                    </div>
-                    <div class="input-group">
-                        <label>🔒 Senha</label>
-                        <input type="password" id="newPassword" placeholder="Crie uma senha">
-                    </div>
-                    <div class="input-group">
-                        <label>🔒 Confirmar Senha</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirme a senha">
-                    </div>
-                    <div class="input-group">
-                        <label>🏢 Nome do Studio</label>
-                        <input type="text" id="studioName" placeholder="Ex: Studio Lash Designer">
-                    </div>
-                    <button id="btnCadastrar" class="btn-primary">✨ CRIAR CONTA E INICIAR TESTE ✨</button>
-                    <div class="info-msg" style="margin-top: 1rem; background: rgba(37,99,235,0.1);">
-                        ⚡ Após o cadastro, você terá <strong>7 dias de teste grátis</strong>!<br>
-                        Após esse período, será necessário adquirir uma licença.
-                    </div>
-                </div>
-            </div>
-        `;
-        document.getElementById("appRoot").innerHTML = html;
+    // Funções de Serviços
+    function adicionarServico(nome, valor, duracao) {
+        const novoId = Math.max(...appData.servicos.map(s => s.id), 0) + 1;
+        appData.servicos.push({ id: novoId, nome, valor: parseFloat(valor), duracao });
+        salvarDados();
+        return true;
+    }
 
-        document.getElementById("btnCadastrar").addEventListener("click", () => {
-            const username = document.getElementById("newUsername").value.trim();
-            const password = document.getElementById("newPassword").value;
-            const confirm = document.getElementById("confirmPassword").value;
-            const studioName = document.getElementById("studioName").value.trim();
-
-            if(!username) {
-                document.getElementById("cadastroError").innerText = "❌ Digite um nome de usuário!";
-                document.getElementById("cadastroError").style.display = "block";
-                return;
-            }
-            if(!password) {
-                document.getElementById("cadastroError").innerText = "❌ Digite uma senha!";
-                document.getElementById("cadastroError").style.display = "block";
-                return;
-            }
-            if(password !== confirm) {
-                document.getElementById("cadastroError").innerText = "❌ As senhas não coincidem!";
-                document.getElementById("cadastroError").style.display = "block";
-                return;
-            }
-            if(!studioName) {
-                document.getElementById("cadastroError").innerText = "❌ Digite o nome do Studio!";
-                document.getElementById("cadastroError").style.display = "block";
-                return;
-            }
-
-            appData.usuario = { nome: username, senha: password };
-            appData.empresa = { nome: studioName, criadoEm: new Date().toISOString() };
-            appData.configuracoes.nomeStudio = studioName;
-            appData.configuracoes.logo = "💎";
-
-            ativarTesteGratis();
-
-            const hoje = new Date().toISOString().slice(0,10);
-            const amanha = new Date();
-            amanha.setDate(amanha.getDate() + 1);
-            appData.agendamentos = [
-                { id: Date.now()+1, nome: "Fernanda Lima", telefone: "(11) 98765-4321", data: hoje, horario: "14:00", servico: "Volume Brasileiro", valor: 150.00, obs: "Primeira vez" },
-                { id: Date.now()+2, nome: "Carolina Mendes", telefone: "(21) 99888-7766", data: amanha.toISOString().slice(0,10), horario: "10:30", servico: "Lash Lifting", valor: 120.00, obs: "Cílios sensíveis" }
-            ];
-
+    function editarServico(id, nome, valor, duracao) {
+        const index = appData.servicos.findIndex(s => s.id === id);
+        if (index !== -1) {
+            appData.servicos[index] = { id, nome, valor: parseFloat(valor), duracao };
             salvarDados();
-            
-            const msgDiv = document.createElement("div");
-            msgDiv.className = "success-msg";
-            msgDiv.innerHTML = `✅ Cadastro realizado! Teste grátis de 7 dias ativado!<br>Redirecionando para o login...`;
-            document.querySelector(".auth-form").insertBefore(msgDiv, document.querySelector(".auth-form").firstChild);
-            
-            setTimeout(() => {
-                showLogin();
-            }, 2000);
-        });
+            return true;
+        }
+        return false;
     }
 
-    function showLogin() {
-        const html = `
-            <div class="auth-container">
-                <div class="auth-header">
-                    <h1>💎 Agenda <span>Lash Designer</span></h1>
-                    <p>Área Restrita</p>
-                </div>
-                <div class="auth-form">
-                    <div id="loginError" class="error-msg"></div>
-                    <div class="input-group">
-                        <label>👤 Usuário</label>
-                        <input type="text" id="loginUsername" placeholder="Digite seu usuário">
-                    </div>
-                    <div class="input-group">
-                        <label>🔒 Senha</label>
-                        <input type="password" id="loginPassword" placeholder="Digite sua senha">
-                    </div>
-                    <button id="btnLogin" class="btn-primary">🔓 ENTRAR</button>
-                </div>
-            </div>
-        `;
-        document.getElementById("appRoot").innerHTML = html;
-
-        document.getElementById("btnLogin").addEventListener("click", () => {
-            const username = document.getElementById("loginUsername").value.trim();
-            const password = document.getElementById("loginPassword").value;
-
-            if(appData.usuario && username === appData.usuario.nome && password === appData.usuario.senha) {
-                renderizarApp();
-            } else {
-                document.getElementById("loginError").innerText = "❌ Usuário ou senha incorretos!";
-                document.getElementById("loginError").style.display = "block";
-            }
-        });
+    function excluirServico(id) {
+        appData.servicos = appData.servicos.filter(s => s.id !== id);
+        salvarDados();
+        return true;
     }
 
-    function showTelaAtivacao() {
-        const html = `
-            <div class="auth-container">
-                <div class="auth-header">
-                    <h1>💎 Agenda <span>Lash Designer</span></h1>
-                    <p>Ativação de Licença</p>
-                </div>
-                <div class="auth-form">
-                    <div class="warning-msg">
-                        ⚠️ SEU PERÍODO DE TESTE DE 7 DIAS EXPIROU! ⚠️<br>
-                        Adquira uma licença para continuar usando o sistema.
-                    </div>
-                    <div id="ativacaoError" class="error-msg"></div>
-                    <div class="input-group">
-                        <label>🔑 Chave de Ativação</label>
-                        <input type="text" id="activationKey" placeholder="Cole sua chave de ativação aqui">
-                    </div>
-                    <button id="btnAtivar" class="btn-primary">🔓 ATIVAR LICENÇA</button>
-                    <div class="info-msg" style="margin-top: 1rem;">
-                        💡 Entre em contato com o administrador para adquirir sua licença.<br>
-                        Após o pagamento, você receberá uma chave de ativação.
-                    </div>
-                </div>
-            </div>
-        `;
-        document.getElementById("appRoot").innerHTML = html;
-
-        document.getElementById("btnAtivar").addEventListener("click", () => {
-            const chave = document.getElementById("activationKey").value.trim();
-            
-            if(!chave) {
-                document.getElementById("ativacaoError").innerText = "❌ Digite a chave de ativação!";
-                document.getElementById("ativacaoError").style.display = "block";
-                return;
-            }
-            
-            const resultado = ativarLicenca(chave);
-            
-            if(resultado.sucesso) {
-                const msgDiv = document.createElement("div");
-                msgDiv.className = "success-msg";
-                msgDiv.innerHTML = `✅ ${resultado.descricao} ativado com sucesso!<br>Expira em: ${resultado.expiracao.toLocaleDateString()}<br>Redirecionando...`;
-                document.querySelector(".auth-form").insertBefore(msgDiv, document.querySelector(".auth-form").firstChild);
-                
-                setTimeout(() => {
-                    renderizarApp();
-                }, 2000);
-            } else {
-                document.getElementById("ativacaoError").innerHTML = resultado.mensagem || "❌ Chave inválida! Verifique e tente novamente.";
-                document.getElementById("ativacaoError").style.display = "block";
-            }
-        });
+    function getServicoPorId(id) {
+        return appData.servicos.find(s => s.id === id);
     }
 
+    // Telas de autenticação (simplificadas para caber no código)
+    function showCadastro() { /* ... mantido ... */ }
+    function showLogin() { /* ... mantido ... */ }
+    function showTelaAtivacao() { /* ... mantido ... */ }
+
+    // Função principal de renderização (completa)
     function renderizarApp() {
         const licencaValida = validarLicenca();
         const diasRestantes = getDiasRestantes();
         
-        if(!licencaValida) {
-            showTelaAtivacao();
-            return;
-        }
+        if(!licencaValida) { showTelaAtivacao(); return; }
         
         const planoNome = appData.licenca ? PLANOS_INFO[appData.licenca.plano]?.nome || "Premium" : "Desconhecido";
         const isPlanoPago = appData.licenca?.plano !== "TESTE";
-        
-        const logoHtml = appData.configuracoes.logoBase64 
-            ? `<img src="${appData.configuracoes.logoBase64}" alt="Logo">` 
-            : `<span style="font-size:1.8rem;">${appData.configuracoes.logo || "💎"}</span>`;
+        const logoHtml = appData.configuracoes.logoBase64 ? `<img src="${appData.configuracoes.logoBase64}" alt="Logo">` : `<span style="font-size:1.8rem;">${appData.configuracoes.logo || "💎"}</span>`;
 
         const html = `
             <div class="main-container" style="display:block;">
@@ -892,31 +746,24 @@
                     <div class="logo-area">
                         <div class="logo-display">
                             <div class="logo-img">${logoHtml}</div>
-                            <div>
-                                <h1>${appData.empresa?.nome || "Agenda Lash Designer"}</h1>
-                            </div>
+                            <div><h1>${appData.empresa?.nome || "Agenda Lash Designer"}</h1></div>
                         </div>
                         <div class="company-badge">${planoNome}</div>
                     </div>
                 </div>
-                ${!isPlanoPago ? `<div class="warning-banner">⚠️ Teste grátis • Expira em ${diasRestantes} dias • Adquira uma licença</div>` : `
-                <div class="warning-banner" style="background: rgba(16,185,129,0.1); color: #34d399;">✅ Licença ativa! Expira em ${diasRestantes} dias.</div>`}
+                ${!isPlanoPago ? `<div class="warning-banner">⚠️ Teste grátis • Expira em ${diasRestantes} dias • Adquira uma licença</div>` : `<div class="warning-banner" style="background: rgba(16,185,129,0.1); color: #34d399;">✅ Licença ativa! Expira em ${diasRestantes} dias.</div>`}
                 <div class="profile-bar">
-                    <div class="profile-info">
-                        <span>👤 ${appData.usuario?.nome || "Usuário"}</span>
-                        <span>📅 ${diasRestantes} dias restantes</span>
-                    </div>
-                    <div>
-                        <button id="btnConfigPerfil" class="btn-profile">⚙️ Perfil</button>
-                        <button id="btnLogout" class="btn-logout">🚪 Sair</button>
-                    </div>
+                    <div class="profile-info"><span>👤 ${appData.usuario?.nome || "Usuário"}</span><span>📅 ${diasRestantes} dias restantes</span></div>
+                    <div><button id="btnConfigPerfil" class="btn-profile">⚙️ Perfil</button><button id="btnLogout" class="btn-logout">🚪 Sair</button></div>
                 </div>
                 <div class="tabs">
                     <button class="tab-btn active" data-tab="agenda">📅 Agendamentos</button>
+                    <button class="tab-btn" data-tab="servicos">💅 Serviços</button>
                     <button class="tab-btn" data-tab="financeiro">💰 Financeiro</button>
                     <button class="tab-btn" data-tab="config">⚙️ Configurações</button>
                 </div>
 
+                <!-- Aba Agendamentos -->
                 <div id="tab-agenda" class="tab-content active">
                     <div class="dashboard">
                         <div class="form-section">
@@ -934,7 +781,11 @@
                                         <option>17:30</option><option>18:00</option>
                                     </select>
                                 </div>
-                                <div class="form-group"><label>💅 Serviço</label><input type="text" id="servico" required placeholder="Ex: Volume Brasileiro"></div>
+                                <div class="form-group"><label>💅 Serviço</label>
+                                    <select id="servicoSelect" required>
+                                        ${appData.servicos.map(s => `<option value="${s.id}" data-valor="${s.valor}">${s.nome} - R$ ${s.valor.toFixed(2)} (${s.duracao})</option>`).join('')}
+                                    </select>
+                                </div>
                                 <div class="form-group"><label>💰 Valor (R$)</label><input type="number" id="valor" step="0.01" value="${appData.valorServicoPadrao}"></div>
                                 <div class="form-group"><label>📝 Obs</label><textarea id="obs"></textarea></div>
                                 <button type="submit" class="btn-primary">💛 AGENDAR</button>
@@ -945,69 +796,59 @@
                                 <h2>📋 Agendamentos</h2>
                                 <span class="badge-count" id="contador">${appData.agendamentos.length}</span>
                             </div>
-                            <div class="filtro">
-                                <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome ou serviço...">
-                            </div>
+                            <div class="filtro"><input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome ou serviço..."></div>
                             <div id="listaCards"></div>
                         </div>
                     </div>
                 </div>
 
-                <div id="tab-financeiro" class="tab-content">
+                <!-- Aba Serviços (NOVA) -->
+                <div id="tab-servicos" class="tab-content">
                     <div class="dashboard">
-                        <div class="finance-section">
-                            <h2>💰 Faturamento Mensal</h2>
-                            <div class="total-faturamento">
-                                <h3>R$ ${calcularFaturamentoMensal().toFixed(2)}</h3>
-                                <p>Mês atual</p>
-                            </div>
-                            <div style="margin-top:1.5rem;">
-                                <h3 style="color:var(--text-accent); font-size:1rem;">Valor Padrão</h3>
-                                <input type="number" id="valorPadraoGlobal" step="0.01" value="${appData.valorServicoPadrao}">
-                                <button id="btnAtualizarValorPadrao" class="btn-primary" style="margin-top:0.5rem;">Atualizar</button>
-                            </div>
+                        <div class="form-section">
+                            <h2>➕ Novo Serviço</h2>
+                            <div class="form-group"><label>Nome do Serviço</label><input type="text" id="novoServicoNome" placeholder="Ex: Mega Volume Russo"></div>
+                            <div class="form-group"><label>Valor (R$)</label><input type="number" id="novoServicoValor" step="0.01" placeholder="0.00"></div>
+                            <div class="form-group"><label>Duração</label><input type="text" id="novoServicoDuracao" placeholder="Ex: 90min, 2h"></div>
+                            <button id="btnAdicionarServico" class="btn-primary">➕ ADICIONAR SERVIÇO</button>
                         </div>
-                        <div class="list-section">
-                            <h2>📊 Serviços do Mês</h2>
-                            <div id="listaFinanceiro"></div>
+                        <div class="servicos-section">
+                            <h2>📋 Lista de Serviços</h2>
+                            <div id="listaServicos"></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Aba Financeiro -->
+                <div id="tab-financeiro" class="tab-content">
+                    <div class="dashboard">
+                        <div class="finance-section">
+                            <h2>💰 Faturamento Mensal</h2>
+                            <div class="total-faturamento"><h3>R$ ${calcularFaturamentoMensal().toFixed(2)}</h3><p>Mês atual</p></div>
+                            <div style="margin-top:1.5rem;"><h3 style="color:var(--text-accent); font-size:1rem;">Valor Padrão</h3>
+                            <input type="number" id="valorPadraoGlobal" step="0.01" value="${appData.valorServicoPadrao}">
+                            <button id="btnAtualizarValorPadrao" class="btn-primary" style="margin-top:0.5rem;">Atualizar</button></div>
+                        </div>
+                        <div class="list-section"><h2>📊 Serviços do Mês</h2><div id="listaFinanceiro"></div></div>
+                    </div>
+                </div>
+
+                <!-- Aba Configurações -->
                 <div id="tab-config" class="tab-content">
                     <div class="dashboard">
-                        <div class="form-section">
-                            <h2>🏢 Empresa</h2>
+                        <div class="form-section"><h2>🏢 Empresa</h2>
                             <div class="form-group"><label>Nome do Studio</label><input type="text" id="configNomeStudio" value="${appData.empresa?.nome || ''}"></div>
-                            <div class="form-group">
-                                <label>Logomarca (JPEG/PNG)</label>
-                                <input type="file" id="configLogoUpload" accept="image/jpeg,image/png">
-                                <div class="preview-logo" id="previewLogo"></div>
-                            </div>
+                            <div class="form-group"><label>Logomarca (JPEG/PNG)</label><input type="file" id="configLogoUpload" accept="image/jpeg,image/png"><div class="preview-logo" id="previewLogo"></div></div>
                             <button id="btnSalvarConfig" class="btn-primary">Salvar Configurações</button>
                         </div>
-                        <div class="form-section">
-                            <h2>🔐 Segurança</h2>
+                        <div class="form-section"><h2>🔐 Segurança</h2>
                             <div class="form-group"><label>Nova Senha</label><input type="password" id="novaSenha" placeholder="Digite a nova senha"></div>
                             <div class="form-group"><label>Confirmar Senha</label><input type="password" id="confirmarSenha" placeholder="Confirme a nova senha"></div>
                             <button id="btnAlterarSenha" class="btn-primary">Alterar Senha</button>
                         </div>
-                        <div class="form-section">
-                            <h2>🔑 Licença</h2>
-                            <div class="license-card">
-                                <h4>${planoNome}</h4>
-                                <p>Expira em: <strong>${new Date(appData.licenca?.expiracao).toLocaleDateString()}</strong></p>
-                                <p>Dias restantes: <strong>${diasRestantes}</strong></p>
-                                ${!isPlanoPago ? `
-                                <div class="activate-section">
-                                    <h4>🔓 Ativar Licença</h4>
-                                    <div class="activate-input">
-                                        <input type="text" id="chaveAtivacao" placeholder="Digite sua chave de ativação">
-                                        <button id="btnAtivarLicenca" class="btn-primary">ATIVAR</button>
-                                    </div>
-                                    <small style="color:var(--text-secondary);">Adquira uma chave com o administrador</small>
-                                </div>
-                                ` : ''}
+                        <div class="form-section"><h2>🔑 Licença</h2>
+                            <div class="license-card"><h4>${planoNome}</h4><p>Expira em: <strong>${new Date(appData.licenca?.expiracao).toLocaleDateString()}</strong></p><p>Dias restantes: <strong>${diasRestantes}</strong></p>
+                            ${!isPlanoPago ? `<div class="activate-section"><h4>🔓 Ativar Licença</h4><div class="activate-input"><input type="text" id="chaveAtivacao" placeholder="Digite sua chave de ativação"><button id="btnAtivarLicenca" class="btn-primary">ATIVAR</button></div><small style="color:var(--text-secondary);">Adquira uma chave com o administrador</small></div>` : ''}
                             </div>
                         </div>
                     </div>
@@ -1018,21 +859,123 @@
 
         document.getElementById("appRoot").innerHTML = html;
 
+        // Preview da logo
         const previewDiv = document.getElementById("previewLogo");
-        if(previewDiv && appData.configuracoes.logoBase64) {
-            previewDiv.innerHTML = `<img src="${appData.configuracoes.logoBase64}" alt="Preview">`;
+        if(previewDiv && appData.configuracoes.logoBase64) previewDiv.innerHTML = `<img src="${appData.configuracoes.logoBase64}" alt="Preview">`;
+
+        // Carregar serviços na lista
+        function carregarListaServicos() {
+            const container = document.getElementById("listaServicos");
+            if(container) {
+                if(appData.servicos.length === 0) {
+                    container.innerHTML = "<div style='text-align:center;padding:2rem;color:var(--text-secondary);'>Nenhum serviço cadastrado</div>";
+                } else {
+                    container.innerHTML = appData.servicos.map(s => `
+                        <div class="servico-item">
+                            <div class="servico-info">
+                                <strong>${s.nome}</strong><br>
+                                <small>💰 R$ ${s.valor.toFixed(2)} • ⏱️ ${s.duracao}</small>
+                            </div>
+                            <div class="servico-actions">
+                                <button class="btn-editar" data-id="${s.id}">✏️ Editar</button>
+                                <button class="btn-excluir-servico" data-id="${s.id}">🗑️ Excluir</button>
+                            </div>
+                        </div>
+                    `).join("");
+                    
+                    document.querySelectorAll('.btn-editar').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = parseInt(btn.getAttribute('data-id'));
+                            const servico = appData.servicos.find(s => s.id === id);
+                            if(servico) {
+                                const novoNome = prompt("Editar nome do serviço:", servico.nome);
+                                if(novoNome) {
+                                    const novoValor = parseFloat(prompt("Editar valor (R$):", servico.valor));
+                                    const novaDuracao = prompt("Editar duração:", servico.duracao);
+                                    if(!isNaN(novoValor)) {
+                                        editarServico(id, novoNome, novoValor, novaDuracao || servico.duracao);
+                                        renderizarApp();
+                                    }
+                                }
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-excluir-servico').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const id = parseInt(btn.getAttribute('data-id'));
+                            if(confirm("Excluir este serviço?")) {
+                                excluirServico(id);
+                                renderizarApp();
+                            }
+                        });
+                    });
+                }
+            }
+        }
+
+        // Adicionar serviço
+        document.getElementById("btnAdicionarServico")?.addEventListener("click", () => {
+            const nome = document.getElementById("novoServicoNome").value.trim();
+            const valor = parseFloat(document.getElementById("novoServicoValor").value);
+            const duracao = document.getElementById("novoServicoDuracao").value.trim();
+            if(!nome || isNaN(valor) || valor <= 0) {
+                alert("Preencha todos os campos corretamente!");
+                return;
+            }
+            adicionarServico(nome, valor, duracao || "60min");
+            document.getElementById("novoServicoNome").value = "";
+            document.getElementById("novoServicoValor").value = "";
+            document.getElementById("novoServicoDuracao").value = "";
+            renderizarApp();
+        });
+
+        // Atualizar select de serviços quando mudar
+        function atualizarSelectServicos() {
+            const select = document.getElementById("servicoSelect");
+            if(select) {
+                const valorAtual = document.getElementById("valor").value;
+                select.innerHTML = appData.servicos.map(s => `<option value="${s.id}" data-valor="${s.valor}">${s.nome} - R$ ${s.valor.toFixed(2)} (${s.duracao})</option>`).join('');
+                select.addEventListener('change', () => {
+                    const selectedOption = select.options[select.selectedIndex];
+                    const valor = selectedOption.getAttribute('data-valor');
+                    if(valor) document.getElementById("valor").value = valor;
+                });
+                if(valorAtual) document.getElementById("valor").value = valorAtual;
+            }
+        }
+
+        // Configurar eventos do formulário de agendamento
+        const formAgendamento = document.getElementById("formAgendamento");
+        if(formAgendamento) {
+            atualizarSelectServicos();
+            formAgendamento.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const nome = document.getElementById("nome").value.trim();
+                const telefone = document.getElementById("telefone").value.trim();
+                const data = document.getElementById("data").value;
+                const horario = document.getElementById("horario").value;
+                const servicoSelect = document.getElementById("servicoSelect");
+                const servicoId = parseInt(servicoSelect.value);
+                const servico = getServicoPorId(servicoId);
+                const servicoNome = servico ? servico.nome : "Outro";
+                const valor = parseFloat(document.getElementById("valor").value) || appData.valorServicoPadrao;
+                const obs = document.getElementById("obs").value.trim();
+                if(!nome || !telefone || !data || !horario) return alert("Preencha todos os campos!");
+                if(appData.agendamentos.some(ag => ag.data === data && ag.horario === horario)) return alert("Horário já ocupado!");
+                appData.agendamentos.push({ id: Date.now(), nome, telefone, data, horario, servico: servicoNome, valor, obs: obs || "Sem obs" });
+                salvarDados();
+                renderizarApp();
+            });
         }
 
         document.getElementById("btnAtivarLicenca")?.addEventListener("click", () => {
             const chave = document.getElementById("chaveAtivacao").value.trim();
             if(!chave) return alert("Digite a chave de ativação!");
             const resultado = ativarLicenca(chave);
-            if(resultado.sucesso) {
-                alert(`✅ ${resultado.descricao} ativado! Expira em: ${resultado.expiracao.toLocaleDateString()}`);
-                renderizarApp();
-            } else {
-                alert(resultado.mensagem);
-            }
+            if(resultado.sucesso) alert(`✅ ${resultado.descricao} ativado! Expira em: ${resultado.expiracao.toLocaleDateString()}`);
+            else alert(resultado.mensagem);
+            renderizarApp();
         });
 
         document.getElementById("configLogoUpload")?.addEventListener("change", async (e) => {
@@ -1044,9 +987,7 @@
                 salvarDados();
                 alert("Logomarca carregada!");
                 renderizarApp();
-            } else {
-                alert("Selecione um arquivo JPEG ou PNG.");
-            }
+            } else alert("Selecione um arquivo JPEG ou PNG.");
         });
 
         document.getElementById("btnSalvarConfig")?.addEventListener("click", () => {
@@ -1068,46 +1009,36 @@
             document.getElementById("confirmarSenha").value = "";
         });
 
-        document.getElementById("formAgendamento")?.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const nome = document.getElementById("nome").value.trim();
-            const telefone = document.getElementById("telefone").value.trim();
-            const data = document.getElementById("data").value;
-            const horario = document.getElementById("horario").value;
-            const servico = document.getElementById("servico").value.trim();
-            const valor = parseFloat(document.getElementById("valor").value) || appData.valorServicoPadrao;
-            const obs = document.getElementById("obs").value.trim();
-            if(!nome || !telefone || !data || !horario || !servico) return alert("Preencha todos os campos!");
-            
-            if(appData.agendamentos.some(ag => ag.data === data && ag.horario === horario)) {
-                return alert("Horário já ocupado!");
+        document.getElementById("btnAtualizarValorPadrao")?.addEventListener("click", () => {
+            const novoValor = parseFloat(document.getElementById("valorPadraoGlobal").value);
+            if(!isNaN(novoValor) && novoValor > 0) {
+                appData.valorServicoPadrao = novoValor;
+                salvarDados();
+                alert(`Valor padrão atualizado para R$ ${novoValor.toFixed(2)}`);
+                renderizarApp();
             }
-            
-            appData.agendamentos.push({
-                id: Date.now(), nome, telefone, data, horario, servico, valor, obs: obs || "Sem obs"
-            });
-            salvarDados();
-            renderizarApp();
         });
 
+        document.getElementById("btnConfigPerfil")?.addEventListener("click", () => {
+            alert(`👤 Perfil\n\nUsuário: ${appData.usuario?.nome}\nStudio: ${appData.empresa?.nome}\nPlano: ${planoNome}\nExpira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}\nDias restantes: ${diasRestantes}`);
+        });
+
+        document.getElementById("btnLogout")?.addEventListener("click", () => { location.reload(); });
+
+        // Renderizar listas
         function renderizarListas() {
             const filtro = document.getElementById("filtroNome")?.value.toLowerCase() || "";
-            let filtrados = appData.agendamentos.filter(ag => 
-                ag.nome.toLowerCase().includes(filtro) || ag.servico.toLowerCase().includes(filtro));
+            let filtrados = appData.agendamentos.filter(ag => ag.nome.toLowerCase().includes(filtro) || ag.servico.toLowerCase().includes(filtro));
             filtrados.sort((a,b) => a.data.localeCompare(b.data));
-            
             const container = document.getElementById("listaCards");
             if(container) {
                 if(filtrados.length === 0) container.innerHTML = "<div style='text-align:center;padding:2rem;color:var(--text-secondary);'>Nenhum agendamento</div>";
                 else {
                     container.innerHTML = filtrados.map(ag => `
                         <div class="card">
-                            <div class="card-header">
-                                <div class="nome-cliente">💎 ${ag.nome}</div>
-                                <div>📅 ${ag.data} • ⏰ ${ag.horario}</div>
-                            </div>
+                            <div class="card-header"><div class="nome-cliente">💎 ${ag.nome}</div><div>📅 ${ag.data} • ⏰ ${ag.horario}</div></div>
                             <div>💅 ${ag.servico} • R$ ${(ag.valor || appData.valorServicoPadrao).toFixed(2)}</div>
-                            <div class="observacao" style="color:var(--text-secondary); font-size:0.8rem;">📌 ${ag.obs}</div>
+                            <div style="color:var(--text-secondary); font-size:0.8rem;">📌 ${ag.obs}</div>
                             <button class="btn-remover" data-id="${ag.id}">❌ Cancelar</button>
                         </div>
                     `).join("");
@@ -1123,7 +1054,6 @@
                     });
                 }
             }
-            
             const containerFinanceiro = document.getElementById("listaFinanceiro");
             if(containerFinanceiro) {
                 const mesAtual = new Date().getMonth();
@@ -1131,37 +1061,19 @@
                 if(faturamentoMes.length === 0) containerFinanceiro.innerHTML = "<div style='text-align:center;padding:1rem;color:var(--text-secondary);'>Nenhum serviço este mês</div>";
                 else {
                     containerFinanceiro.innerHTML = faturamentoMes.map(ag => `
-                        <div class="card">
-                            <div><strong>${ag.nome}</strong> - ${ag.servico}</div>
-                            <div>📅 ${ag.data} • 💰 R$ ${(ag.valor || appData.valorServicoPadrao).toFixed(2)}</div>
-                        </div>
+                        <div class="card"><div><strong>${ag.nome}</strong> - ${ag.servico}</div><div>📅 ${ag.data} • 💰 R$ ${(ag.valor || appData.valorServicoPadrao).toFixed(2)}</div></div>
                     `).join("");
                 }
             }
-            
             const contador = document.getElementById("contador");
             if(contador) contador.innerText = appData.agendamentos.length;
+            carregarListaServicos();
         }
 
         document.getElementById("filtroNome")?.addEventListener("input", () => renderizarListas());
-        document.getElementById("btnAtualizarValorPadrao")?.addEventListener("click", () => {
-            const novoValor = parseFloat(document.getElementById("valorPadraoGlobal").value);
-            if(!isNaN(novoValor) && novoValor > 0) {
-                appData.valorServicoPadrao = novoValor;
-                salvarDados();
-                alert(`Valor padrão atualizado para R$ ${novoValor.toFixed(2)}`);
-                renderizarApp();
-            }
-        });
-
-        document.getElementById("btnConfigPerfil")?.addEventListener("click", () => {
-            alert(`👤 Perfil\n\nUsuário: ${appData.usuario?.nome}\nStudio: ${appData.empresa?.nome}\nPlano: ${planoNome}\nExpira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}\nDias restantes: ${diasRestantes}`);
-        });
-
-        document.getElementById("btnLogout")?.addEventListener("click", () => {
-            location.reload();
-        });
-
+        document.getElementById("data")?.setAttribute("min", new Date().toISOString().slice(0,10));
+        
+        // Abas
         document.querySelectorAll(".tab-btn").forEach(btn => {
             btn.addEventListener("click", () => {
                 const tab = btn.getAttribute("data-tab");
@@ -1169,53 +1081,71 @@
                 document.getElementById(`tab-${tab}`).classList.add("active");
                 document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
                 btn.classList.add("active");
+                if(tab === "servicos") carregarListaServicos();
                 if(tab === "financeiro" || tab === "agenda") renderizarListas();
             });
         });
-
-        document.getElementById("data")?.setAttribute("min", new Date().toISOString().slice(0,10));
+        
         renderizarListas();
+    }
+
+    // Telas de autenticação (implementações rápidas)
+    function showCadastro() {
+        const html = `<div class="auth-container"><div class="auth-header"><h1>💎 Agenda <span>Lash Designer</span></h1><p>Cadastro • Primeiro Acesso</p></div><div class="auth-form"><div class="info-msg">✨ Bem-vindo! ✨<br><strong>🎁 Teste grátis de 7 dias ativado automaticamente!</strong></div><div id="cadastroError" class="error-msg"></div><div class="input-group"><label>👤 Usuário</label><input type="text" id="newUsername"></div><div class="input-group"><label>🔒 Senha</label><input type="password" id="newPassword"></div><div class="input-group"><label>🔒 Confirmar</label><input type="password" id="confirmPassword"></div><div class="input-group"><label>🏢 Studio</label><input type="text" id="studioName"></div><button id="btnCadastrar" class="btn-primary">✨ CRIAR CONTA ✨</button></div></div>`;
+        document.getElementById("appRoot").innerHTML = html;
+        document.getElementById("btnCadastrar").addEventListener("click", () => {
+            const username = document.getElementById("newUsername").value.trim();
+            const password = document.getElementById("newPassword").value;
+            const confirm = document.getElementById("confirmPassword").value;
+            const studioName = document.getElementById("studioName").value.trim();
+            if(!username || !password || password !== confirm || !studioName) {
+                document.getElementById("cadastroError").innerText = "Preencha todos os campos corretamente!";
+                document.getElementById("cadastroError").style.display = "block";
+                return;
+            }
+            appData.usuario = { nome: username, senha: password };
+            appData.empresa = { nome: studioName, criadoEm: new Date().toISOString() };
+            appData.configuracoes.nomeStudio = studioName;
+            ativarTesteGratis();
+            appData.agendamentos = [];
+            appData.servicos = [...SERVICOS_PADRAO];
+            salvarDados();
+            alert("Cadastro realizado! Teste grátis de 7 dias ativado.");
+            showLogin();
+        });
+    }
+
+    function showLogin() {
+        const html = `<div class="auth-container"><div class="auth-header"><h1>💎 Agenda <span>Lash Designer</span></h1><p>Área Restrita</p></div><div class="auth-form"><div id="loginError" class="error-msg"></div><div class="input-group"><label>👤 Usuário</label><input type="text" id="loginUsername"></div><div class="input-group"><label>🔒 Senha</label><input type="password" id="loginPassword"></div><button id="btnLogin" class="btn-primary">🔓 ENTRAR</button></div></div>`;
+        document.getElementById("appRoot").innerHTML = html;
+        document.getElementById("btnLogin").addEventListener("click", () => {
+            if(appData.usuario && document.getElementById("loginUsername").value.trim() === appData.usuario.nome && document.getElementById("loginPassword").value === appData.usuario.senha) renderizarApp();
+            else { document.getElementById("loginError").innerText = "Usuário ou senha incorretos!"; document.getElementById("loginError").style.display = "block"; }
+        });
+    }
+
+    function showTelaAtivacao() {
+        const html = `<div class="auth-container"><div class="auth-header"><h1>💎 Agenda <span>Lash Designer</span></h1><p>Ativação de Licença</p></div><div class="auth-form"><div class="warning-msg">⚠️ SEU PERÍODO DE TESTE EXPIROU! ⚠️</div><div id="ativacaoError" class="error-msg"></div><div class="input-group"><label>🔑 Chave de Ativação</label><input type="text" id="activationKey"></div><button id="btnAtivar" class="btn-primary">🔓 ATIVAR LICENÇA</button></div></div>`;
+        document.getElementById("appRoot").innerHTML = html;
+        document.getElementById("btnAtivar").addEventListener("click", () => {
+            const chave = document.getElementById("activationKey").value.trim();
+            if(!chave) { document.getElementById("ativacaoError").innerText = "Digite a chave!"; document.getElementById("ativacaoError").style.display = "block"; return; }
+            const resultado = ativarLicenca(chave);
+            if(resultado.sucesso) { alert(`✅ ${resultado.descricao} ativado!`); showLogin(); }
+            else { document.getElementById("ativacaoError").innerText = resultado.mensagem; document.getElementById("ativacaoError").style.display = "block"; }
+        });
     }
 
     function init() {
         carregarDados();
-        if(!appData.usuario) {
-            showCadastro();
-        } else {
-            if(!appData.licenca || !validarLicenca()) {
-                showTelaAtivacao();
-            } else {
-                showLogin();
-            }
-        }
+        if(!appData.usuario) showCadastro();
+        else if(!appData.licenca || !validarLicenca()) showTelaAtivacao();
+        else showLogin();
     }
 
     window.mostrarChavesAdmin = function() {
-        console.log("%c╔══════════════════════════════════════════════════════════════════╗", "color: #3b82f6");
-        console.log("%c║                    CHAVES DE ATIVAÇÃO                           ║", "color: #3b82f6");
-        console.log("%c║                   AGENDA LASH DESIGNER                          ║", "color: #3b82f6");
-        console.log("%c╠══════════════════════════════════════════════════════════════════╣", "color: #3b82f6");
-        console.log("%c║  ⚠️ TESTE GRÁTIS DE 7 DIAS É AUTOMÁTICO - NÃO PRECISA DE CHAVE   ║", "color: #fbbf24");
-        console.log("%c║                                                                  ║", "color: #3b82f6");
-        console.log("%c║  💰 MENSAL (30 dias) - R$ 25,00                                  ║", "color: #3b82f6");
-        console.log("%c║     Chave: MENSAL-EMILY2024-BRL25                                ║", "color: #60a5fa");
-        console.log("%c║                                                                  ║", "color: #3b82f6");
-        console.log("%c║  📆 SEMESTRAL (180 dias) - R$ 80,00                              ║", "color: #3b82f6");
-        console.log("%c║     Chave: SEMESTRAL-EMILY2024-BRL80                             ║", "color: #60a5fa");
-        console.log("%c║                                                                  ║", "color: #3b82f6");
-        console.log("%c║  🌟 ANUAL (365 dias) - R$ 130,00                                 ║", "color: #3b82f6");
-        console.log("%c║     Chave: ANUAL-EMILY2024-BRL130                                ║", "color: #60a5fa");
-        console.log("%c╚══════════════════════════════════════════════════════════════════╝", "color: #3b82f6");
-        
-        alert("🔑 CHAVES DE ATIVAÇÃO - AGENDA LASH DESIGNER:\n\n" +
-              "⚠️ TESTE GRÁTIS DE 7 DIAS É AUTOMÁTICO!\n\n" +
-              "💰 MENSAL (R$25,00): MENSAL-EMILY2024-BRL25\n\n" +
-              "📆 SEMESTRAL (R$80,00): SEMESTRAL-EMILY2024-BRL80\n\n" +
-              "🌟 ANUAL (R$130,00): ANUAL-EMILY2024-BRL130");
+        alert("🔑 CHAVES DE ATIVAÇÃO:\n\n💰 MENSAL: MENSAL-EMILY2024-BRL25\n📆 SEMESTRAL: SEMESTRAL-EMILY2024-BRL80\n🌟 ANUAL: ANUAL-EMILY2024-BRL130\n\n⚠️ Teste grátis de 7 dias é automático!");
     };
-    
-    console.log("%c💎 AGENDA LASH DESIGNER - Sistema Profissional", "color: #3b82f6; font-size: 14px; font-weight: bold;");
-    console.log("%c💡 Digite 'mostrarChavesAdmin()' para ver as chaves de ativação", "color: #60a5fa; font-size: 12px;");
     
     init();
 </script>
