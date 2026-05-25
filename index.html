@@ -16,11 +16,24 @@
             font-family: 'Inter', 'Poppins', 'Segoe UI', system-ui, sans-serif;
         }
 
+        /* Fundo dinâmico */
         body {
-            background: #f0f2f5;
             min-height: 100vh;
             padding: 1rem;
-            transition: all 0.3s;
+            transition: background 0.3s ease;
+        }
+
+        /* Fundo sólido padrão */
+        body.bg-solid {
+            background: #f0f2f5;
+        }
+
+        /* Fundo com imagem */
+        body.bg-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         .install-float {
@@ -47,7 +60,7 @@
             100% { transform: scale(1); }
         }
 
-        /* TEMAS */
+        /* TEMAS DE CORES DO SISTEMA */
         body.theme-light {
             --primary-color: #2563eb;
             --whatsapp-color: #25D366;
@@ -131,6 +144,7 @@
             border: 1px solid var(--border-color);
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: background 0.3s;
         }
 
         .header {
@@ -151,8 +165,8 @@
         }
 
         .logo-img {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: #f0f2f5;
             display: flex;
@@ -366,6 +380,39 @@
             margin-left: 0.5rem;
         }
 
+        /* Preview de fundo */
+        .bg-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .bg-preview:hover {
+            transform: scale(1.05);
+        }
+        .bg-preview.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--bg-card);
+        }
+
+        .color-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .color-circle:hover {
+            transform: scale(1.1);
+        }
+        .color-circle.selected {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px #333;
+        }
+
         @media (max-width: 768px) {
             body { padding: 0.5rem; }
             .tab-pane { padding: 0.8rem; }
@@ -437,6 +484,11 @@
         empresa: { nome: "TOP Agenda 2026", logoBase64: null },
         licenca: null,
         tema: "light",
+        fundo: {
+            tipo: "solid", // solid ou image
+            cor: "#f0f2f5",
+            imagem: null
+        },
         horarioInicio: "08:00",
         horarioFim: "20:00",
         horarioAlmocoInicio: "12:00",
@@ -486,6 +538,9 @@
         }
         
         if (!appData.tema) appData.tema = "light";
+        if (!appData.fundo) {
+            appData.fundo = { tipo: "solid", cor: "#f0f2f5", imagem: null };
+        }
         salvarDados();
     }
 
@@ -498,6 +553,27 @@
             case 'red': body.classList.add('theme-red'); break;
             case 'black': body.classList.add('theme-black'); break;
             default: body.classList.add('theme-light');
+        }
+    }
+
+    function aplicarFundo() {
+        const body = document.body;
+        if (appData.fundo.tipo === "solid") {
+            body.classList.remove('bg-image');
+            body.classList.add('bg-solid');
+            body.style.background = appData.fundo.cor || "#f0f2f5";
+            body.style.backgroundImage = "none";
+        } else if (appData.fundo.tipo === "image" && appData.fundo.imagem) {
+            body.classList.remove('bg-solid');
+            body.classList.add('bg-image');
+            body.style.backgroundImage = `url(${appData.fundo.imagem})`;
+            body.style.backgroundSize = "cover";
+            body.style.backgroundPosition = "center";
+            body.style.backgroundRepeat = "no-repeat";
+            body.style.backgroundAttachment = "fixed";
+        } else {
+            body.classList.add('bg-solid');
+            body.style.background = "#f0f2f5";
         }
     }
 
@@ -657,6 +733,7 @@
         const financeiro = calcularFinanceiro();
         
         aplicarTema(appData.tema);
+        aplicarFundo();
         
         const logoHtml = appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}">` : `<span>⭐</span>`;
         
@@ -664,7 +741,7 @@
             <div class="glass-card">
                 <div class="header">
                     <div class="logo-area">
-                        <div class="logo-img">${logoHtml}</div>
+                        <div class="logo-img" id="logoPreview">${logoHtml}</div>
                         <div>
                             <h1>⭐ TOP Agenda 2026 <span class="year-badge">NEW</span></h1>
                             <p>${appData.empresa.nome} · Lembretes WhatsApp</p>
@@ -779,10 +856,86 @@
                 <!-- Aba Configurações -->
                 <div id="tab-config" class="tab-pane">
                     <div class="grid-2">
-                        <div class="info-card"><h3>🎨 Temas</h3><div style="display:flex;gap:0.5rem;flex-wrap:wrap;"><button class="btn-secondary" onclick="mudarTema('light')">⚪ Branco</button><button class="btn-secondary" onclick="mudarTema('yellow')">🟡 Amarelo</button><button class="btn-secondary" onclick="mudarTema('blue')">🔵 Azul</button><button class="btn-secondary" onclick="mudarTema('red')">🔴 Vermelho</button><button class="btn-secondary" onclick="mudarTema('black')">⚫ Preto</button></div></div>
-                        <div class="info-card"><h3>⚙️ Horários</h3><div class="form-group"><label>Início</label><input type="time" id="cfgInicio" value="${appData.horarioInicio}"></div><div class="form-group"><label>Fim</label><input type="time" id="cfgFim" value="${appData.horarioFim}"></div><div class="form-group"><label>Almoço</label><input type="time" id="cfgAlmocoIni" value="${appData.horarioAlmocoInicio}"> às <input type="time" id="cfgAlmocoFim" value="${appData.horarioAlmocoFim}"></div><button id="btnSalvarHorarios" class="btn-primary">Salvar</button></div>
-                        <div class="info-card"><h3>🔗 Link Online</h3><input type="text" id="linkAgendamento" readonly value="${gerarLinkAgendamento()}"><button id="btnCopiarLink" class="btn-secondary" style="margin-top:0.5rem;">Copiar</button><div class="form-group"><label>Nome do Estúdio</label><input type="text" id="nomeStudio" value="${appData.empresa.nome}"></div><button id="btnSalvarStudio" class="btn-primary">Salvar</button></div>
-                        <div class="info-card"><h3>🔐 Licença</h3><div>Plano: ${PLANOS[appData.licenca?.plano]?.nome || "Teste"}</div><div>Expira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}</div><div>Dias: ${diasRestantes}</div>${isTeste ? `<input type="text" id="chaveUpgrade" placeholder="Chave"><button id="btnUpgrade" class="btn-primary">Ativar</button>` : ''}</div>
+                        <div class="info-card">
+                            <h3>🖼️ Logomarca</h3>
+                            <div class="form-group"><label>Enviar imagem (PNG/JPG)</label><input type="file" id="logoUpload" accept="image/jpeg,image/png"></div>
+                            <div id="previewLogo" style="display:flex; justify-content:center; margin-bottom:1rem;">
+                                ${appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--primary-color);">` : '<span style="color:var(--text-secondary);">Nenhuma logo</span>'}
+                            </div>
+                            <button id="btnSalvarLogo" class="btn-primary">Salvar Logomarca</button>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>🎨 Fundo da Tela</h3>
+                            <div class="form-group">
+                                <label>Tipo de fundo</label>
+                                <select id="tipoFundo">
+                                    <option value="solid" ${appData.fundo.tipo === 'solid' ? 'selected' : ''}>Cor Sólida</option>
+                                    <option value="image" ${appData.fundo.tipo === 'image' ? 'selected' : ''}>Imagem Personalizada</option>
+                                </select>
+                            </div>
+                            <div id="solidColorDiv" style="${appData.fundo.tipo === 'image' ? 'display:none' : ''}">
+                                <label>Cor de fundo</label>
+                                <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+                                    <div class="color-circle" style="background:#f0f2f5; border:1px solid #ccc;" onclick="alterarCorFundo('#f0f2f5')" title="Claro"></div>
+                                    <div class="color-circle" style="background:#ffffff; border:1px solid #ccc;" onclick="alterarCorFundo('#ffffff')" title="Branco"></div>
+                                    <div class="color-circle" style="background:#1a1a2e;" onclick="alterarCorFundo('#1a1a2e')" title="Azul Escuro"></div>
+                                    <div class="color-circle" style="background:#2d1b4e;" onclick="alterarCorFundo('#2d1b4e')" title="Roxo"></div>
+                                    <div class="color-circle" style="background:#1e3a5f;" onclick="alterarCorFundo('#1e3a5f')" title="Azul Marinho"></div>
+                                    <div class="color-circle" style="background:#3e2723;" onclick="alterarCorFundo('#3e2723')" title="Marrom"></div>
+                                    <div class="color-circle" style="background:#0a0a0a;" onclick="alterarCorFundo('#0a0a0a')" title="Preto"></div>
+                                    <div class="color-circle" style="background:#f5e6d3;" onclick="alterarCorFundo('#f5e6d3')" title="Bege"></div>
+                                </div>
+                                <div class="form-group" style="margin-top:0.8rem;">
+                                    <label>Ou digite uma cor (hex)</label>
+                                    <input type="text" id="corPersonalizada" placeholder="#RRGGBB" value="${appData.fundo.cor || '#f0f2f5'}">
+                                    <button id="btnAplicarCor" class="btn-secondary" style="margin-top:0.3rem;">Aplicar Cor</button>
+                                </div>
+                            </div>
+                            <div id="imageBgDiv" style="${appData.fundo.tipo === 'solid' ? 'display:none' : ''}">
+                                <label>Imagem de fundo</label>
+                                <input type="file" id="bgImageUpload" accept="image/jpeg,image/png,image/jpg">
+                                <div id="previewBg" style="margin-top:0.8rem; text-align:center;">
+                                    ${appData.fundo.imagem ? `<img src="${appData.fundo.imagem}" style="max-width:100%; max-height:100px; border-radius:0.5rem;">` : '<span style="color:var(--text-secondary);">Nenhuma imagem selecionada</span>'}
+                                </div>
+                                <button id="btnRemoverBg" class="btn-secondary" style="margin-top:0.5rem;">Remover Imagem</button>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>🎨 Temas do Sistema</h3>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <button class="btn-secondary" onclick="mudarTema('light')">⚪ Branco</button>
+                                <button class="btn-secondary" onclick="mudarTema('yellow')">🟡 Amarelo</button>
+                                <button class="btn-secondary" onclick="mudarTema('blue')">🔵 Azul</button>
+                                <button class="btn-secondary" onclick="mudarTema('red')">🔴 Vermelho</button>
+                                <button class="btn-secondary" onclick="mudarTema('black')">⚫ Preto</button>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>⚙️ Horários</h3>
+                            <div class="form-group"><label>Início</label><input type="time" id="cfgInicio" value="${appData.horarioInicio}"></div>
+                            <div class="form-group"><label>Fim</label><input type="time" id="cfgFim" value="${appData.horarioFim}"></div>
+                            <div class="form-group"><label>Almoço</label><input type="time" id="cfgAlmocoIni" value="${appData.horarioAlmocoInicio}"> às <input type="time" id="cfgAlmocoFim" value="${appData.horarioAlmocoFim}"></div>
+                            <button id="btnSalvarHorarios" class="btn-primary">Salvar</button>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>🔗 Link Online</h3>
+                            <input type="text" id="linkAgendamento" readonly value="${gerarLinkAgendamento()}">
+                            <button id="btnCopiarLink" class="btn-secondary" style="margin-top:0.5rem;">Copiar</button>
+                            <div class="form-group" style="margin-top:0.8rem;"><label>Nome do Estúdio</label><input type="text" id="nomeStudio" value="${appData.empresa.nome}"></div>
+                            <button id="btnSalvarStudio" class="btn-primary">Salvar</button>
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>🔐 Licença</h3>
+                            <div>Plano: ${PLANOS[appData.licenca?.plano]?.nome || "Teste"}</div>
+                            <div>Expira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}</div>
+                            <div>Dias: ${diasRestantes}</div>
+                            ${isTeste ? `<input type="text" id="chaveUpgrade" placeholder="Chave" style="margin-top:0.8rem;"><button id="btnUpgrade" class="btn-primary" style="margin-top:0.5rem;">Ativar</button>` : ''}
+                        </div>
                     </div>
                 </div>
                 
@@ -791,6 +944,99 @@
         `;
         
         document.getElementById("root").innerHTML = html;
+        
+        // Funções de Fundo
+        window.alterarCorFundo = (cor) => {
+            appData.fundo.tipo = "solid";
+            appData.fundo.cor = cor;
+            document.getElementById("tipoFundo").value = "solid";
+            document.getElementById("solidColorDiv").style.display = "block";
+            document.getElementById("imageBgDiv").style.display = "none";
+            salvarDados();
+            aplicarFundo();
+            
+            // Atualizar input de cor
+            const corInput = document.getElementById("corPersonalizada");
+            if (corInput) corInput.value = cor;
+        };
+        
+        document.getElementById("tipoFundo")?.addEventListener("change", (e) => {
+            appData.fundo.tipo = e.target.value;
+            if (appData.fundo.tipo === "solid") {
+                document.getElementById("solidColorDiv").style.display = "block";
+                document.getElementById("imageBgDiv").style.display = "none";
+                aplicarFundo();
+            } else {
+                document.getElementById("solidColorDiv").style.display = "none";
+                document.getElementById("imageBgDiv").style.display = "block";
+                if (appData.fundo.imagem) {
+                    aplicarFundo();
+                }
+            }
+            salvarDados();
+        });
+        
+        document.getElementById("btnAplicarCor")?.addEventListener("click", () => {
+            const cor = document.getElementById("corPersonalizada").value;
+            if (cor && cor.match(/^#[0-9A-Fa-f]{6}$/)) {
+                appData.fundo.tipo = "solid";
+                appData.fundo.cor = cor;
+                salvarDados();
+                aplicarFundo();
+                document.getElementById("tipoFundo").value = "solid";
+                document.getElementById("solidColorDiv").style.display = "block";
+                document.getElementById("imageBgDiv").style.display = "none";
+            } else {
+                alert("Digite uma cor válida no formato hexadecimal (#RRGGBB)");
+            }
+        });
+        
+        document.getElementById("bgImageUpload")?.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (file && (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg")) {
+                const base64 = await fileToBase64(file);
+                appData.fundo.tipo = "image";
+                appData.fundo.imagem = base64;
+                salvarDados();
+                aplicarFundo();
+                document.getElementById("previewBg").innerHTML = `<img src="${base64}" style="max-width:100%; max-height:100px; border-radius:0.5rem;">`;
+                document.getElementById("tipoFundo").value = "image";
+                document.getElementById("solidColorDiv").style.display = "none";
+                document.getElementById("imageBgDiv").style.display = "block";
+            } else {
+                alert("Formato inválido! Use PNG, JPG ou JPEG.");
+            }
+        });
+        
+        document.getElementById("btnRemoverBg")?.addEventListener("click", () => {
+            appData.fundo.tipo = "solid";
+            appData.fundo.imagem = null;
+            salvarDados();
+            aplicarFundo();
+            document.getElementById("previewBg").innerHTML = '<span style="color:var(--text-secondary);">Nenhuma imagem selecionada</span>';
+            document.getElementById("tipoFundo").value = "solid";
+            document.getElementById("solidColorDiv").style.display = "block";
+            document.getElementById("imageBgDiv").style.display = "none";
+        });
+        
+        // Funções de Logo
+        document.getElementById("logoUpload")?.addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
+                const base64 = await fileToBase64(file);
+                appData.empresa.logoBase64 = base64;
+                salvarDados();
+                document.getElementById("previewLogo").innerHTML = `<img src="${base64}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--primary-color);">`;
+                document.getElementById("logoPreview").innerHTML = `<img src="${base64}">`;
+                alert("✅ Logomarca salva com sucesso!");
+            } else {
+                alert("Formato inválido! Use PNG ou JPG.");
+            }
+        });
+        
+        document.getElementById("btnSalvarLogo")?.addEventListener("click", () => {
+            renderizarApp();
+        });
         
         // Funções globais
         window.mudarTema = (tema) => { appData.tema = tema; salvarDados(); aplicarTema(tema); renderizarApp(); };
@@ -1200,6 +1446,7 @@
             if (chave) { if (!ativarPlanoPorChave(chave).sucesso) ativarTesteGratis(); }
             else ativarTesteGratis();
             appData.tema = "light";
+            appData.fundo = { tipo: "solid", cor: "#f0f2f5", imagem: null };
             salvarDados();
             renderizarApp();
         });
