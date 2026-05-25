@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <meta name="theme-color" content="#2563eb">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="TOP Agenda">
+    <meta name="theme-color" content="#25D366">
     <title>TOP Agenda | Integração com WhatsApp</title>
     <style>
         * {
@@ -23,7 +20,6 @@
             transition: all 0.3s;
         }
 
-        /* BOTÃO FLUTUANTE DE INSTALAÇÃO */
         .install-float {
             position: fixed;
             bottom: 20px;
@@ -35,7 +31,6 @@
             padding: 0.8rem 1.5rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             z-index: 10000;
             display: flex;
             align-items: center;
@@ -52,8 +47,6 @@
         /* TEMAS */
         body.theme-light {
             --primary-color: #2563eb;
-            --primary-light: #3b82f6;
-            --primary-dark: #1d4ed8;
             --whatsapp-color: #25D366;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
@@ -65,24 +58,8 @@
             --hover-bg: #f3f4f6;
         }
         
-        body.theme-light .glass-card {
-            background: var(--bg-card);
-            border-color: var(--border-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        body.theme-light .info-card {
-            background: #fafafa;
-            border-color: var(--border-color);
-        }
-        body.theme-light .header {
-            background: var(--bg-header);
-            border-bottom-color: var(--primary-color);
-        }
-
         body.theme-yellow {
             --primary-color: #d4af37;
-            --primary-light: #f5e6a3;
-            --primary-dark: #b8942e;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
             --text-primary: #1f2937;
@@ -90,30 +67,24 @@
             --border-color: #e5e7eb;
         }
         body.theme-yellow .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #d4af37, #b8942e);
             color: #0a0a0a;
         }
 
         body.theme-blue {
             --primary-color: #2563eb;
-            --primary-light: #3b82f6;
-            --primary-dark: #1d4ed8;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
         }
 
         body.theme-red {
             --primary-color: #dc2626;
-            --primary-light: #ef4444;
-            --primary-dark: #b91c1c;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
         }
 
         body.theme-black {
             --primary-color: #1f1f1f;
-            --primary-light: #333333;
-            --primary-dark: #000000;
             --bg-card: #1a1a1a;
             --bg-header: #0f0f0f;
             --text-primary: #e5e5e5;
@@ -128,15 +99,13 @@
             border-bottom-color: #d4af37;
         }
         body.theme-black .btn-primary {
-            background: linear-gradient(135deg, #1f1f1f 0%, #000000 100%);
+            background: linear-gradient(135deg, #1f1f1f, #000000);
             color: #d4af37;
             border: 1px solid #d4af37;
         }
 
         body {
             --primary-color: #2563eb;
-            --primary-light: #3b82f6;
-            --primary-dark: #1d4ed8;
             --whatsapp-color: #25D366;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
@@ -149,7 +118,7 @@
         }
 
         .app {
-            max-width: 1600px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -158,13 +127,12 @@
             border-radius: 1.5rem;
             border: 1px solid var(--border-color);
             overflow: hidden;
-            transition: all 0.3s;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
         .header {
             background: var(--bg-header);
-            padding: 1.2rem 2rem;
+            padding: 1rem 1.5rem;
             border-bottom: 3px solid var(--primary-color);
             display: flex;
             justify-content: space-between;
@@ -176,12 +144,12 @@
         .logo-area {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.8rem;
         }
 
         .logo-img {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: #f0f2f5;
             display: flex;
@@ -198,7 +166,7 @@
         }
 
         .logo-area h1 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--primary-color);
         }
@@ -212,7 +180,7 @@
             display: flex;
             gap: 0.25rem;
             background: var(--bg-card);
-            padding: 0.5rem 1.5rem;
+            padding: 0.5rem 1rem;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
         }
@@ -220,7 +188,7 @@
         .nav-btn {
             background: transparent;
             border: none;
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 1rem;
             font-size: 0.8rem;
             font-weight: 500;
             color: var(--text-secondary);
@@ -242,7 +210,7 @@
 
         .tab-pane {
             display: none;
-            padding: 1.5rem;
+            padding: 1.2rem;
             animation: fadeIn 0.3s ease;
         }
 
@@ -257,8 +225,8 @@
 
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.2rem;
         }
 
         .info-card {
@@ -272,8 +240,8 @@
             color: var(--primary-color);
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.4rem;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -294,13 +262,12 @@
 
         input, select, textarea {
             width: 100%;
-            padding: 0.7rem 1rem;
+            padding: 0.6rem 0.8rem;
             background: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
+            border-radius: 0.7rem;
             color: var(--text-primary);
             font-size: 0.85rem;
-            transition: all 0.2s;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -310,21 +277,15 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark, #1d4ed8) 100%);
             color: white;
             font-weight: 600;
-            padding: 0.7rem 1.2rem;
+            padding: 0.6rem 1rem;
             border: none;
-            border-radius: 0.75rem;
+            border-radius: 0.7rem;
             cursor: pointer;
             font-size: 0.85rem;
-            transition: all 0.2s;
             width: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.05);
         }
 
         .btn-whatsapp {
@@ -336,91 +297,61 @@
             background: transparent;
             color: var(--primary-color);
             border: 1px solid var(--primary-color);
-            padding: 0.4rem 0.8rem;
-            border-radius: 0.75rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 0.6rem;
             cursor: pointer;
-            font-size: 0.75rem;
-            transition: all 0.2s;
+            font-size: 0.7rem;
         }
 
         .btn-sm {
-            padding: 0.25rem 0.6rem;
+            padding: 0.2rem 0.5rem;
             font-size: 0.7rem;
         }
 
         .client-item, .contato-item {
             background: var(--slot-bg);
-            border-radius: 0.75rem;
-            padding: 0.7rem;
+            border-radius: 0.7rem;
+            padding: 0.6rem;
             margin-bottom: 0.5rem;
-            transition: all 0.2s;
             border: 1px solid var(--border-color);
-        }
-
-        .client-item:hover, .contato-item:hover {
-            background: var(--hover-bg);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            border-radius: 2rem;
-            font-size: 0.65rem;
-            font-weight: 500;
         }
 
         .badge-whatsapp {
             background: rgba(37, 211, 102, 0.15);
             color: #25D366;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
         }
 
         .stat-value {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
         .footer {
             background: #f9fafb;
-            padding: 0.8rem;
+            padding: 0.7rem;
             text-align: center;
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 0.65rem;
         }
 
-        .contato-wpp {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .whatsapp-chip {
-            background: rgba(37, 211, 102, 0.15);
-            color: #25D366;
-            padding: 0.2rem 0.6rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
+        .exemplo-box {
+            background: rgba(37, 99, 235, 0.05);
+            padding: 0.8rem;
+            border-radius: 0.7rem;
+            margin: 0.8rem 0;
+            font-size: 0.75rem;
         }
 
         @media (max-width: 768px) {
             body { padding: 0.5rem; }
-            .tab-pane { padding: 1rem; }
+            .tab-pane { padding: 0.8rem; }
             .grid-2 { grid-template-columns: 1fr; }
-            .nav-btn { padding: 0.4rem 0.8rem; font-size: 0.7rem; }
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--slot-bg);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-color);
-            border-radius: 3px;
+            .nav-btn { padding: 0.4rem 0.7rem; font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -437,7 +368,25 @@
         deferredPrompt = e;
         setTimeout(() => {
             if (!isInstalled && !document.getElementById('installFloatBtn')) {
-                mostrarBotaoInstalacao();
+                const btn = document.createElement('button');
+                btn.id = 'installFloatBtn';
+                btn.className = 'install-float';
+                btn.innerHTML = '📲 Instalar TOP Agenda ⭐';
+                document.body.appendChild(btn);
+                btn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            isInstalled = true;
+                            localStorage.setItem("pwa_installed", "true");
+                        }
+                        deferredPrompt = null;
+                    } else {
+                        alert("📱 Para instalar, clique no menu do navegador e selecione 'Instalar aplicativo'");
+                    }
+                    btn.remove();
+                });
             }
         }, 2000);
     });
@@ -445,29 +394,6 @@
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
         isInstalled = true;
         localStorage.setItem("pwa_installed", "true");
-    }
-
-    function mostrarBotaoInstalacao() {
-        if (isInstalled || document.getElementById('installFloatBtn')) return;
-        const btn = document.createElement('button');
-        btn.id = 'installFloatBtn';
-        btn.className = 'install-float';
-        btn.innerHTML = '📲 Instalar TOP Agenda ⭐';
-        document.body.appendChild(btn);
-        btn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    isInstalled = true;
-                    localStorage.setItem("pwa_installed", "true");
-                }
-                deferredPrompt = null;
-            } else {
-                alert("📱 Para instalar, clique no menu do navegador (três pontinhos) e selecione 'Instalar aplicativo'");
-            }
-            btn.remove();
-        });
     }
 
     // ========== CONFIGURAÇÕES ==========
@@ -497,7 +423,7 @@
         horarioAlmocoInicio: "12:00",
         horarioAlmocoFim: "13:00",
         clientes: [],
-        contatosWhatsApp: [],  // Contatos importados do WhatsApp
+        contatosWhatsApp: [],
         servicos: [],
         agendamentos: [],
         mensagensPredefinidas: []
@@ -539,6 +465,7 @@
             ];
         }
         
+        if (appData.contatosWhatsApp === undefined) appData.contatosWhatsApp = [];
         if (!appData.tema) appData.tema = "light";
         salvarDados();
     }
@@ -605,18 +532,18 @@
         });
     }
 
-    // ========== FUNÇÕES DE INTEGRAÇÃO COM WHATSAPP ==========
-    
-    // Importar contatos do WhatsApp (simulado - usuário cola os contatos)
-    function importarContatosWhatsApp(contatosTexto) {
-        const linhas = contatosTexto.split(/\r?\n/);
+    // ========== FUNÇÕES DE IMPORTAÇÃO DE CONTATOS ==========
+    function importarContatosWhatsApp(texto) {
+        const linhas = texto.split(/\r?\n/);
         let novosContatos = [];
         
         for (const linha of linhas) {
-            // Formatos aceitos: "Nome|Telefone" ou "Nome,Telefone" ou "Nome - Telefone"
+            if (!linha.trim()) continue;
+            
             let nome = "";
             let telefone = "";
             
+            // Tentar diferentes formatos
             if (linha.includes("|")) {
                 const partes = linha.split("|");
                 nome = partes[0].trim();
@@ -630,20 +557,18 @@
                 nome = partes[0].trim();
                 telefone = partes[1].trim();
             } else {
-                // Tentar extrair números
-                const matchTelefone = linha.match(/(\d{10,13})/);
-                if (matchTelefone) {
-                    telefone = matchTelefone[1];
+                // Tentar extrair número
+                const matchTel = linha.match(/(\d{10,13})/);
+                if (matchTel) {
+                    telefone = matchTel[1];
                     nome = linha.replace(telefone, "").replace(/[-|,]/g, "").trim();
                     if (!nome) nome = "Contato WhatsApp";
                 }
             }
             
             if (nome && telefone) {
-                // Limpar telefone
                 telefone = telefone.replace(/\D/g, '');
                 if (telefone.length >= 10) {
-                    // Verificar se já não existe
                     const existe = appData.contatosWhatsApp.some(c => c.telefone === telefone) ||
                                   appData.clientes.some(c => c.telefone === telefone);
                     if (!existe) {
@@ -651,7 +576,6 @@
                             id: Date.now() + Math.random(),
                             nome: nome,
                             telefone: telefone,
-                            email: "",
                             origem: "whatsapp",
                             dataImportacao: new Date().toISOString()
                         });
@@ -668,40 +592,34 @@
         return novosContatos;
     }
     
-    // Adicionar contato do WhatsApp como cliente
     function adicionarContatoComoCliente(contato) {
         const novoCliente = {
             id: Date.now(),
             nome: contato.nome,
             telefone: contato.telefone,
-            email: contato.email || "",
+            email: "",
             totalGasto: 0,
-            totalVisitas: 0,
-            origem: "whatsapp"
+            totalVisitas: 0
         };
         appData.clientes.push(novoCliente);
-        
-        // Remover dos contatos do WhatsApp
         appData.contatosWhatsApp = appData.contatosWhatsApp.filter(c => c.id !== contato.id);
-        
         salvarDados();
         return novoCliente;
     }
     
-    // Ignorar contato do WhatsApp
     function ignorarContatoWhatsApp(id) {
         appData.contatosWhatsApp = appData.contatosWhatsApp.filter(c => c.id !== id);
         salvarDados();
     }
 
     function calcularFinanceiro() {
-        const totalReceita = appData.agendamentos.reduce((s, a) => s + (a.valor || 0), 0);
-        const totalCustos = appData.agendamentos.reduce((s, a) => {
+        const totalReceita = (appData.agendamentos || []).reduce((s, a) => s + (a.valor || 0), 0);
+        const totalCustos = (appData.agendamentos || []).reduce((s, a) => {
             const serv = appData.servicos.find(srv => srv.id === a.servicoId);
             return s + (serv?.custo || 0);
         }, 0);
         const porPagamento = { dinheiro: 0, pix: 0, credito: 0, debito: 0 };
-        appData.agendamentos.forEach(a => {
+        (appData.agendamentos || []).forEach(a => {
             const v = a.valor || 0;
             if (a.formaPagamento === 'dinheiro') porPagamento.dinheiro += v;
             else if (a.formaPagamento === 'pix') porPagamento.pix += v;
@@ -711,7 +629,7 @@
         return { totalReceita, totalCustos, lucro: totalReceita - totalCustos, porPagamento };
     }
 
-    // CRUD Clientes
+    // CRUD
     function adicionarCliente(nome, telefone, email) {
         const novoId = Math.max(...appData.clientes.map(c => c.id), 0) + 1;
         appData.clientes.push({ id: novoId, nome, telefone, email: email || '', totalGasto: 0, totalVisitas: 0 });
@@ -727,7 +645,7 @@
     }
 
     function removerCliente(id) {
-        const temAgendamento = appData.agendamentos.some(a => a.clienteId === id);
+        const temAgendamento = (appData.agendamentos || []).some(a => a.clienteId === id);
         if (temAgendamento) {
             alert("❌ Não é possível remover cliente com agendamentos!");
             return false;
@@ -756,6 +674,14 @@
         salvarDados();
     }
 
+    function formatarTelefone(tel) {
+        if (!tel) return '';
+        const str = tel.toString();
+        if (str.length === 11) return `(${str.substring(0,2)}) ${str.substring(2,7)}-${str.substring(7,11)}`;
+        if (str.length === 10) return `(${str.substring(0,2)}) ${str.substring(2,6)}-${str.substring(6,10)}`;
+        return str;
+    }
+
     function renderizarApp() {
         if (!validarLicenca()) {
             document.getElementById("root").innerHTML = `
@@ -779,13 +705,19 @@
         
         aplicarTema(appData.tema);
         
-        const logoHtml = appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}">` : `<span style="font-size:1.8rem;">⭐</span>`;
+        const logoHtml = appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}">` : `<span>⭐</span>`;
         
         const html = `
             <div class="glass-card">
                 <div class="header">
-                    <div class="logo-area"><div class="logo-img">${logoHtml}</div><div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · Integração WhatsApp</p></div></div>
-                    <div style="text-align:right;"><div style="color:var(--primary-color);font-weight:500;">👤 ${appData.usuario?.nome}</div><div style="font-size:0.7rem;">${isTeste ? `🎁 ${diasRestantes} dias` : `✅ Licença ativa`}</div></div>
+                    <div class="logo-area">
+                        <div class="logo-img">${logoHtml}</div>
+                        <div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · WhatsApp Integration</p></div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color:var(--primary-color);font-weight:500;">👤 ${appData.usuario?.nome}</div>
+                        <div style="font-size:0.7rem;">${isTeste ? `🎁 ${diasRestantes} dias restantes` : `✅ Licença ativa`}</div>
+                    </div>
                 </div>
                 
                 <div class="nav-tabs">
@@ -794,7 +726,7 @@
                     <button class="nav-btn" data-tab="clientes">👥 Clientes</button>
                     <button class="nav-btn" data-tab="servicos">💅 Serviços</button>
                     <button class="nav-btn" data-tab="financeiro">💰 Financeiro</button>
-                    <button class="nav-btn" data-tab="config">⚙️</button>
+                    <button class="nav-btn" data-tab="config">⚙️ Config</button>
                 </div>
                 
                 <!-- Aba Agenda -->
@@ -803,7 +735,7 @@
                         <div class="info-card">
                             <h3>✍️ Novo Agendamento</h3>
                             <form id="formAgendamento">
-                                <div class="form-group"><label>Cliente</label><select id="clienteId" required><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}">${c.nome} 📱 ${c.telefone}</option>`).join('')}<option value="novo">➕ NOVO CLIENTE</option></select></div>
+                                <div class="form-group"><label>Cliente</label><select id="clienteId" required><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}">${c.nome} - ${formatarTelefone(c.telefone)}</option>`).join('')}<option value="novo">➕ NOVO CLIENTE</option></select></div>
                                 <div class="form-group"><label>Data</label><input type="date" id="dataAgenda" value="${new Date().toISOString().slice(0,10)}" required></div>
                                 <div class="form-group"><label>Horário</label><select id="horarioAgenda" required>${gerarOpcoesHorario()}</select></div>
                                 <div class="form-group"><label>Serviço</label><select id="servicoId" required>${appData.servicos.map(s => `<option value="${s.id}" data-preco="${s.preco}">${s.nome} - R$ ${s.preco}</option>`).join('')}</select></div>
@@ -812,23 +744,35 @@
                                 <button type="submit" class="btn-primary">✅ Agendar</button>
                             </form>
                         </div>
-                        <div class="info-card"><h3>📋 Agenda Hoje</h3><div id="agendaHoje" style="max-height:450px;overflow-y:auto;"></div></div>
+                        <div class="info-card"><h3>📋 Agenda Hoje</h3><div id="agendaHoje" style="max-height:400px;overflow-y:auto;"></div></div>
                     </div>
                 </div>
                 
-                <!-- Aba WhatsApp - Integração com Contatos -->
+                <!-- Aba WhatsApp - COM INSTRUÇÕES CLARAS -->
                 <div id="tab-whatsapp" class="tab-pane">
                     <div class="grid-2">
                         <div class="info-card">
-                            <h3>📱 Importar Contatos do WhatsApp</h3>
-                            <p style="font-size:0.75rem; margin-bottom:0.8rem; color: var(--text-secondary);">Copie os contatos do WhatsApp e cole abaixo. Formatos aceitos: "Nome|Telefone" ou "Nome,Telefone" ou "Nome - Telefone"</p>
-                            <textarea id="contatosWhatsAppInput" rows="6" placeholder="Exemplos:&#10;Ana Silva|11999990001&#10;Maria Santos,11988887777&#10;João Souza - 11977776666" style="font-size:0.8rem;"></textarea>
-                            <button id="btnImportarWhatsApp" class="btn-primary" style="margin-top:0.5rem; background:#25D366;">📥 Importar Contatos</button>
+                            <h3>📱 Como importar contatos do WhatsApp</h3>
+                            <div class="exemplo-box">
+                                <strong>📋 Passo a passo:</strong><br>
+                                1. Abra o WhatsApp no seu celular<br>
+                                2. Toque no contato que deseja copiar<br>
+                                3. Toque nos três pontos ⋮ → "Ver no sistema"<br>
+                                4. Copie o nome e o telefone<br>
+                                5. Cole abaixo no formato: <strong>Nome|Telefone</strong><br><br>
+                                <strong>📝 Exemplo:</strong><br>
+                                <code>Ana Silva|11999990001</code><br>
+                                <code>Maria Santos,11888887777</code><br>
+                                <code>João Souza - 11977776666</code>
+                            </div>
+                            <textarea id="contatosWhatsAppInput" rows="5" placeholder="Cole aqui os contatos copiados do WhatsApp...&#10;Ex:&#10;Ana Silva|11999990001&#10;Maria Santos,11888887777" style="font-size:0.8rem;"></textarea>
+                            <button id="btnImportarWhatsApp" class="btn-primary btn-whatsapp" style="margin-top:0.5rem;">📥 Importar Contatos</button>
                         </div>
                         <div class="info-card">
-                            <h3>📇 Contatos do WhatsApp <span class="badge badge-whatsapp">${appData.contatosWhatsApp.length} novos</span></h3>
-                            <div id="listaContatosWhatsApp" style="max-height:400px;overflow-y:auto;"></div>
-                            ${appData.contatosWhatsApp.length === 0 ? '<div style="text-align:center;padding:1rem;color:var(--text-secondary);">Nenhum contato importado. Cole os contatos ao lado e clique em importar.</div>' : ''}
+                            <h3>📇 Contatos Importados <span class="badge-whatsapp">${appData.contatosWhatsApp.length} novos</span></h3>
+                            <div id="listaContatosWhatsApp" style="max-height:400px;overflow-y:auto;">
+                                ${appData.contatosWhatsApp.length === 0 ? '<div style="text-align:center;padding:1rem;color:var(--text-secondary);">Nenhum contato importado. Cole os contatos ao lado e clique em importar.</div>' : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="info-card" style="margin-top:1rem;">
@@ -837,7 +781,7 @@
                             <div><label>Selecione um cliente</label><select id="clienteEnvioRapido"><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('')}</select></div>
                             <div><label>Ou digite o telefone</label><input type="text" id="telefoneEnvioRapido" placeholder="(11) 99999-9999"></div>
                         </div>
-                        <div class="form-group"><label>Mensagem</label><textarea id="mensagemEnvioRapido" rows="3" placeholder="Digite sua mensagem... use {nome} e {link}"></textarea></div>
+                        <div class="form-group"><label>Mensagem</label><textarea id="mensagemEnvioRapido" rows="3" placeholder="Digite sua mensagem... use {nome} para nome do cliente e {link} para link da agenda"></textarea></div>
                         <button id="btnEnviarWhatsRapido" class="btn-primary btn-whatsapp">📲 Enviar WhatsApp</button>
                     </div>
                 </div>
@@ -847,13 +791,10 @@
                     <div class="grid-2">
                         <div class="info-card">
                             <h3>👥 Clientes <button class="btn-secondary btn-sm" onclick="abrirModalCliente()">+ Novo</button></h3>
-                            <input type="text" id="filtroClientes" placeholder="🔍 Filtrar..." style="margin-bottom:0.8rem;">
+                            <input type="text" id="filtroClientes" placeholder="🔍 Filtrar por nome..." style="margin-bottom:0.8rem;">
                             <div id="listaClientes" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
-                        <div class="info-card">
-                            <h3>🏆 Melhores Clientes</h3>
-                            <div id="melhoresClientes"></div>
-                        </div>
+                        <div class="info-card"><h3>🏆 Melhores Clientes</h3><div id="melhoresClientes"></div></div>
                     </div>
                 </div>
                 
@@ -864,11 +805,7 @@
                             <h3>💅 Serviços <button class="btn-secondary btn-sm" onclick="abrirModalServico()">+ Novo</button></h3>
                             <div id="listaServicos" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
-                        <div class="info-card">
-                            <h3>📊 Estatísticas</h3>
-                            <div>Total: <strong>${appData.servicos.length}</strong> serviços</div>
-                            <div>Mais caro: <strong>R$ ${Math.max(...appData.servicos.map(s => s.preco), 0).toFixed(2)}</strong></div>
-                        </div>
+                        <div class="info-card"><h3>📊 Estatísticas</h3><div>Total: <strong>${appData.servicos.length}</strong> serviços</div><div>Mais caro: <strong>R$ ${Math.max(...appData.servicos.map(s => s.preco), 0).toFixed(2)}</strong></div></div>
                     </div>
                 </div>
                 
@@ -883,7 +820,7 @@
                 <!-- Aba Configurações -->
                 <div id="tab-config" class="tab-pane">
                     <div class="grid-2">
-                        <div class="info-card"><h3>🎨 Cores</h3><div style="display:flex;gap:0.8rem;flex-wrap:wrap;"><div class="color-option" style="background:#fff;border:2px solid #ccc;" onclick="mudarTema('light')" title="Branco">⚪</div><div class="color-option" style="background:#d4af37;" onclick="mudarTema('yellow')" title="Amarelo">🟡</div><div class="color-option" style="background:#2563eb;" onclick="mudarTema('blue')" title="Azul">🔵</div><div class="color-option" style="background:#dc2626;" onclick="mudarTema('red')" title="Vermelho">🔴</div><div class="color-option" style="background:#1f1f1f;" onclick="mudarTema('black')" title="Preto">⚫</div></div></div>
+                        <div class="info-card"><h3>🎨 Temas</h3><div style="display:flex;gap:0.8rem;flex-wrap:wrap;"><button class="btn-secondary" onclick="mudarTema('light')">⚪ Branco</button><button class="btn-secondary" onclick="mudarTema('yellow')">🟡 Amarelo</button><button class="btn-secondary" onclick="mudarTema('blue')">🔵 Azul</button><button class="btn-secondary" onclick="mudarTema('red')">🔴 Vermelho</button><button class="btn-secondary" onclick="mudarTema('black')">⚫ Preto</button></div></div>
                         <div class="info-card"><h3>⚙️ Horários</h3><div class="form-group"><label>Início</label><input type="time" id="cfgInicio" value="${appData.horarioInicio}"></div><div class="form-group"><label>Fim</label><input type="time" id="cfgFim" value="${appData.horarioFim}"></div><div class="form-group"><label>Almoço</label><input type="time" id="cfgAlmocoIni" value="${appData.horarioAlmocoInicio}"> às <input type="time" id="cfgAlmocoFim" value="${appData.horarioAlmocoFim}"></div><button id="btnSalvarHorarios" class="btn-primary">Salvar</button></div>
                         <div class="info-card"><h3>🔗 Link Online</h3><input type="text" id="linkAgendamento" readonly value="${gerarLinkAgendamento()}"><button id="btnCopiarLink" class="btn-secondary" style="margin-top:0.5rem;">Copiar</button><div class="form-group"><label>Nome do Estúdio</label><input type="text" id="nomeStudio" value="${appData.empresa.nome}"></div><button id="btnSalvarStudio" class="btn-primary">Salvar</button></div>
                         <div class="info-card"><h3>🔐 Licença</h3><div>Plano: ${PLANOS[appData.licenca?.plano]?.nome || "Teste"}</div><div>Expira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}</div><div>Dias: ${diasRestantes}</div>${isTeste ? `<input type="text" id="chaveUpgrade" placeholder="Chave"><button id="btnUpgrade" class="btn-primary">Ativar</button>` : ''}</div>
@@ -896,7 +833,7 @@
         
         document.getElementById("root").innerHTML = html;
         
-        // Funções auxiliares
+        // Funções globais
         window.mudarTema = (tema) => { appData.tema = tema; salvarDados(); aplicarTema(tema); renderizarApp(); };
         
         window.abrirModalCliente = () => {
@@ -997,7 +934,7 @@
             const hoje = new Date().toISOString().slice(0,10);
             const container = document.getElementById("agendaHoje");
             if (!container) return;
-            const agendamentosHoje = appData.agendamientos?.filter(a => a.data === hoje) || [];
+            const agendamentosHoje = (appData.agendamentos || []).filter(a => a.data === hoje);
             if (agendamentosHoje.length === 0) {
                 container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum agendamento hoje</div>";
                 return;
@@ -1019,14 +956,8 @@
             container.innerHTML = appData.contatosWhatsApp.map(c => `
                 <div class="contato-item">
                     <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <div>
-                            <strong>${c.nome}</strong>
-                            <div class="whatsapp-chip" style="margin-top:0.2rem;">📱 ${formatarTelefone(c.telefone)}</div>
-                        </div>
-                        <div style="display:flex;gap:0.3rem;">
-                            <button class="btn-secondary btn-sm" onclick="adicionarComoCliente(${c.id})">➕ Cliente</button>
-                            <button class="btn-secondary btn-sm" onclick="ignorarContato(${c.id})">✖️</button>
-                        </div>
+                        <div><strong>${c.nome}</strong><br><span style="font-size:0.7rem;">📱 ${formatarTelefone(c.telefone)}</span></div>
+                        <div><button class="btn-secondary btn-sm" onclick="adicionarComoCliente(${c.id})">➕ Adicionar</button> <button class="btn-secondary btn-sm" onclick="ignorarContato(${c.id})">✖️</button></div>
                     </div>
                 </div>
             `).join('');
@@ -1041,13 +972,13 @@
                 <div class="client-item">
                     <div style="display:flex;justify-content:space-between;">
                         <strong>${c.nome}</strong>
-                        <span class="badge badge-primary">${c.totalVisitas || 0} visitas</span>
+                        <span class="badge-whatsapp">${c.totalVisitas || 0} visitas</span>
                     </div>
                     <div>📱 ${formatarTelefone(c.telefone)}</div>
                     <div>💰 R$ ${(c.totalGasto||0).toFixed(2)}</div>
                     <div style="display:flex;gap:0.3rem;margin-top:0.5rem;">
                         <button class="btn-secondary btn-sm" onclick="enviarParaCliente(${c.id})">💬 WhatsApp</button>
-                        <button class="btn-secondary btn-sm" onclick="editarClienteModal(${c.id}, '${c.nome}', '${c.telefone}', '${c.email || ''}')">✏️</button>
+                        <button class="btn-secondary btn-sm" onclick="editarClienteModal(${c.id}, '${c.nome}', '${c.telefone}', '${c.email || ''}')">✏️ Editar</button>
                         <button class="btn-secondary btn-sm" onclick="removerClienteConfirm(${c.id}, '${c.nome}')">🗑️</button>
                     </div>
                 </div>
@@ -1060,15 +991,10 @@
             if (!container) return;
             container.innerHTML = appData.servicos.map(s => `
                 <div class="servico-item">
-                    <div style="display:flex;justify-content:space-between;">
-                        <strong>${s.nome}</strong>
-                    </div>
+                    <div style="display:flex;justify-content:space-between;"><strong>${s.nome}</strong></div>
                     <div>💰 R$ ${s.preco.toFixed(2)} | Custo: R$ ${s.custo.toFixed(2)}</div>
                     <div>⏱️ ${s.duracao} min | 💎 Lucro: R$ ${(s.preco - s.custo).toFixed(2)}</div>
-                    <div style="display:flex;gap:0.3rem;margin-top:0.5rem;">
-                        <button class="btn-secondary btn-sm" onclick="editarServicoModal(${s.id}, '${s.nome}', ${s.preco}, ${s.custo}, ${s.duracao})">✏️</button>
-                        <button class="btn-secondary btn-sm" onclick="removerServicoConfirm(${s.id}, '${s.nome}')">🗑️</button>
-                    </div>
+                    <div><button class="btn-secondary btn-sm" onclick="editarServicoModal(${s.id}, '${s.nome}', ${s.preco}, ${s.custo}, ${s.duracao})">✏️ Editar</button> <button class="btn-secondary btn-sm" onclick="removerServicoConfirm(${s.id}, '${s.nome}')">🗑️</button></div>
                 </div>
             `).join('');
             if (appData.servicos.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum serviço</div>";
@@ -1096,14 +1022,6 @@
             const top5 = Array.from(mapa.entries()).map(([id, total]) => ({ ...appData.clientes.find(c => c.id === id), total })).sort((a,b) => b.total - a.total).slice(0,5);
             container.innerHTML = top5.map((c,i) => `<div class="client-item" style="display:flex;justify-content:space-between;"><span>${i+1}º - ${c.nome}</span><span style="color:var(--primary-color);">R$ ${c.total.toFixed(2)}</span></div>`).join('');
             if (top5.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum dado</div>";
-        }
-        
-        function formatarTelefone(tel) {
-            if (!tel) return '';
-            const ddd = tel.substring(0,2);
-            const parte1 = tel.substring(2,7);
-            const parte2 = tel.substring(7,11);
-            return `(${ddd}) ${parte1}-${parte2}`;
         }
         
         // Eventos
@@ -1140,7 +1058,7 @@
         document.getElementById("btnImportarWhatsApp")?.addEventListener("click", () => {
             const texto = document.getElementById("contatosWhatsAppInput").value;
             if (!texto.trim()) {
-                alert("Cole os contatos do WhatsApp no campo acima!");
+                alert("📋 Cole os contatos do WhatsApp no campo acima! Use o formato: Nome|Telefone");
                 return;
             }
             const novos = importarContatosWhatsApp(texto);
@@ -1149,7 +1067,7 @@
                 document.getElementById("contatosWhatsAppInput").value = "";
                 renderizarApp();
             } else {
-                alert("Nenhum contato válido encontrado. Use o formato: Nome|Telefone");
+                alert("⚠️ Nenhum contato válido encontrado. Use o formato: Nome|Telefone (ex: Ana Silva|11999990001)");
             }
         });
         
@@ -1163,7 +1081,8 @@
                 msg = msg.replace(/{nome}/g, opt.getAttribute("data-nome") || "");
             }
             msg = msg.replace(/{link}/g, gerarLinkAgendamento());
-            if (!tel) return alert("Digite o telefone ou selecione um cliente!");
+            if (!tel) return alert("📱 Digite o telefone ou selecione um cliente!");
+            if (!msg) return alert("📝 Digite uma mensagem!");
             enviarWhatsApp(tel, msg);
         });
         
