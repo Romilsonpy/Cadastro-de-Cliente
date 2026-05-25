@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TOP Agenda">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white'%3E⭐%3C/text%3E%3C/svg%3E">
-    <title>TOP Agenda | Gestão Profissional para Estética</title>
+    <title>TOP Agenda | Integração com WhatsApp</title>
     <style>
         * {
             margin: 0;
@@ -20,54 +19,8 @@
         body {
             background: #f0f2f5;
             min-height: 100vh;
-            padding: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        /* BANNER DE INSTALAÇÃO PWA - VERSÃO CORRIGIDA */
-        .install-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
             padding: 1rem;
-            border-radius: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            z-index: 10000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .install-banner button {
-            background: white;
-            color: #2563eb;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .install-banner button:hover {
-            transform: scale(1.02);
-        }
-
-        .close-banner {
-            background: transparent;
-            color: white;
-            font-size: 1.2rem;
-            padding: 0.3rem 0.8rem;
+            transition: all 0.3s;
         }
 
         /* BOTÃO FLUTUANTE DE INSTALAÇÃO */
@@ -75,7 +28,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
             border: none;
             border-radius: 3rem;
@@ -101,6 +54,7 @@
             --primary-color: #2563eb;
             --primary-light: #3b82f6;
             --primary-dark: #1d4ed8;
+            --whatsapp-color: #25D366;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
             --text-primary: #1f2937;
@@ -124,14 +78,6 @@
             background: var(--bg-header);
             border-bottom-color: var(--primary-color);
         }
-        body.theme-light .nav-btn {
-            color: var(--text-secondary);
-        }
-        body.theme-light .nav-btn.active {
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
 
         body.theme-yellow {
             --primary-color: #d4af37;
@@ -142,8 +88,6 @@
             --text-primary: #1f2937;
             --text-secondary: #6b7280;
             --border-color: #e5e7eb;
-            --input-bg: #ffffff;
-            --slot-bg: #f9fafb;
         }
         body.theme-yellow .btn-primary {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
@@ -156,11 +100,6 @@
             --primary-dark: #1d4ed8;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
-            --input-bg: #ffffff;
-            --slot-bg: #f9fafb;
         }
 
         body.theme-red {
@@ -169,11 +108,6 @@
             --primary-dark: #b91c1c;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
-            --input-bg: #ffffff;
-            --slot-bg: #f9fafb;
         }
 
         body.theme-black {
@@ -203,6 +137,7 @@
             --primary-color: #2563eb;
             --primary-light: #3b82f6;
             --primary-dark: #1d4ed8;
+            --whatsapp-color: #25D366;
             --bg-card: #ffffff;
             --bg-header: #ffffff;
             --text-primary: #1f2937;
@@ -229,7 +164,7 @@
 
         .header {
             background: var(--bg-header);
-            padding: 1.5rem 2rem;
+            padding: 1.2rem 2rem;
             border-bottom: 3px solid var(--primary-color);
             display: flex;
             justify-content: space-between;
@@ -245,8 +180,8 @@
         }
 
         .logo-img {
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: #f0f2f5;
             display: flex;
@@ -263,21 +198,21 @@
         }
 
         .logo-area h1 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
         .logo-area p {
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
         }
 
         .nav-tabs {
             display: flex;
             gap: 0.25rem;
             background: var(--bg-card);
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
         }
@@ -285,8 +220,8 @@
         .nav-btn {
             background: transparent;
             border: none;
-            padding: 0.7rem 1.4rem;
-            font-size: 0.85rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.8rem;
             font-weight: 500;
             color: var(--text-secondary);
             cursor: pointer;
@@ -307,7 +242,7 @@
 
         .tab-pane {
             display: none;
-            padding: 1.8rem;
+            padding: 1.5rem;
             animation: fadeIn 0.3s ease;
         }
 
@@ -322,20 +257,20 @@
 
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
         }
 
         .info-card {
             background: var(--slot-bg);
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 1.2rem;
             border: 1px solid var(--border-color);
         }
 
         .info-card h3 {
             color: var(--primary-color);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
@@ -346,25 +281,25 @@
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         label {
             display: block;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
             margin-bottom: 0.3rem;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.7rem 1rem;
             background: var(--input-bg);
             border: 1px solid var(--border-color);
             border-radius: 0.75rem;
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.2s;
         }
 
@@ -378,11 +313,11 @@
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
             font-weight: 600;
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             border: none;
             border-radius: 0.75rem;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.2s;
             width: 100%;
         }
@@ -392,163 +327,93 @@
             filter: brightness(1.05);
         }
 
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+        }
+
         .btn-secondary {
             background: transparent;
             color: var(--primary-color);
             border: 1px solid var(--primary-color);
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 0.75rem;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(37, 99, 235, 0.1);
         }
 
         .btn-sm {
-            padding: 0.3rem 0.8rem;
-            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.7rem;
         }
 
-        .agenda-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-            gap: 0.6rem;
-            max-height: 550px;
-            overflow-y: auto;
-            padding: 0.5rem;
-        }
-
-        .time-slot {
-            background: var(--slot-bg);
-            border-radius: 0.6rem;
-            padding: 0.6rem 0.3rem;
-            text-align: center;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-left: 3px solid var(--primary-color);
-            border: 1px solid var(--border-color);
-        }
-
-        .time-slot:hover:not(.blocked):not(.occupied) {
-            background: var(--hover-bg);
-            transform: scale(1.02);
-        }
-
-        .time-slot.occupied {
-            border-left-color: #dc2626;
-            background: #fef2f2;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .time-slot.blocked {
-            border-left-color: #9ca3af;
-            background: #f3f4f6;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .client-item, .servico-item {
+        .client-item, .contato-item {
             background: var(--slot-bg);
             border-radius: 0.75rem;
-            padding: 0.8rem;
-            margin-bottom: 0.6rem;
+            padding: 0.7rem;
+            margin-bottom: 0.5rem;
             transition: all 0.2s;
             border: 1px solid var(--border-color);
         }
 
-        .client-item:hover, .servico-item:hover {
+        .client-item:hover, .contato-item:hover {
             background: var(--hover-bg);
         }
 
         .badge {
             display: inline-block;
-            padding: 0.2rem 0.6rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 2rem;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 500;
         }
 
-        .badge-primary {
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--primary-color);
+        .badge-whatsapp {
+            background: rgba(37, 211, 102, 0.15);
+            color: #25D366;
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
         .footer {
             background: #f9fafb;
-            padding: 1rem;
+            padding: 0.8rem;
             text-align: center;
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
-        .msg-template {
-            background: var(--slot-bg);
-            padding: 0.8rem;
-            border-radius: 0.75rem;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-            border: 1px solid var(--border-color);
-        }
-
-        .msg-template:hover {
-            background: var(--hover-bg);
-            border-left: 3px solid var(--primary-color);
-        }
-
-        .color-option {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-
-        .color-option:hover {
-            transform: scale(1.1);
-        }
-
-        .color-option.selected {
-            border-color: #fff;
-            box-shadow: 0 0 0 2px #333;
-        }
-
-        .profile-preview {
+        .contato-wpp {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: var(--slot-bg);
-            border-radius: 1rem;
-            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .whatsapp-chip {
+            background: rgba(37, 211, 102, 0.15);
+            color: #25D366;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
         }
 
         @media (max-width: 768px) {
             body { padding: 0.5rem; }
             .tab-pane { padding: 1rem; }
             .grid-2 { grid-template-columns: 1fr; }
-            .nav-btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
-            .install-float { padding: 0.6rem 1.2rem; font-size: 0.8rem; }
+            .nav-btn { padding: 0.4rem 0.8rem; font-size: 0.7rem; }
         }
 
         ::-webkit-scrollbar {
             width: 6px;
-            height: 6px;
         }
         ::-webkit-scrollbar-track {
             background: var(--slot-bg);
@@ -563,90 +428,32 @@
 <div id="root" class="app"></div>
 
 <script>
-    // ========== PWA INSTALL - VERSÃO CORRIGIDA ==========
+    // ========== PWA INSTALL ==========
     let deferredPrompt = null;
     let isInstalled = localStorage.getItem("pwa_installed") === "true";
-    let installBannerShown = false;
 
-    // Evento beforeinstallprompt - ESSENCIAL PARA O BOTÃO INSTALAR
     window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('beforeinstallprompt disparado!');
         e.preventDefault();
         deferredPrompt = e;
-        
-        // Mostrar banner ou botão flutuante
-        if (!isInstalled && !installBannerShown) {
-            mostrarBotaoInstalacao();
-        }
+        setTimeout(() => {
+            if (!isInstalled && !document.getElementById('installFloatBtn')) {
+                mostrarBotaoInstalacao();
+            }
+        }, 2000);
     });
 
-    // Verificar se já está instalado
-    window.addEventListener('appinstalled', () => {
-        console.log('App instalado com sucesso!');
-        deferredPrompt = null;
-        isInstalled = true;
-        localStorage.setItem("pwa_installed", "true");
-        esconderBannerInstalacao();
-        esconderBotaoInstalacao();
-    });
-
-    // Detectar se já está rodando como PWA
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
         isInstalled = true;
         localStorage.setItem("pwa_installed", "true");
     }
 
-    function mostrarBannerInstalacao() {
-        if (isInstalled || installBannerShown) return;
-        if (document.getElementById('installBanner')) return;
-        
-        installBannerShown = true;
-        const banner = document.createElement('div');
-        banner.id = 'installBanner';
-        banner.className = 'install-banner';
-        banner.innerHTML = `
-            <div style="display:flex;align-items:center;gap:0.8rem;">
-                <span style="font-size:2rem;">⭐</span>
-                <div><strong>Instalar TOP Agenda</strong><br><small>Instale como aplicativo no seu celular</small></div>
-            </div>
-            <div style="display:flex;gap:0.5rem;">
-                <button id="btnInstalarApp">📲 Instalar Agora</button>
-                <button id="btnFecharBanner" class="close-banner">✕</button>
-            </div>
-        `;
-        document.body.appendChild(banner);
-        
-        document.getElementById('btnInstalarApp')?.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    isInstalled = true;
-                    localStorage.setItem("pwa_installed", "true");
-                }
-                deferredPrompt = null;
-            } else {
-                // Fallback para dispositivos que não suportam beforeinstallprompt
-                alert("Para instalar, clique no menu do navegador e selecione 'Adicionar à tela inicial' ou 'Instalar aplicativo'");
-            }
-            esconderBannerInstalacao();
-        });
-        
-        document.getElementById('btnFecharBanner')?.addEventListener('click', () => {
-            esconderBannerInstalacao();
-        });
-    }
-
     function mostrarBotaoInstalacao() {
-        if (isInstalled) return;
-        if (document.getElementById('installFloatBtn')) return;
-        
+        if (isInstalled || document.getElementById('installFloatBtn')) return;
         const btn = document.createElement('button');
         btn.id = 'installFloatBtn';
         btn.className = 'install-float';
-        btn.innerHTML = '📲 Instalar App ⭐';
+        btn.innerHTML = '📲 Instalar TOP Agenda ⭐';
         document.body.appendChild(btn);
-        
         btn.addEventListener('click', async () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
@@ -657,30 +464,13 @@
                 }
                 deferredPrompt = null;
             } else {
-                alert("📱 Para instalar, clique no menu do navegador (três pontinhos) e selecione 'Instalar aplicativo' ou 'Adicionar à tela inicial'");
+                alert("📱 Para instalar, clique no menu do navegador (três pontinhos) e selecione 'Instalar aplicativo'");
             }
-            esconderBotaoInstalacao();
+            btn.remove();
         });
     }
 
-    function esconderBannerInstalacao() {
-        const banner = document.getElementById('installBanner');
-        if (banner) banner.remove();
-    }
-
-    function esconderBotaoInstalacao() {
-        const btn = document.getElementById('installFloatBtn');
-        if (btn) btn.remove();
-    }
-
-    // Tentar mostrar o botão mesmo se o evento não disparar (fallback)
-    setTimeout(() => {
-        if (!isInstalled && !installBannerShown && !deferredPrompt) {
-            mostrarBotaoInstalacao();
-        }
-    }, 3000);
-
-    // ========== CONFIGURAÇÕES DO SISTEMA ==========
+    // ========== CONFIGURAÇÕES ==========
     const STORAGE_KEY = "top_agenda_system";
 
     const PLANOS = {
@@ -699,7 +489,7 @@
 
     let appData = {
         usuario: null,
-        empresa: { nome: "TOP Agenda", logoBase64: null, criadoEm: new Date().toISOString() },
+        empresa: { nome: "TOP Agenda", logoBase64: null },
         licenca: null,
         tema: "light",
         horarioInicio: "08:00",
@@ -707,10 +497,10 @@
         horarioAlmocoInicio: "12:00",
         horarioAlmocoFim: "13:00",
         clientes: [],
+        contatosWhatsApp: [],  // Contatos importados do WhatsApp
         servicos: [],
         agendamentos: [],
-        mensagensPredefinidas: [],
-        profissionais: []
+        mensagensPredefinidas: []
     };
 
     function salvarDados() {
@@ -747,10 +537,6 @@
                 "✨ Lembrete: Seu horário está reservado para {data} às {horario}. Confirme sua presença!",
                 "🎁 Promoção especial para clientes fiéis! Agenda já seu próximo procedimento: {link}"
             ];
-        }
-        
-        if (appData.profissionais.length === 0) {
-            appData.profissionais = [{ id: 1, nome: "Você", comissaoPercentual: 100 }];
         }
         
         if (!appData.tema) appData.tema = "light";
@@ -819,6 +605,95 @@
         });
     }
 
+    // ========== FUNÇÕES DE INTEGRAÇÃO COM WHATSAPP ==========
+    
+    // Importar contatos do WhatsApp (simulado - usuário cola os contatos)
+    function importarContatosWhatsApp(contatosTexto) {
+        const linhas = contatosTexto.split(/\r?\n/);
+        let novosContatos = [];
+        
+        for (const linha of linhas) {
+            // Formatos aceitos: "Nome|Telefone" ou "Nome,Telefone" ou "Nome - Telefone"
+            let nome = "";
+            let telefone = "";
+            
+            if (linha.includes("|")) {
+                const partes = linha.split("|");
+                nome = partes[0].trim();
+                telefone = partes[1].trim();
+            } else if (linha.includes(",")) {
+                const partes = linha.split(",");
+                nome = partes[0].trim();
+                telefone = partes[1].trim();
+            } else if (linha.includes("-")) {
+                const partes = linha.split("-");
+                nome = partes[0].trim();
+                telefone = partes[1].trim();
+            } else {
+                // Tentar extrair números
+                const matchTelefone = linha.match(/(\d{10,13})/);
+                if (matchTelefone) {
+                    telefone = matchTelefone[1];
+                    nome = linha.replace(telefone, "").replace(/[-|,]/g, "").trim();
+                    if (!nome) nome = "Contato WhatsApp";
+                }
+            }
+            
+            if (nome && telefone) {
+                // Limpar telefone
+                telefone = telefone.replace(/\D/g, '');
+                if (telefone.length >= 10) {
+                    // Verificar se já não existe
+                    const existe = appData.contatosWhatsApp.some(c => c.telefone === telefone) ||
+                                  appData.clientes.some(c => c.telefone === telefone);
+                    if (!existe) {
+                        novosContatos.push({
+                            id: Date.now() + Math.random(),
+                            nome: nome,
+                            telefone: telefone,
+                            email: "",
+                            origem: "whatsapp",
+                            dataImportacao: new Date().toISOString()
+                        });
+                    }
+                }
+            }
+        }
+        
+        if (novosContatos.length > 0) {
+            appData.contatosWhatsApp.push(...novosContatos);
+            salvarDados();
+        }
+        
+        return novosContatos;
+    }
+    
+    // Adicionar contato do WhatsApp como cliente
+    function adicionarContatoComoCliente(contato) {
+        const novoCliente = {
+            id: Date.now(),
+            nome: contato.nome,
+            telefone: contato.telefone,
+            email: contato.email || "",
+            totalGasto: 0,
+            totalVisitas: 0,
+            origem: "whatsapp"
+        };
+        appData.clientes.push(novoCliente);
+        
+        // Remover dos contatos do WhatsApp
+        appData.contatosWhatsApp = appData.contatosWhatsApp.filter(c => c.id !== contato.id);
+        
+        salvarDados();
+        return novoCliente;
+    }
+    
+    // Ignorar contato do WhatsApp
+    function ignorarContatoWhatsApp(id) {
+        appData.contatosWhatsApp = appData.contatosWhatsApp.filter(c => c.id !== id);
+        salvarDados();
+    }
+
     function calcularFinanceiro() {
         const totalReceita = appData.agendamentos.reduce((s, a) => s + (a.valor || 0), 0);
         const totalCustos = appData.agendamentos.reduce((s, a) => {
@@ -834,25 +709,6 @@
             else if (a.formaPagamento === 'debito') porPagamento.debito += v;
         });
         return { totalReceita, totalCustos, lucro: totalReceita - totalCustos, porPagamento };
-    }
-
-    function getAtendimentosMes() {
-        const hoje = new Date();
-        return appData.agendamentos.filter(a => {
-            const data = new Date(a.data);
-            return data.getMonth() === hoje.getMonth() && data.getFullYear() === hoje.getFullYear();
-        });
-    }
-
-    function getMelhoresClientes() {
-        const mapa = new Map();
-        appData.agendamentos.forEach(a => {
-            const cliente = appData.clientes.find(c => c.id === a.clienteId);
-            if (cliente) mapa.set(cliente.id, (mapa.get(cliente.id) || 0) + (a.valor || 0));
-        });
-        return Array.from(mapa.entries())
-            .map(([id, total]) => ({ ...appData.clientes.find(c => c.id === id), total }))
-            .sort((a, b) => b.total - a.total).slice(0, 5);
     }
 
     // CRUD Clientes
@@ -881,7 +737,6 @@
         return true;
     }
 
-    // CRUD Serviços
     function adicionarServico(nome, preco, custo, duracao) {
         const novoId = Math.max(...appData.servicos.map(s => s.id), 0) + 1;
         appData.servicos.push({ id: novoId, nome, preco: parseFloat(preco), custo: parseFloat(custo) || 0, duracao: parseInt(duracao) || 60 });
@@ -904,10 +759,10 @@
     function renderizarApp() {
         if (!validarLicenca()) {
             document.getElementById("root").innerHTML = `
-                <div class="glass-card" style="text-align: center; padding: 3rem; max-width: 500px; margin: 0 auto;">
+                <div class="glass-card" style="text-align: center; padding: 2rem; max-width: 500px; margin: 0 auto;">
                     <h2 style="color: var(--primary-color);">⭐ TOP Agenda</h2>
-                    <p style="margin: 1rem 0;">Seu período de teste de 7 dias expirou.</p>
-                    <div class="info-card"><h3>📋 Planos</h3><p>💰 Mensal: <code>MENSAL-TOP-2990</code> - R$29,90</p><p>📆 Trimestral: <code>TRIMESTRAL-TOP-7990</code> - R$79,90</p><p>🌟 Anual: <code>ANUAL-TOP-24990</code> - R$249,90</p><input type="text" id="chaveRenovacao" placeholder="Cole sua chave"><button id="btnRenovar" class="btn-primary" style="margin-top:1rem;">Ativar</button></div>
+                    <p>Seu período de teste de 7 dias expirou.</p>
+                    <div class="info-card"><h3>Planos</h3><p>💰 Mensal: <code>MENSAL-TOP-2990</code> - R$29,90</p><p>📆 Trimestral: <code>TRIMESTRAL-TOP-7990</code> - R$79,90</p><p>🌟 Anual: <code>ANUAL-TOP-24990</code> - R$249,90</p><input type="text" id="chaveRenovacao" placeholder="Cole sua chave"><button id="btnRenovar" class="btn-primary" style="margin-top:1rem;">Ativar</button></div>
                 </div>
             `;
             document.getElementById("btnRenovar")?.addEventListener("click", () => {
@@ -924,31 +779,31 @@
         
         aplicarTema(appData.tema);
         
-        const logoHtml = appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}">` : `<span style="font-size:2rem;">⭐</span>`;
+        const logoHtml = appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}">` : `<span style="font-size:1.8rem;">⭐</span>`;
         
         const html = `
             <div class="glass-card">
                 <div class="header">
-                    <div class="logo-area"><div class="logo-img">${logoHtml}</div><div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · Gestão Profissional</p></div></div>
-                    <div style="text-align:right;"><div style="color:var(--primary-color);font-weight:500;">👤 ${appData.usuario?.nome}</div><div style="font-size:0.8rem;">${isTeste ? `🎁 ${diasRestantes} dias restantes` : `✅ Licença ativa`}</div></div>
+                    <div class="logo-area"><div class="logo-img">${logoHtml}</div><div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · Integração WhatsApp</p></div></div>
+                    <div style="text-align:right;"><div style="color:var(--primary-color);font-weight:500;">👤 ${appData.usuario?.nome}</div><div style="font-size:0.7rem;">${isTeste ? `🎁 ${diasRestantes} dias` : `✅ Licença ativa`}</div></div>
                 </div>
                 
                 <div class="nav-tabs">
                     <button class="nav-btn active" data-tab="agenda">📅 Agenda</button>
+                    <button class="nav-btn" data-tab="whatsapp">💬 WhatsApp</button>
                     <button class="nav-btn" data-tab="clientes">👥 Clientes</button>
                     <button class="nav-btn" data-tab="servicos">💅 Serviços</button>
                     <button class="nav-btn" data-tab="financeiro">💰 Financeiro</button>
-                    <button class="nav-btn" data-tab="mensagens">💬 Mensagens</button>
-                    <button class="nav-btn" data-tab="config">⚙️ Configurações</button>
-                    <button class="nav-btn" data-tab="perfil">👤 Perfil</button>
+                    <button class="nav-btn" data-tab="config">⚙️</button>
                 </div>
                 
+                <!-- Aba Agenda -->
                 <div id="tab-agenda" class="tab-pane active">
                     <div class="grid-2">
                         <div class="info-card">
                             <h3>✍️ Novo Agendamento</h3>
                             <form id="formAgendamento">
-                                <div class="form-group"><label>Cliente</label><select id="clienteId" required><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('')}<option value="novo">➕ NOVO CLIENTE</option></select></div>
+                                <div class="form-group"><label>Cliente</label><select id="clienteId" required><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}">${c.nome} 📱 ${c.telefone}</option>`).join('')}<option value="novo">➕ NOVO CLIENTE</option></select></div>
                                 <div class="form-group"><label>Data</label><input type="date" id="dataAgenda" value="${new Date().toISOString().slice(0,10)}" required></div>
                                 <div class="form-group"><label>Horário</label><select id="horarioAgenda" required>${gerarOpcoesHorario()}</select></div>
                                 <div class="form-group"><label>Serviço</label><select id="servicoId" required>${appData.servicos.map(s => `<option value="${s.id}" data-preco="${s.preco}">${s.nome} - R$ ${s.preco}</option>`).join('')}</select></div>
@@ -957,68 +812,85 @@
                                 <button type="submit" class="btn-primary">✅ Agendar</button>
                             </form>
                         </div>
-                        <div class="info-card"><h3>📋 Agenda Hoje</h3><div id="agendaHoje" style="max-height:500px;overflow-y:auto;"></div></div>
+                        <div class="info-card"><h3>📋 Agenda Hoje</h3><div id="agendaHoje" style="max-height:450px;overflow-y:auto;"></div></div>
                     </div>
                 </div>
                 
+                <!-- Aba WhatsApp - Integração com Contatos -->
+                <div id="tab-whatsapp" class="tab-pane">
+                    <div class="grid-2">
+                        <div class="info-card">
+                            <h3>📱 Importar Contatos do WhatsApp</h3>
+                            <p style="font-size:0.75rem; margin-bottom:0.8rem; color: var(--text-secondary);">Copie os contatos do WhatsApp e cole abaixo. Formatos aceitos: "Nome|Telefone" ou "Nome,Telefone" ou "Nome - Telefone"</p>
+                            <textarea id="contatosWhatsAppInput" rows="6" placeholder="Exemplos:&#10;Ana Silva|11999990001&#10;Maria Santos,11988887777&#10;João Souza - 11977776666" style="font-size:0.8rem;"></textarea>
+                            <button id="btnImportarWhatsApp" class="btn-primary" style="margin-top:0.5rem; background:#25D366;">📥 Importar Contatos</button>
+                        </div>
+                        <div class="info-card">
+                            <h3>📇 Contatos do WhatsApp <span class="badge badge-whatsapp">${appData.contatosWhatsApp.length} novos</span></h3>
+                            <div id="listaContatosWhatsApp" style="max-height:400px;overflow-y:auto;"></div>
+                            ${appData.contatosWhatsApp.length === 0 ? '<div style="text-align:center;padding:1rem;color:var(--text-secondary);">Nenhum contato importado. Cole os contatos ao lado e clique em importar.</div>' : ''}
+                        </div>
+                    </div>
+                    <div class="info-card" style="margin-top:1rem;">
+                        <h3>💬 Enviar Mensagem Rápida</h3>
+                        <div class="grid-2">
+                            <div><label>Selecione um cliente</label><select id="clienteEnvioRapido"><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('')}</select></div>
+                            <div><label>Ou digite o telefone</label><input type="text" id="telefoneEnvioRapido" placeholder="(11) 99999-9999"></div>
+                        </div>
+                        <div class="form-group"><label>Mensagem</label><textarea id="mensagemEnvioRapido" rows="3" placeholder="Digite sua mensagem... use {nome} e {link}"></textarea></div>
+                        <button id="btnEnviarWhatsRapido" class="btn-primary btn-whatsapp">📲 Enviar WhatsApp</button>
+                    </div>
+                </div>
+                
+                <!-- Aba Clientes -->
                 <div id="tab-clientes" class="tab-pane">
                     <div class="grid-2">
                         <div class="info-card">
-                            <h3>📇 Clientes <button class="btn-secondary btn-sm" onclick="abrirModalCliente()">+ Novo</button></h3>
-                            <input type="text" id="filtroClientes" placeholder="🔍 Filtrar por nome..." style="margin-bottom:1rem;">
-                            <div id="listaClientes" style="max-height:450px;overflow-y:auto;"></div>
-                            <button id="btnImportar" class="btn-secondary" style="margin-top:1rem;width:100%;">📱 Importar WhatsApp</button>
+                            <h3>👥 Clientes <button class="btn-secondary btn-sm" onclick="abrirModalCliente()">+ Novo</button></h3>
+                            <input type="text" id="filtroClientes" placeholder="🔍 Filtrar..." style="margin-bottom:0.8rem;">
+                            <div id="listaClientes" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
-                        <div class="info-card"><h3>🏆 Melhores Clientes</h3><div id="melhoresClientes"></div></div>
+                        <div class="info-card">
+                            <h3>🏆 Melhores Clientes</h3>
+                            <div id="melhoresClientes"></div>
+                        </div>
                     </div>
                 </div>
                 
+                <!-- Aba Serviços -->
                 <div id="tab-servicos" class="tab-pane">
                     <div class="grid-2">
                         <div class="info-card">
                             <h3>💅 Serviços <button class="btn-secondary btn-sm" onclick="abrirModalServico()">+ Novo</button></h3>
-                            <div id="listaServicos" style="max-height:500px;overflow-y:auto;"></div>
+                            <div id="listaServicos" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                         <div class="info-card">
                             <h3>📊 Estatísticas</h3>
-                            <div>Total de serviços: <strong>${appData.servicos.length}</strong></div>
-                            <div>Serviço mais caro: <strong>R$ ${Math.max(...appData.servicos.map(s => s.preco), 0).toFixed(2)}</strong></div>
-                            <div>Serviço mais rápido: <strong>${Math.min(...appData.servicos.map(s => s.duracao), 0)} min</strong></div>
+                            <div>Total: <strong>${appData.servicos.length}</strong> serviços</div>
+                            <div>Mais caro: <strong>R$ ${Math.max(...appData.servicos.map(s => s.preco), 0).toFixed(2)}</strong></div>
                         </div>
                     </div>
                 </div>
                 
+                <!-- Aba Financeiro -->
                 <div id="tab-financeiro" class="tab-pane">
                     <div class="grid-2">
                         <div class="info-card"><h3>💰 Resumo</h3><div style="display:flex;justify-content:space-between;"><div>Receita:<br><span class="stat-value">R$ ${financeiro.totalReceita.toFixed(2)}</span></div><div>Custos:<br><span class="stat-value">R$ ${financeiro.totalCustos.toFixed(2)}</span></div><div>Lucro:<br><span class="stat-value">R$ ${financeiro.lucro.toFixed(2)}</span></div></div><hr><h4>Por Pagamento</h4><div>💰 Dinheiro: R$ ${financeiro.porPagamento.dinheiro.toFixed(2)}</div><div>📱 Pix: R$ ${financeiro.porPagamento.pix.toFixed(2)}</div><div>💳 Crédito: R$ ${financeiro.porPagamento.credito.toFixed(2)}</div><div>💳 Débito: R$ ${financeiro.porPagamento.debito.toFixed(2)}</div></div>
-                        <div class="info-card"><h3>📋 Últimos</h3><div id="ultimosAtendimentos"></div></div>
+                        <div class="info-card"><h3>📋 Últimos Atendimentos</h3><div id="ultimosAtendimentos"></div></div>
                     </div>
                 </div>
                 
-                <div id="tab-mensagens" class="tab-pane">
-                    <div class="grid-2">
-                        <div class="info-card"><h3>💬 Templates</h3><div id="listaMensagens"></div><button id="btnNovaMsg" class="btn-secondary" style="width:100%;">➕ Nova</button></div>
-                        <div class="info-card"><h3>📱 Enviar</h3><select id="clienteEnvio"><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('')}</select><input type="text" id="telefoneEnvio" placeholder="Telefone"><textarea id="mensagemEnvio" rows="4" placeholder="Mensagem... use {nome} e {link}"></textarea><button id="btnEnviar" class="btn-primary">📲 Enviar</button></div>
-                    </div>
-                </div>
-                
+                <!-- Aba Configurações -->
                 <div id="tab-config" class="tab-pane">
                     <div class="grid-2">
-                        <div class="info-card"><h3>🎨 Cores</h3><div style="display:flex;gap:1rem;flex-wrap:wrap;"><div class="color-option ${appData.tema === 'light' ? 'selected' : ''}" style="background:#fff;border:2px solid #ccc;" onclick="mudarTema('light')" title="Branco"></div><div class="color-option ${appData.tema === 'yellow' ? 'selected' : ''}" style="background:#d4af37;" onclick="mudarTema('yellow')" title="Amarelo"></div><div class="color-option ${appData.tema === 'blue' ? 'selected' : ''}" style="background:#2563eb;" onclick="mudarTema('blue')" title="Azul"></div><div class="color-option ${appData.tema === 'red' ? 'selected' : ''}" style="background:#dc2626;" onclick="mudarTema('red')" title="Vermelho"></div><div class="color-option ${appData.tema === 'black' ? 'selected' : ''}" style="background:#1f1f1f;" onclick="mudarTema('black')" title="Preto"></div></div></div>
+                        <div class="info-card"><h3>🎨 Cores</h3><div style="display:flex;gap:0.8rem;flex-wrap:wrap;"><div class="color-option" style="background:#fff;border:2px solid #ccc;" onclick="mudarTema('light')" title="Branco">⚪</div><div class="color-option" style="background:#d4af37;" onclick="mudarTema('yellow')" title="Amarelo">🟡</div><div class="color-option" style="background:#2563eb;" onclick="mudarTema('blue')" title="Azul">🔵</div><div class="color-option" style="background:#dc2626;" onclick="mudarTema('red')" title="Vermelho">🔴</div><div class="color-option" style="background:#1f1f1f;" onclick="mudarTema('black')" title="Preto">⚫</div></div></div>
                         <div class="info-card"><h3>⚙️ Horários</h3><div class="form-group"><label>Início</label><input type="time" id="cfgInicio" value="${appData.horarioInicio}"></div><div class="form-group"><label>Fim</label><input type="time" id="cfgFim" value="${appData.horarioFim}"></div><div class="form-group"><label>Almoço</label><input type="time" id="cfgAlmocoIni" value="${appData.horarioAlmocoInicio}"> às <input type="time" id="cfgAlmocoFim" value="${appData.horarioAlmocoFim}"></div><button id="btnSalvarHorarios" class="btn-primary">Salvar</button></div>
                         <div class="info-card"><h3>🔗 Link Online</h3><input type="text" id="linkAgendamento" readonly value="${gerarLinkAgendamento()}"><button id="btnCopiarLink" class="btn-secondary" style="margin-top:0.5rem;">Copiar</button><div class="form-group"><label>Nome do Estúdio</label><input type="text" id="nomeStudio" value="${appData.empresa.nome}"></div><button id="btnSalvarStudio" class="btn-primary">Salvar</button></div>
-                    </div>
-                </div>
-                
-                <div id="tab-perfil" class="tab-pane">
-                    <div class="grid-2">
-                        <div class="info-card"><h3>👤 Perfil</h3><div class="profile-preview"><div class="logo-img" style="width:70px;height:70px;">${logoHtml}</div><div><strong>${appData.usuario?.nome}</strong><br>${appData.empresa.nome}</div></div><div class="form-group"><label>Nome</label><input type="text" id="editUsername" value="${appData.usuario?.nome || ''}"></div><div class="form-group"><label>Nova senha</label><input type="password" id="editPassword" placeholder="Deixe em branco"></div><div class="form-group"><label>Confirmar</label><input type="password" id="editConfirmPassword"></div><button id="btnSalvarPerfil" class="btn-primary">Salvar</button></div>
-                        <div class="info-card"><h3>🖼️ Logomarca</h3><input type="file" id="logoUpload" accept="image/jpeg,image/png"><div id="previewLogo" class="profile-preview" style="justify-content:center;">${appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}" style="width:100px;height:100px;border-radius:50%;">` : 'Nenhuma logo'}</div><button id="btnSalvarLogo" class="btn-primary">Salvar</button></div>
                         <div class="info-card"><h3>🔐 Licença</h3><div>Plano: ${PLANOS[appData.licenca?.plano]?.nome || "Teste"}</div><div>Expira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}</div><div>Dias: ${diasRestantes}</div>${isTeste ? `<input type="text" id="chaveUpgrade" placeholder="Chave"><button id="btnUpgrade" class="btn-primary">Ativar</button>` : ''}</div>
                     </div>
                 </div>
                 
-                <div class="footer">⭐ TOP Agenda © 2024 · Gestão Profissional para Estética</div>
+                <div class="footer">⭐ TOP Agenda © 2024 · Integração com WhatsApp · Gestão Profissional</div>
             </div>
         `;
         
@@ -1048,6 +920,32 @@
             }
         };
         
+        window.adicionarComoCliente = (id) => {
+            const contato = appData.contatosWhatsApp.find(c => c.id === id);
+            if (contato) {
+                adicionarContatoComoCliente(contato);
+                renderizarApp();
+                alert(`✅ ${contato.nome} adicionado como cliente!`);
+            }
+        };
+        
+        window.ignorarContato = (id) => {
+            if (confirm("Ignorar este contato?")) {
+                ignorarContatoWhatsApp(id);
+                renderizarApp();
+            }
+        };
+        
+        window.enviarParaCliente = (id) => {
+            const cliente = appData.clientes.find(c => c.id === id);
+            if (cliente) {
+                document.getElementById("telefoneEnvioRapido").value = cliente.telefone;
+                const sel = document.getElementById("clienteEnvioRapido");
+                if (sel) sel.value = id;
+                document.querySelector("[data-tab='whatsapp']").click();
+            }
+        };
+        
         window.editarClienteModal = (id, nome, telefone, email) => {
             const novoNome = prompt("Editar nome:", nome);
             const novoTelefone = prompt("Editar telefone:", telefone);
@@ -1055,6 +953,12 @@
             if (novoNome && novoTelefone) {
                 editarCliente(id, novoNome, novoTelefone, novoEmail);
                 renderizarApp();
+            }
+        };
+        
+        window.removerClienteConfirm = (id, nome) => {
+            if (confirm(`Remover cliente "${nome}"?`)) {
+                if (removerCliente(id)) renderizarApp();
             }
         };
         
@@ -1069,37 +973,11 @@
             }
         };
         
-        window.removerClienteConfirm = (id, nome) => {
-            if (confirm(`Remover cliente "${nome}"?`)) {
-                if (removerCliente(id)) renderizarApp();
-            }
-        };
-        
         window.removerServicoConfirm = (id, nome) => {
             if (confirm(`Remover serviço "${nome}"?`)) {
                 removerServico(id);
                 renderizarApp();
             }
-        };
-        
-        window.enviarParaCliente = (id) => {
-            const c = appData.clientes.find(cl => cl.id === id);
-            if (c) {
-                document.getElementById("telefoneEnvio").value = c.telefone;
-                const sel = document.getElementById("clienteEnvio");
-                if (sel) sel.value = id;
-                document.querySelector("[data-tab='mensagens']").click();
-            }
-        };
-        
-        window.usarTemplate = (idx) => {
-            document.getElementById("mensagemEnvio").value = appData.mensagensPredefinidas[idx];
-        };
-        
-        window.removerTemplate = (idx) => {
-            appData.mensagensPredefinidas.splice(idx, 1);
-            salvarDados();
-            atualizarMensagens();
         };
         
         function gerarOpcoesHorario() {
@@ -1119,9 +997,9 @@
             const hoje = new Date().toISOString().slice(0,10);
             const container = document.getElementById("agendaHoje");
             if (!container) return;
-            const agendamentosHoje = appData.agendamentos.filter(a => a.data === hoje);
+            const agendamentosHoje = appData.agendamientos?.filter(a => a.data === hoje) || [];
             if (agendamentosHoje.length === 0) {
-                container.innerHTML = "<div style='text-align:center;padding:2rem;'>Nenhum agendamento</div>";
+                container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum agendamento hoje</div>";
                 return;
             }
             container.innerHTML = agendamentosHoje.map(a => {
@@ -1129,6 +1007,29 @@
                 const servico = appData.servicos.find(s => s.id === a.servicoId);
                 return `<div class="client-item">⏰ <strong>${a.horario}</strong><br><strong>${cliente?.nome}</strong><br>${servico?.nome} - R$ ${a.valor.toFixed(2)}</div>`;
             }).join('');
+        }
+        
+        function atualizarListaContatosWhatsApp() {
+            const container = document.getElementById("listaContatosWhatsApp");
+            if (!container) return;
+            if (appData.contatosWhatsApp.length === 0) {
+                container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum contato importado</div>";
+                return;
+            }
+            container.innerHTML = appData.contatosWhatsApp.map(c => `
+                <div class="contato-item">
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <div>
+                            <strong>${c.nome}</strong>
+                            <div class="whatsapp-chip" style="margin-top:0.2rem;">📱 ${formatarTelefone(c.telefone)}</div>
+                        </div>
+                        <div style="display:flex;gap:0.3rem;">
+                            <button class="btn-secondary btn-sm" onclick="adicionarComoCliente(${c.id})">➕ Cliente</button>
+                            <button class="btn-secondary btn-sm" onclick="ignorarContato(${c.id})">✖️</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
         
         function atualizarListaClientes() {
@@ -1142,13 +1043,12 @@
                         <strong>${c.nome}</strong>
                         <span class="badge badge-primary">${c.totalVisitas || 0} visitas</span>
                     </div>
-                    <div>📱 ${c.telefone}</div>
-                    <div>✉️ ${c.email || '—'}</div>
+                    <div>📱 ${formatarTelefone(c.telefone)}</div>
                     <div>💰 R$ ${(c.totalGasto||0).toFixed(2)}</div>
-                    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
-                        <button class="btn-secondary btn-sm" onclick="enviarParaCliente(${c.id})">💬 Msg</button>
-                        <button class="btn-secondary btn-sm" onclick="editarClienteModal(${c.id}, '${c.nome}', '${c.telefone}', '${c.email || ''}')">✏️ Editar</button>
-                        <button class="btn-secondary btn-sm" onclick="removerClienteConfirm(${c.id}, '${c.nome}')">🗑️ Remover</button>
+                    <div style="display:flex;gap:0.3rem;margin-top:0.5rem;">
+                        <button class="btn-secondary btn-sm" onclick="enviarParaCliente(${c.id})">💬 WhatsApp</button>
+                        <button class="btn-secondary btn-sm" onclick="editarClienteModal(${c.id}, '${c.nome}', '${c.telefone}', '${c.email || ''}')">✏️</button>
+                        <button class="btn-secondary btn-sm" onclick="removerClienteConfirm(${c.id}, '${c.nome}')">🗑️</button>
                     </div>
                 </div>
             `).join('');
@@ -1163,32 +1063,21 @@
                     <div style="display:flex;justify-content:space-between;">
                         <strong>${s.nome}</strong>
                     </div>
-                    <div>💰 Preço: R$ ${s.preco.toFixed(2)} | Custo: R$ ${s.custo.toFixed(2)}</div>
-                    <div>⏱️ ${s.duracao} minutos | 💎 Lucro: R$ ${(s.preco - s.custo).toFixed(2)}</div>
-                    <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
-                        <button class="btn-secondary btn-sm" onclick="editarServicoModal(${s.id}, '${s.nome}', ${s.preco}, ${s.custo}, ${s.duracao})">✏️ Editar</button>
-                        <button class="btn-secondary btn-sm" onclick="removerServicoConfirm(${s.id}, '${s.nome}')">🗑️ Remover</button>
+                    <div>💰 R$ ${s.preco.toFixed(2)} | Custo: R$ ${s.custo.toFixed(2)}</div>
+                    <div>⏱️ ${s.duracao} min | 💎 Lucro: R$ ${(s.preco - s.custo).toFixed(2)}</div>
+                    <div style="display:flex;gap:0.3rem;margin-top:0.5rem;">
+                        <button class="btn-secondary btn-sm" onclick="editarServicoModal(${s.id}, '${s.nome}', ${s.preco}, ${s.custo}, ${s.duracao})">✏️</button>
+                        <button class="btn-secondary btn-sm" onclick="removerServicoConfirm(${s.id}, '${s.nome}')">🗑️</button>
                     </div>
                 </div>
             `).join('');
             if (appData.servicos.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum serviço</div>";
         }
         
-        function atualizarMensagens() {
-            const container = document.getElementById("listaMensagens");
-            if (!container) return;
-            container.innerHTML = appData.mensagensPredefinidas.map((msg, idx) => `
-                <div class="msg-template" onclick="usarTemplate(${idx})">
-                    📝 ${msg.substring(0,60)}...
-                    <button class="btn-secondary btn-sm" style="float:right;" onclick="event.stopPropagation();removerTemplate(${idx})">❌</button>
-                </div>
-            `).join('');
-        }
-        
         function atualizarUltimosAtendimentos() {
             const container = document.getElementById("ultimosAtendimentos");
             if (!container) return;
-            const ultimos = [...appData.agendamentos].reverse().slice(0,10);
+            const ultimos = [...(appData.agendamentos || [])].reverse().slice(0,10);
             container.innerHTML = ultimos.map(a => {
                 const c = appData.clientes.find(cl => cl.id === a.clienteId);
                 return `<div class="client-item">📅 ${a.data} ${a.horario}<br><strong>${c?.nome}</strong> - R$ ${a.valor.toFixed(2)}</div>`;
@@ -1199,9 +1088,22 @@
         function atualizarMelhoresClientes() {
             const container = document.getElementById("melhoresClientes");
             if (!container) return;
-            const top5 = getMelhoresClientes();
-            container.innerHTML = top5.map((c,i) => `<div class="client-item" style="display:flex;justify-content:space-between;"><span>${i+1}º - ${c.nome}</span><span style="color:var(--primary-color);font-weight:bold;">R$ ${c.total.toFixed(2)}</span></div>`).join('');
+            const mapa = new Map();
+            (appData.agendamentos || []).forEach(a => {
+                const cliente = appData.clientes.find(c => c.id === a.clienteId);
+                if (cliente) mapa.set(cliente.id, (mapa.get(cliente.id) || 0) + (a.valor || 0));
+            });
+            const top5 = Array.from(mapa.entries()).map(([id, total]) => ({ ...appData.clientes.find(c => c.id === id), total })).sort((a,b) => b.total - a.total).slice(0,5);
+            container.innerHTML = top5.map((c,i) => `<div class="client-item" style="display:flex;justify-content:space-between;"><span>${i+1}º - ${c.nome}</span><span style="color:var(--primary-color);">R$ ${c.total.toFixed(2)}</span></div>`).join('');
             if (top5.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum dado</div>";
+        }
+        
+        function formatarTelefone(tel) {
+            if (!tel) return '';
+            const ddd = tel.substring(0,2);
+            const parte1 = tel.substring(2,7);
+            const parte2 = tel.substring(7,11);
+            return `(${ddd}) ${parte1}-${parte2}`;
         }
         
         // Eventos
@@ -1222,11 +1124,12 @@
             const valor = parseFloat(document.getElementById("valorAgenda").value);
             const formaPagamento = document.getElementById("formaPagamento").value;
             
-            if (appData.agendamentos.find(a => a.data === data && a.horario === horario)) {
+            if ((appData.agendamentos || []).find(a => a.data === data && a.horario === horario)) {
                 alert("❌ Horário já ocupado!");
                 return;
             }
             
+            if (!appData.agendamentos) appData.agendamentos = [];
             appData.agendamentos.push({ id: Date.now(), clienteId: parseInt(clienteId), data, horario, servicoId, valor, formaPagamento });
             const cliente = appData.clientes.find(c => c.id === parseInt(clienteId));
             if (cliente) { cliente.totalGasto = (cliente.totalGasto || 0) + valor; cliente.totalVisitas = (cliente.totalVisitas || 0) + 1; }
@@ -1234,35 +1137,33 @@
             renderizarApp();
         });
         
-        document.getElementById("btnImportar")?.addEventListener("click", () => {
-            const contatos = prompt("Cole os contatos (Nome|Telefone|Email):\nAna|11999990001|ana@email.com");
-            if (contatos) {
-                contatos.split("\n").forEach(line => {
-                    const partes = line.split("|");
-                    if (partes.length >= 2 && !appData.clientes.find(c => c.telefone === partes[1].trim())) {
-                        adicionarCliente(partes[0].trim(), partes[1].trim(), partes[2]?.trim() || "");
-                    }
-                });
+        document.getElementById("btnImportarWhatsApp")?.addEventListener("click", () => {
+            const texto = document.getElementById("contatosWhatsAppInput").value;
+            if (!texto.trim()) {
+                alert("Cole os contatos do WhatsApp no campo acima!");
+                return;
+            }
+            const novos = importarContatosWhatsApp(texto);
+            if (novos.length > 0) {
+                alert(`✅ ${novos.length} contatos importados do WhatsApp!`);
+                document.getElementById("contatosWhatsAppInput").value = "";
                 renderizarApp();
+            } else {
+                alert("Nenhum contato válido encontrado. Use o formato: Nome|Telefone");
             }
         });
         
-        document.getElementById("btnNovaMsg")?.addEventListener("click", () => {
-            const nova = prompt("Nova mensagem (use {nome} e {link}):");
-            if (nova) { appData.mensagensPredefinidas.push(nova); salvarDados(); atualizarMensagens(); }
-        });
-        
-        document.getElementById("btnEnviar")?.addEventListener("click", () => {
-            let tel = document.getElementById("telefoneEnvio").value;
-            let msg = document.getElementById("mensagemEnvio").value;
-            const sel = document.getElementById("clienteEnvio");
+        document.getElementById("btnEnviarWhatsRapido")?.addEventListener("click", () => {
+            let tel = document.getElementById("telefoneEnvioRapido").value;
+            let msg = document.getElementById("mensagemEnvioRapido").value;
+            const sel = document.getElementById("clienteEnvioRapido");
             if (sel && sel.value) {
                 const opt = sel.options[sel.selectedIndex];
                 tel = opt.getAttribute("data-tel") || tel;
                 msg = msg.replace(/{nome}/g, opt.getAttribute("data-nome") || "");
             }
             msg = msg.replace(/{link}/g, gerarLinkAgendamento());
-            if (!tel) return alert("Digite o telefone!");
+            if (!tel) return alert("Digite o telefone ou selecione um cliente!");
             enviarWhatsApp(tel, msg);
         });
         
@@ -1288,31 +1189,6 @@
             renderizarApp();
         });
         
-        document.getElementById("btnSalvarPerfil")?.addEventListener("click", () => {
-            const newUser = document.getElementById("editUsername").value;
-            const newPass = document.getElementById("editPassword").value;
-            const confirm = document.getElementById("editConfirmPassword").value;
-            if (newUser) appData.usuario.nome = newUser;
-            if (newPass) {
-                if (newPass !== confirm) return alert("Senhas não conferem!");
-                appData.usuario.senha = newPass;
-            }
-            salvarDados();
-            alert("✅ Perfil atualizado!");
-            renderizarApp();
-        });
-        
-        document.getElementById("logoUpload")?.addEventListener("change", async (e) => {
-            const file = e.target.files[0];
-            if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
-                appData.empresa.logoBase64 = await fileToBase64(file);
-                salvarDados();
-                renderizarApp();
-            } else alert("Formato inválido! Use PNG ou JPG.");
-        });
-        
-        document.getElementById("btnSalvarLogo")?.addEventListener("click", () => renderizarApp());
-        
         document.getElementById("btnUpgrade")?.addEventListener("click", () => {
             const ativado = ativarPlanoPorChave(document.getElementById("chaveUpgrade").value);
             if (ativado.sucesso) { alert(`✅ ${ativado.plano} ativado!`); renderizarApp(); }
@@ -1336,20 +1212,20 @@
                 if (tab === "clientes") atualizarListaClientes();
                 if (tab === "servicos") atualizarListaServicos();
                 if (tab === "financeiro") atualizarUltimosAtendimentos();
-                if (tab === "mensagens") atualizarMensagens();
+                if (tab === "whatsapp") atualizarListaContatosWhatsApp();
             });
         });
         
         atualizarAgendaHoje();
         atualizarListaClientes();
         atualizarListaServicos();
-        atualizarMensagens();
+        atualizarListaContatosWhatsApp();
         atualizarUltimosAtendimentos();
         atualizarMelhoresClientes();
         
-        const selectEnvio = document.getElementById("clienteEnvio");
-        if (selectEnvio) {
-            selectEnvio.innerHTML = `<option value="">Selecione...</option>` + appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('');
+        const selectRapido = document.getElementById("clienteEnvioRapido");
+        if (selectRapido) {
+            selectRapido.innerHTML = `<option value="">Selecione...</option>` + appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('');
         }
     }
     
@@ -1358,7 +1234,7 @@
         document.getElementById("root").innerHTML = `
             <div class="glass-card" style="max-width:500px;margin:2rem auto;text-align:center;padding:2rem;">
                 <h2 style="color:var(--primary-color);">⭐ TOP Agenda</h2>
-                <div class="info-card" style="margin:1rem 0;"><h3>🎁 Teste Grátis de 7 dias</h3></div>
+                <div class="info-card" style="margin:1rem 0;"><h3>🎁 Teste Grátis de 7 dias</h3><p style="font-size:0.8rem;">Integração completa com WhatsApp!</p></div>
                 <div class="form-group"><label>Usuário</label><input type="text" id="newUser"></div>
                 <div class="form-group"><label>Senha</label><input type="password" id="newPass"></div>
                 <div class="form-group"><label>Confirmar</label><input type="password" id="confirmPass"></div>
@@ -1377,6 +1253,8 @@
             if (pass !== confirm) return alert("Senhas não conferem");
             appData.usuario = { nome: user, senha: pass };
             appData.empresa = { nome: studio, logoBase64: null };
+            appData.agendamentos = [];
+            appData.contatosWhatsApp = [];
             if (chave) { if (!ativarPlanoPorChave(chave).sucesso) ativarTesteGratis(); }
             else ativarTesteGratis();
             appData.tema = "light";
