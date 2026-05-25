@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="theme-color" content="#25D366">
-    <title>TOP Agenda | Lembretes WhatsApp</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TOP Agenda 2026">
+    <title>TOP Agenda 2026 | Lembretes WhatsApp</title>
     <style>
         * {
             margin: 0;
@@ -354,6 +357,15 @@
             font-size: 0.65rem;
         }
 
+        .year-badge {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             body { padding: 0.5rem; }
             .tab-pane { padding: 0.8rem; }
@@ -378,7 +390,7 @@
                 const btn = document.createElement('button');
                 btn.id = 'installFloatBtn';
                 btn.className = 'install-float';
-                btn.innerHTML = '📲 Instalar TOP Agenda ⭐';
+                btn.innerHTML = '📲 Instalar TOP Agenda 2026 ⭐';
                 document.body.appendChild(btn);
                 btn.addEventListener('click', async () => {
                     if (deferredPrompt) {
@@ -404,25 +416,25 @@
     }
 
     // ========== CONFIGURAÇÕES ==========
-    const STORAGE_KEY = "top_agenda_system";
+    const STORAGE_KEY = "top_agenda_2026_system";
 
     const PLANOS = {
-        TESTE: { nome: "Teste Grátis", dias: 7, preco: 0, chave: "TESTE7-TOP-FREE" },
-        MENSAL: { nome: "Plano Mensal", dias: 30, preco: 29.90, chave: "MENSAL-TOP-2990" },
-        TRIMESTRAL: { nome: "Plano Trimestral", dias: 90, preco: 79.90, chave: "TRIMESTRAL-TOP-7990" },
-        ANUAL: { nome: "Plano Anual", dias: 365, preco: 249.90, chave: "ANUAL-TOP-24990" }
+        TESTE: { nome: "Teste Grátis", dias: 7, preco: 0, chave: "TESTE7-TOP2026-FREE" },
+        MENSAL: { nome: "Plano Mensal", dias: 30, preco: 29.90, chave: "MENSAL-TOP2026-2990" },
+        TRIMESTRAL: { nome: "Plano Trimestral", dias: 90, preco: 79.90, chave: "TRIMESTRAL-TOP2026-7990" },
+        ANUAL: { nome: "Plano Anual", dias: 365, preco: 249.90, chave: "ANUAL-TOP2026-24990" }
     };
 
     const CHAVES_MAP = {
-        "TESTE7-TOP-FREE": "TESTE",
-        "MENSAL-TOP-2990": "MENSAL",
-        "TRIMESTRAL-TOP-7990": "TRIMESTRAL",
-        "ANUAL-TOP-24990": "ANUAL"
+        "TESTE7-TOP2026-FREE": "TESTE",
+        "MENSAL-TOP2026-2990": "MENSAL",
+        "TRIMESTRAL-TOP2026-7990": "TRIMESTRAL",
+        "ANUAL-TOP2026-24990": "ANUAL"
     };
 
     let appData = {
         usuario: null,
-        empresa: { nome: "TOP Agenda", logoBase64: null },
+        empresa: { nome: "TOP Agenda 2026", logoBase64: null },
         licenca: null,
         tema: "light",
         horarioInicio: "08:00",
@@ -432,7 +444,7 @@
         clientes: [],
         servicos: [],
         agendamentos: [],
-        mensagensLembrete: []  // Mensagens prontas para enviar
+        mensagensLembrete: []
     };
 
     function salvarDados() {
@@ -463,7 +475,6 @@
             ];
         }
         
-        // Mensagens padrão para lembretes
         if (appData.mensagensLembrete.length === 0) {
             appData.mensagensLembrete = [
                 "💛 Olá {nome}, tudo bem? Seus cílios já estão precisando de manutenção! Agende seu horário: {link}",
@@ -510,7 +521,7 @@
     function ativarTesteGratis() {
         const exp = new Date();
         exp.setDate(exp.getDate() + 7);
-        appData.licenca = { chave: "TESTE7-TOP-FREE", plano: "TESTE", expiracao: exp.toISOString(), ativo: true };
+        appData.licenca = { chave: "TESTE7-TOP2026-FREE", plano: "TESTE", expiracao: exp.toISOString(), ativo: true };
         salvarDados();
     }
 
@@ -540,7 +551,6 @@
         });
     }
 
-    // Funções para gerenciar mensagens de lembrete
     function adicionarMensagemLembrete(mensagem) {
         appData.mensagensLembrete.push(mensagem);
         salvarDados();
@@ -573,7 +583,6 @@
         return { totalReceita, totalCustos, lucro: totalReceita - totalCustos, porPagamento };
     }
 
-    // CRUD Clientes
     function adicionarCliente(nome, telefone, email) {
         const novoId = Math.max(...appData.clientes.map(c => c.id), 0) + 1;
         appData.clientes.push({ id: novoId, nome, telefone, email: email || '', totalGasto: 0, totalVisitas: 0 });
@@ -599,7 +608,6 @@
         return true;
     }
 
-    // CRUD Serviços
     function adicionarServico(nome, preco, custo, duracao) {
         const novoId = Math.max(...appData.servicos.map(s => s.id), 0) + 1;
         appData.servicos.push({ id: novoId, nome, preco: parseFloat(preco), custo: parseFloat(custo) || 0, duracao: parseInt(duracao) || 60 });
@@ -631,9 +639,9 @@
         if (!validarLicenca()) {
             document.getElementById("root").innerHTML = `
                 <div class="glass-card" style="text-align: center; padding: 2rem; max-width: 500px; margin: 0 auto;">
-                    <h2 style="color: var(--primary-color);">⭐ TOP Agenda</h2>
+                    <h2 style="color: var(--primary-color);">⭐ TOP Agenda 2026</h2>
                     <p>Seu período de teste de 7 dias expirou.</p>
-                    <div class="info-card"><h3>Planos</h3><p>💰 Mensal: <code>MENSAL-TOP-2990</code> - R$29,90</p><p>📆 Trimestral: <code>TRIMESTRAL-TOP-7990</code> - R$79,90</p><p>🌟 Anual: <code>ANUAL-TOP-24990</code> - R$249,90</p><input type="text" id="chaveRenovacao" placeholder="Cole sua chave"><button id="btnRenovar" class="btn-primary" style="margin-top:1rem;">Ativar</button></div>
+                    <div class="info-card"><h3>Planos</h3><p>💰 Mensal: <code>MENSAL-TOP2026-2990</code> - R$29,90</p><p>📆 Trimestral: <code>TRIMESTRAL-TOP2026-7990</code> - R$79,90</p><p>🌟 Anual: <code>ANUAL-TOP2026-24990</code> - R$249,90</p><input type="text" id="chaveRenovacao" placeholder="Cole sua chave"><button id="btnRenovar" class="btn-primary" style="margin-top:1rem;">Ativar</button></div>
                 </div>
             `;
             document.getElementById("btnRenovar")?.addEventListener("click", () => {
@@ -657,7 +665,10 @@
                 <div class="header">
                     <div class="logo-area">
                         <div class="logo-img">${logoHtml}</div>
-                        <div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · Lembretes WhatsApp</p></div>
+                        <div>
+                            <h1>⭐ TOP Agenda 2026 <span class="year-badge">NEW</span></h1>
+                            <p>${appData.empresa.nome} · Lembretes WhatsApp</p>
+                        </div>
                     </div>
                     <div style="text-align:right;">
                         <div style="color:var(--primary-color);font-weight:500;">👤 ${appData.usuario?.nome}</div>
@@ -719,16 +730,16 @@
                                 <textarea id="mensagemLembrete" rows="4" placeholder="Digite sua mensagem... use {nome} para o nome do cliente e {link} para o link da agenda"></textarea>
                             </div>
                             <div class="form-group">
-                                <label>Ou clique em uma mensagem pronta acima</label>
+                                <label>💡 Dica: Clique em uma mensagem pronta acima</label>
                             </div>
                             <button id="btnEnviarLembrete" class="btn-primary btn-whatsapp">📲 Enviar Lembrete WhatsApp</button>
                         </div>
                     </div>
                     <div class="info-card" style="margin-top:1rem;">
-                        <h3>📅 Enviar Lembrete para Agendamentos de Hoje</h3>
+                        <h3>📅 Enviar Lembrete em Lote</h3>
                         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                            <button id="btnLembretesHoje" class="btn-secondary">📢 Enviar para todos os clientes de hoje</button>
-                            <button id="btnLembretesAmanha" class="btn-secondary">📅 Enviar para clientes de amanhã</button>
+                            <button id="btnLembretesHoje" class="btn-secondary">📢 Enviar para clientes de HOJE</button>
+                            <button id="btnLembretesAmanha" class="btn-secondary">📅 Enviar para clientes de AMANHÃ</button>
                         </div>
                         <p style="font-size:0.7rem; margin-top:0.5rem; color:var(--text-secondary);">⚠️ Atenção: Cada cliente será aberto em uma nova aba do WhatsApp</p>
                     </div>
@@ -775,7 +786,7 @@
                     </div>
                 </div>
                 
-                <div class="footer">⭐ TOP Agenda © 2024 · Lembretes WhatsApp · Gestão Profissional</div>
+                <div class="footer">⭐ TOP Agenda 2026 © · Lembretes WhatsApp · Gestão Profissional para Estética</div>
             </div>
         `;
         
@@ -944,7 +955,7 @@
             const container = document.getElementById("listaServicos");
             if (!container) return;
             container.innerHTML = appData.servicos.map(s => `
-                <div class="servico-item">
+                <div class="client-item">
                     <div style="display:flex;justify-content:space-between;"><strong>${s.nome}</strong></div>
                     <div>💰 R$ ${s.preco.toFixed(2)} | Custo: R$ ${s.custo.toFixed(2)}</div>
                     <div>⏱️ ${s.duracao} min | 💎 Lucro: R$ ${(s.preco - s.custo).toFixed(2)}</div>
@@ -1165,13 +1176,13 @@
     function showPrimeiroAcesso() {
         document.getElementById("root").innerHTML = `
             <div class="glass-card" style="max-width:500px;margin:2rem auto;text-align:center;padding:2rem;">
-                <h2 style="color:var(--primary-color);">⭐ TOP Agenda</h2>
+                <h2 style="color:var(--primary-color);">⭐ TOP Agenda 2026</h2>
                 <div class="info-card" style="margin:1rem 0;"><h3>🎁 Teste Grátis de 7 dias</h3><p style="font-size:0.8rem;">Envie lembretes automáticos pelo WhatsApp!</p></div>
                 <div class="form-group"><label>Usuário</label><input type="text" id="newUser"></div>
                 <div class="form-group"><label>Senha</label><input type="password" id="newPass"></div>
                 <div class="form-group"><label>Confirmar</label><input type="password" id="confirmPass"></div>
                 <div class="form-group"><label>Nome do Estúdio</label><input type="text" id="studioName" value="Meu Estúdio"></div>
-                <div class="form-group"><label>Chave (opcional)</label><input type="text" id="licenseKey" placeholder="TESTE7-TOP-FREE"></div>
+                <div class="form-group"><label>Chave (opcional)</label><input type="text" id="licenseKey" placeholder="TESTE7-TOP2026-FREE"></div>
                 <button id="btnIniciar" class="btn-primary">🚀 Iniciar Teste</button>
             </div>
         `;
@@ -1197,7 +1208,7 @@
     function showLogin() {
         document.getElementById("root").innerHTML = `
             <div class="glass-card" style="max-width:450px;margin:3rem auto;text-align:center;padding:2rem;">
-                <h2 style="color:var(--primary-color);">⭐ TOP Agenda</h2>
+                <h2 style="color:var(--primary-color);">⭐ TOP Agenda 2026</h2>
                 <div class="form-group"><label>Usuário</label><input type="text" id="loginUser"></div>
                 <div class="form-group"><label>Senha</label><input type="password" id="loginPass"></div>
                 <button id="btnEntrar" class="btn-primary">Entrar</button>
