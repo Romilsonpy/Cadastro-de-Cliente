@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="theme-color" content="#25D366">
-    <title>TOP Agenda | Integração com WhatsApp</title>
+    <title>TOP Agenda | Lembretes WhatsApp</title>
     <style>
         * {
             margin: 0;
@@ -308,12 +308,27 @@
             font-size: 0.7rem;
         }
 
-        .client-item, .contato-item {
+        .client-item {
             background: var(--slot-bg);
             border-radius: 0.7rem;
             padding: 0.6rem;
             margin-bottom: 0.5rem;
             border: 1px solid var(--border-color);
+        }
+
+        .msg-template {
+            background: var(--slot-bg);
+            border-radius: 0.7rem;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .msg-template:hover {
+            background: var(--hover-bg);
+            border-left: 3px solid #25D366;
         }
 
         .badge-whatsapp {
@@ -337,14 +352,6 @@
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-size: 0.65rem;
-        }
-
-        .exemplo-box {
-            background: rgba(37, 99, 235, 0.05);
-            padding: 0.8rem;
-            border-radius: 0.7rem;
-            margin: 0.8rem 0;
-            font-size: 0.75rem;
         }
 
         @media (max-width: 768px) {
@@ -423,10 +430,9 @@
         horarioAlmocoInicio: "12:00",
         horarioAlmocoFim: "13:00",
         clientes: [],
-        contatosWhatsApp: [],
         servicos: [],
         agendamentos: [],
-        mensagensPredefinidas: []
+        mensagensLembrete: []  // Mensagens prontas para enviar
     };
 
     function salvarDados() {
@@ -457,15 +463,17 @@
             ];
         }
         
-        if (appData.mensagensPredefinidas.length === 0) {
-            appData.mensagensPredefinidas = [
+        // Mensagens padrão para lembretes
+        if (appData.mensagensLembrete.length === 0) {
+            appData.mensagensLembrete = [
                 "💛 Olá {nome}, tudo bem? Seus cílios já estão precisando de manutenção! Agende seu horário: {link}",
                 "✨ Lembrete: Seu horário está reservado para {data} às {horario}. Confirme sua presença!",
-                "🎁 Promoção especial para clientes fiéis! Agenda já seu próximo procedimento: {link}"
+                "🎁 Promoção especial para clientes fiéis! Agenda já seu próximo procedimento: {link}",
+                "📅 {nome}, não se esqueça do seu agendamento amanhã às {horario}. Te espero!",
+                "💆‍♀️ Oi {nome}, já faz 30 dias desde seu último atendimento. Hora de renovar seus cílios!"
             ];
         }
         
-        if (appData.contatosWhatsApp === undefined) appData.contatosWhatsApp = [];
         if (!appData.tema) appData.tema = "light";
         salvarDados();
     }
@@ -532,83 +540,19 @@
         });
     }
 
-    // ========== FUNÇÕES DE IMPORTAÇÃO DE CONTATOS ==========
-    function importarContatosWhatsApp(texto) {
-        const linhas = texto.split(/\r?\n/);
-        let novosContatos = [];
-        
-        for (const linha of linhas) {
-            if (!linha.trim()) continue;
-            
-            let nome = "";
-            let telefone = "";
-            
-            // Tentar diferentes formatos
-            if (linha.includes("|")) {
-                const partes = linha.split("|");
-                nome = partes[0].trim();
-                telefone = partes[1].trim();
-            } else if (linha.includes(",")) {
-                const partes = linha.split(",");
-                nome = partes[0].trim();
-                telefone = partes[1].trim();
-            } else if (linha.includes("-")) {
-                const partes = linha.split("-");
-                nome = partes[0].trim();
-                telefone = partes[1].trim();
-            } else {
-                // Tentar extrair número
-                const matchTel = linha.match(/(\d{10,13})/);
-                if (matchTel) {
-                    telefone = matchTel[1];
-                    nome = linha.replace(telefone, "").replace(/[-|,]/g, "").trim();
-                    if (!nome) nome = "Contato WhatsApp";
-                }
-            }
-            
-            if (nome && telefone) {
-                telefone = telefone.replace(/\D/g, '');
-                if (telefone.length >= 10) {
-                    const existe = appData.contatosWhatsApp.some(c => c.telefone === telefone) ||
-                                  appData.clientes.some(c => c.telefone === telefone);
-                    if (!existe) {
-                        novosContatos.push({
-                            id: Date.now() + Math.random(),
-                            nome: nome,
-                            telefone: telefone,
-                            origem: "whatsapp",
-                            dataImportacao: new Date().toISOString()
-                        });
-                    }
-                }
-            }
-        }
-        
-        if (novosContatos.length > 0) {
-            appData.contatosWhatsApp.push(...novosContatos);
-            salvarDados();
-        }
-        
-        return novosContatos;
-    }
-    
-    function adicionarContatoComoCliente(contato) {
-        const novoCliente = {
-            id: Date.now(),
-            nome: contato.nome,
-            telefone: contato.telefone,
-            email: "",
-            totalGasto: 0,
-            totalVisitas: 0
-        };
-        appData.clientes.push(novoCliente);
-        appData.contatosWhatsApp = appData.contatosWhatsApp.filter(c => c.id !== contato.id);
+    // Funções para gerenciar mensagens de lembrete
+    function adicionarMensagemLembrete(mensagem) {
+        appData.mensagensLembrete.push(mensagem);
         salvarDados();
-        return novoCliente;
     }
-    
-    function ignorarContatoWhatsApp(id) {
-        appData.contatosWhatsApp = appData.contatosWhatsApp.filter(c => c.id !== id);
+
+    function removerMensagemLembrete(index) {
+        appData.mensagensLembrete.splice(index, 1);
+        salvarDados();
+    }
+
+    function editarMensagemLembrete(index, novaMensagem) {
+        appData.mensagensLembrete[index] = novaMensagem;
         salvarDados();
     }
 
@@ -629,7 +573,7 @@
         return { totalReceita, totalCustos, lucro: totalReceita - totalCustos, porPagamento };
     }
 
-    // CRUD
+    // CRUD Clientes
     function adicionarCliente(nome, telefone, email) {
         const novoId = Math.max(...appData.clientes.map(c => c.id), 0) + 1;
         appData.clientes.push({ id: novoId, nome, telefone, email: email || '', totalGasto: 0, totalVisitas: 0 });
@@ -655,6 +599,7 @@
         return true;
     }
 
+    // CRUD Serviços
     function adicionarServico(nome, preco, custo, duracao) {
         const novoId = Math.max(...appData.servicos.map(s => s.id), 0) + 1;
         appData.servicos.push({ id: novoId, nome, preco: parseFloat(preco), custo: parseFloat(custo) || 0, duracao: parseInt(duracao) || 60 });
@@ -712,7 +657,7 @@
                 <div class="header">
                     <div class="logo-area">
                         <div class="logo-img">${logoHtml}</div>
-                        <div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · WhatsApp Integration</p></div>
+                        <div><h1>⭐ TOP Agenda</h1><p>${appData.empresa.nome} · Lembretes WhatsApp</p></div>
                     </div>
                     <div style="text-align:right;">
                         <div style="color:var(--primary-color);font-weight:500;">👤 ${appData.usuario?.nome}</div>
@@ -722,7 +667,7 @@
                 
                 <div class="nav-tabs">
                     <button class="nav-btn active" data-tab="agenda">📅 Agenda</button>
-                    <button class="nav-btn" data-tab="whatsapp">💬 WhatsApp</button>
+                    <button class="nav-btn" data-tab="lembretes">💬 Lembretes</button>
                     <button class="nav-btn" data-tab="clientes">👥 Clientes</button>
                     <button class="nav-btn" data-tab="servicos">💅 Serviços</button>
                     <button class="nav-btn" data-tab="financeiro">💰 Financeiro</button>
@@ -748,41 +693,44 @@
                     </div>
                 </div>
                 
-                <!-- Aba WhatsApp - COM INSTRUÇÕES CLARAS -->
-                <div id="tab-whatsapp" class="tab-pane">
+                <!-- Aba Lembretes WhatsApp -->
+                <div id="tab-lembretes" class="tab-pane">
                     <div class="grid-2">
                         <div class="info-card">
-                            <h3>📱 Como importar contatos do WhatsApp</h3>
-                            <div class="exemplo-box">
-                                <strong>📋 Passo a passo:</strong><br>
-                                1. Abra o WhatsApp no seu celular<br>
-                                2. Toque no contato que deseja copiar<br>
-                                3. Toque nos três pontos ⋮ → "Ver no sistema"<br>
-                                4. Copie o nome e o telefone<br>
-                                5. Cole abaixo no formato: <strong>Nome|Telefone</strong><br><br>
-                                <strong>📝 Exemplo:</strong><br>
-                                <code>Ana Silva|11999990001</code><br>
-                                <code>Maria Santos,11888887777</code><br>
-                                <code>João Souza - 11977776666</code>
-                            </div>
-                            <textarea id="contatosWhatsAppInput" rows="5" placeholder="Cole aqui os contatos copiados do WhatsApp...&#10;Ex:&#10;Ana Silva|11999990001&#10;Maria Santos,11888887777" style="font-size:0.8rem;"></textarea>
-                            <button id="btnImportarWhatsApp" class="btn-primary btn-whatsapp" style="margin-top:0.5rem;">📥 Importar Contatos</button>
+                            <h3>📝 Mensagens Prontas</h3>
+                            <div id="listaMensagens" style="max-height:350px;overflow-y:auto;"></div>
+                            <button id="btnNovaMensagem" class="btn-secondary" style="margin-top:0.8rem; width:100%;">➕ Criar Nova Mensagem</button>
                         </div>
                         <div class="info-card">
-                            <h3>📇 Contatos Importados <span class="badge-whatsapp">${appData.contatosWhatsApp.length} novos</span></h3>
-                            <div id="listaContatosWhatsApp" style="max-height:400px;overflow-y:auto;">
-                                ${appData.contatosWhatsApp.length === 0 ? '<div style="text-align:center;padding:1rem;color:var(--text-secondary);">Nenhum contato importado. Cole os contatos ao lado e clique em importar.</div>' : ''}
+                            <h3>💬 Enviar Lembrete</h3>
+                            <div class="form-group">
+                                <label>Para quem?</label>
+                                <select id="clienteLembrete">
+                                    <option value="">Selecione um cliente...</option>
+                                    ${appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome} - ${formatarTelefone(c.telefone)}</option>`).join('')}
+                                </select>
                             </div>
+                            <div class="form-group">
+                                <label>Ou digite o telefone</label>
+                                <input type="text" id="telefoneLembrete" placeholder="(11) 99999-9999">
+                            </div>
+                            <div class="form-group">
+                                <label>Mensagem</label>
+                                <textarea id="mensagemLembrete" rows="4" placeholder="Digite sua mensagem... use {nome} para o nome do cliente e {link} para o link da agenda"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Ou clique em uma mensagem pronta acima</label>
+                            </div>
+                            <button id="btnEnviarLembrete" class="btn-primary btn-whatsapp">📲 Enviar Lembrete WhatsApp</button>
                         </div>
                     </div>
                     <div class="info-card" style="margin-top:1rem;">
-                        <h3>💬 Enviar Mensagem Rápida</h3>
-                        <div class="grid-2">
-                            <div><label>Selecione um cliente</label><select id="clienteEnvioRapido"><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('')}</select></div>
-                            <div><label>Ou digite o telefone</label><input type="text" id="telefoneEnvioRapido" placeholder="(11) 99999-9999"></div>
+                        <h3>📅 Enviar Lembrete para Agendamentos de Hoje</h3>
+                        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button id="btnLembretesHoje" class="btn-secondary">📢 Enviar para todos os clientes de hoje</button>
+                            <button id="btnLembretesAmanha" class="btn-secondary">📅 Enviar para clientes de amanhã</button>
                         </div>
-                        <div class="form-group"><label>Mensagem</label><textarea id="mensagemEnvioRapido" rows="3" placeholder="Digite sua mensagem... use {nome} para nome do cliente e {link} para link da agenda"></textarea></div>
-                        <button id="btnEnviarWhatsRapido" class="btn-primary btn-whatsapp">📲 Enviar WhatsApp</button>
+                        <p style="font-size:0.7rem; margin-top:0.5rem; color:var(--text-secondary);">⚠️ Atenção: Cada cliente será aberto em uma nova aba do WhatsApp</p>
                     </div>
                 </div>
                 
@@ -820,14 +768,14 @@
                 <!-- Aba Configurações -->
                 <div id="tab-config" class="tab-pane">
                     <div class="grid-2">
-                        <div class="info-card"><h3>🎨 Temas</h3><div style="display:flex;gap:0.8rem;flex-wrap:wrap;"><button class="btn-secondary" onclick="mudarTema('light')">⚪ Branco</button><button class="btn-secondary" onclick="mudarTema('yellow')">🟡 Amarelo</button><button class="btn-secondary" onclick="mudarTema('blue')">🔵 Azul</button><button class="btn-secondary" onclick="mudarTema('red')">🔴 Vermelho</button><button class="btn-secondary" onclick="mudarTema('black')">⚫ Preto</button></div></div>
+                        <div class="info-card"><h3>🎨 Temas</h3><div style="display:flex;gap:0.5rem;flex-wrap:wrap;"><button class="btn-secondary" onclick="mudarTema('light')">⚪ Branco</button><button class="btn-secondary" onclick="mudarTema('yellow')">🟡 Amarelo</button><button class="btn-secondary" onclick="mudarTema('blue')">🔵 Azul</button><button class="btn-secondary" onclick="mudarTema('red')">🔴 Vermelho</button><button class="btn-secondary" onclick="mudarTema('black')">⚫ Preto</button></div></div>
                         <div class="info-card"><h3>⚙️ Horários</h3><div class="form-group"><label>Início</label><input type="time" id="cfgInicio" value="${appData.horarioInicio}"></div><div class="form-group"><label>Fim</label><input type="time" id="cfgFim" value="${appData.horarioFim}"></div><div class="form-group"><label>Almoço</label><input type="time" id="cfgAlmocoIni" value="${appData.horarioAlmocoInicio}"> às <input type="time" id="cfgAlmocoFim" value="${appData.horarioAlmocoFim}"></div><button id="btnSalvarHorarios" class="btn-primary">Salvar</button></div>
                         <div class="info-card"><h3>🔗 Link Online</h3><input type="text" id="linkAgendamento" readonly value="${gerarLinkAgendamento()}"><button id="btnCopiarLink" class="btn-secondary" style="margin-top:0.5rem;">Copiar</button><div class="form-group"><label>Nome do Estúdio</label><input type="text" id="nomeStudio" value="${appData.empresa.nome}"></div><button id="btnSalvarStudio" class="btn-primary">Salvar</button></div>
                         <div class="info-card"><h3>🔐 Licença</h3><div>Plano: ${PLANOS[appData.licenca?.plano]?.nome || "Teste"}</div><div>Expira: ${new Date(appData.licenca?.expiracao).toLocaleDateString()}</div><div>Dias: ${diasRestantes}</div>${isTeste ? `<input type="text" id="chaveUpgrade" placeholder="Chave"><button id="btnUpgrade" class="btn-primary">Ativar</button>` : ''}</div>
                     </div>
                 </div>
                 
-                <div class="footer">⭐ TOP Agenda © 2024 · Integração com WhatsApp · Gestão Profissional</div>
+                <div class="footer">⭐ TOP Agenda © 2024 · Lembretes WhatsApp · Gestão Profissional</div>
             </div>
         `;
         
@@ -857,29 +805,32 @@
             }
         };
         
-        window.adicionarComoCliente = (id) => {
-            const contato = appData.contatosWhatsApp.find(c => c.id === id);
-            if (contato) {
-                adicionarContatoComoCliente(contato);
-                renderizarApp();
-                alert(`✅ ${contato.nome} adicionado como cliente!`);
-            }
-        };
-        
-        window.ignorarContato = (id) => {
-            if (confirm("Ignorar este contato?")) {
-                ignorarContatoWhatsApp(id);
-                renderizarApp();
-            }
-        };
-        
         window.enviarParaCliente = (id) => {
             const cliente = appData.clientes.find(c => c.id === id);
             if (cliente) {
-                document.getElementById("telefoneEnvioRapido").value = cliente.telefone;
-                const sel = document.getElementById("clienteEnvioRapido");
+                document.getElementById("telefoneLembrete").value = cliente.telefone;
+                const sel = document.getElementById("clienteLembrete");
                 if (sel) sel.value = id;
-                document.querySelector("[data-tab='whatsapp']").click();
+                document.querySelector("[data-tab='lembretes']").click();
+            }
+        };
+        
+        window.usarMensagem = (idx) => {
+            document.getElementById("mensagemLembrete").value = appData.mensagensLembrete[idx];
+        };
+        
+        window.editarMensagem = (idx) => {
+            const nova = prompt("Editar mensagem:", appData.mensagensLembrete[idx]);
+            if (nova) {
+                editarMensagemLembrete(idx, nova);
+                renderizarApp();
+            }
+        };
+        
+        window.removerMensagem = (idx) => {
+            if (confirm("Remover esta mensagem?")) {
+                removerMensagemLembrete(idx);
+                renderizarApp();
             }
         };
         
@@ -946,18 +897,21 @@
             }).join('');
         }
         
-        function atualizarListaContatosWhatsApp() {
-            const container = document.getElementById("listaContatosWhatsApp");
+        function atualizarListaMensagens() {
+            const container = document.getElementById("listaMensagens");
             if (!container) return;
-            if (appData.contatosWhatsApp.length === 0) {
-                container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum contato importado</div>";
+            if (appData.mensagensLembrete.length === 0) {
+                container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhuma mensagem criada. Clique em 'Criar Nova Mensagem'</div>";
                 return;
             }
-            container.innerHTML = appData.contatosWhatsApp.map(c => `
-                <div class="contato-item">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <div><strong>${c.nome}</strong><br><span style="font-size:0.7rem;">📱 ${formatarTelefone(c.telefone)}</span></div>
-                        <div><button class="btn-secondary btn-sm" onclick="adicionarComoCliente(${c.id})">➕ Adicionar</button> <button class="btn-secondary btn-sm" onclick="ignorarContato(${c.id})">✖️</button></div>
+            container.innerHTML = appData.mensagensLembrete.map((msg, idx) => `
+                <div class="msg-template">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="flex:1; cursor:pointer;" onclick="usarMensagem(${idx})">💬 ${msg.substring(0, 80)}${msg.length > 80 ? '...' : ''}</div>
+                        <div>
+                            <button class="btn-secondary btn-sm" onclick="editarMensagem(${idx})">✏️</button>
+                            <button class="btn-secondary btn-sm" onclick="removerMensagem(${idx})">🗑️</button>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -977,8 +931,8 @@
                     <div>📱 ${formatarTelefone(c.telefone)}</div>
                     <div>💰 R$ ${(c.totalGasto||0).toFixed(2)}</div>
                     <div style="display:flex;gap:0.3rem;margin-top:0.5rem;">
-                        <button class="btn-secondary btn-sm" onclick="enviarParaCliente(${c.id})">💬 WhatsApp</button>
-                        <button class="btn-secondary btn-sm" onclick="editarClienteModal(${c.id}, '${c.nome}', '${c.telefone}', '${c.email || ''}')">✏️ Editar</button>
+                        <button class="btn-secondary btn-sm" onclick="enviarParaCliente(${c.id})">💬 Enviar Lembrete</button>
+                        <button class="btn-secondary btn-sm" onclick="editarClienteModal(${c.id}, '${c.nome}', '${c.telefone}', '${c.email || ''}')">✏️</button>
                         <button class="btn-secondary btn-sm" onclick="removerClienteConfirm(${c.id}, '${c.nome}')">🗑️</button>
                     </div>
                 </div>
@@ -994,7 +948,7 @@
                     <div style="display:flex;justify-content:space-between;"><strong>${s.nome}</strong></div>
                     <div>💰 R$ ${s.preco.toFixed(2)} | Custo: R$ ${s.custo.toFixed(2)}</div>
                     <div>⏱️ ${s.duracao} min | 💎 Lucro: R$ ${(s.preco - s.custo).toFixed(2)}</div>
-                    <div><button class="btn-secondary btn-sm" onclick="editarServicoModal(${s.id}, '${s.nome}', ${s.preco}, ${s.custo}, ${s.duracao})">✏️ Editar</button> <button class="btn-secondary btn-sm" onclick="removerServicoConfirm(${s.id}, '${s.nome}')">🗑️</button></div>
+                    <div><button class="btn-secondary btn-sm" onclick="editarServicoModal(${s.id}, '${s.nome}', ${s.preco}, ${s.custo}, ${s.duracao})">✏️</button> <button class="btn-secondary btn-sm" onclick="removerServicoConfirm(${s.id}, '${s.nome}')">🗑️</button></div>
                 </div>
             `).join('');
             if (appData.servicos.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum serviço</div>";
@@ -1055,35 +1009,94 @@
             renderizarApp();
         });
         
-        document.getElementById("btnImportarWhatsApp")?.addEventListener("click", () => {
-            const texto = document.getElementById("contatosWhatsAppInput").value;
-            if (!texto.trim()) {
-                alert("📋 Cole os contatos do WhatsApp no campo acima! Use o formato: Nome|Telefone");
-                return;
-            }
-            const novos = importarContatosWhatsApp(texto);
-            if (novos.length > 0) {
-                alert(`✅ ${novos.length} contatos importados do WhatsApp!`);
-                document.getElementById("contatosWhatsAppInput").value = "";
+        document.getElementById("btnNovaMensagem")?.addEventListener("click", () => {
+            const novaMensagem = prompt("Digite a nova mensagem de lembrete:\n(Use {nome} para nome do cliente e {link} para link da agenda)\n\nExemplo: Olá {nome}, tudo bem? Agende seu horário: {link}");
+            if (novaMensagem && novaMensagem.trim()) {
+                adicionarMensagemLembrete(novaMensagem);
                 renderizarApp();
-            } else {
-                alert("⚠️ Nenhum contato válido encontrado. Use o formato: Nome|Telefone (ex: Ana Silva|11999990001)");
             }
         });
         
-        document.getElementById("btnEnviarWhatsRapido")?.addEventListener("click", () => {
-            let tel = document.getElementById("telefoneEnvioRapido").value;
-            let msg = document.getElementById("mensagemEnvioRapido").value;
-            const sel = document.getElementById("clienteEnvioRapido");
-            if (sel && sel.value) {
-                const opt = sel.options[sel.selectedIndex];
-                tel = opt.getAttribute("data-tel") || tel;
-                msg = msg.replace(/{nome}/g, opt.getAttribute("data-nome") || "");
+        document.getElementById("btnEnviarLembrete")?.addEventListener("click", () => {
+            let telefone = document.getElementById("telefoneLembrete").value;
+            let mensagem = document.getElementById("mensagemLembrete").value;
+            const selectCliente = document.getElementById("clienteLembrete");
+            
+            if (selectCliente && selectCliente.value) {
+                const option = selectCliente.options[selectCliente.selectedIndex];
+                telefone = option.getAttribute("data-tel") || telefone;
+                mensagem = mensagem.replace(/{nome}/g, option.getAttribute("data-nome") || "");
             }
-            msg = msg.replace(/{link}/g, gerarLinkAgendamento());
-            if (!tel) return alert("📱 Digite o telefone ou selecione um cliente!");
-            if (!msg) return alert("📝 Digite uma mensagem!");
-            enviarWhatsApp(tel, msg);
+            
+            mensagem = mensagem.replace(/{link}/g, gerarLinkAgendamento());
+            mensagem = mensagem.replace(/{data}/g, new Date().toLocaleDateString());
+            
+            if (!telefone) {
+                alert("📱 Selecione um cliente ou digite um telefone!");
+                return;
+            }
+            if (!mensagem) {
+                alert("📝 Digite uma mensagem ou selecione uma pronta!");
+                return;
+            }
+            
+            enviarWhatsApp(telefone, mensagem);
+        });
+        
+        document.getElementById("btnLembretesHoje")?.addEventListener("click", () => {
+            const hoje = new Date().toISOString().slice(0,10);
+            const agendamentosHoje = (appData.agendamentos || []).filter(a => a.data === hoje);
+            
+            if (agendamentosHoje.length === 0) {
+                alert("Nenhum agendamento para hoje!");
+                return;
+            }
+            
+            const mensagem = prompt("Digite a mensagem para enviar aos clientes de hoje:\n(Use {nome} para nome do cliente, {horario} para o horário, {link} para o link)", 
+                "✨ {nome}, lembrete do seu horário hoje às {horario}. Te espero! {link}");
+            
+            if (!mensagem) return;
+            
+            agendamentosHoje.forEach(ag => {
+                const cliente = appData.clientes.find(c => c.id === ag.clienteId);
+                if (cliente && cliente.telefone) {
+                    let msgEnvio = mensagem.replace(/{nome}/g, cliente.nome);
+                    msgEnvio = msgEnvio.replace(/{horario}/g, ag.horario);
+                    msgEnvio = msgEnvio.replace(/{link}/g, gerarLinkAgendamento());
+                    msgEnvio = msgEnvio.replace(/{data}/g, hoje);
+                    enviarWhatsApp(cliente.telefone, msgEnvio);
+                }
+            });
+            alert(`✅ Enviando lembretes para ${agendamentosHoje.length} clientes...`);
+        });
+        
+        document.getElementById("btnLembretesAmanha")?.addEventListener("click", () => {
+            const amanha = new Date();
+            amanha.setDate(amanha.getDate() + 1);
+            const amanhaStr = amanha.toISOString().slice(0,10);
+            const agendamentosAmanha = (appData.agendamentos || []).filter(a => a.data === amanhaStr);
+            
+            if (agendamentosAmanha.length === 0) {
+                alert("Nenhum agendamento para amanhã!");
+                return;
+            }
+            
+            const mensagem = prompt("Digite a mensagem para enviar aos clientes de amanhã:\n(Use {nome} para nome do cliente, {horario} para o horário, {link} para o link)",
+                "💛 {nome}, lembrete do seu horário amanhã às {horario}. Confirme sua presença! {link}");
+            
+            if (!mensagem) return;
+            
+            agendamentosAmanha.forEach(ag => {
+                const cliente = appData.clientes.find(c => c.id === ag.clienteId);
+                if (cliente && cliente.telefone) {
+                    let msgEnvio = mensagem.replace(/{nome}/g, cliente.nome);
+                    msgEnvio = msgEnvio.replace(/{horario}/g, ag.horario);
+                    msgEnvio = msgEnvio.replace(/{link}/g, gerarLinkAgendamento());
+                    msgEnvio = msgEnvio.replace(/{data}/g, amanhaStr);
+                    enviarWhatsApp(cliente.telefone, msgEnvio);
+                }
+            });
+            alert(`✅ Enviando lembretes para ${agendamentosAmanha.length} clientes...`);
         });
         
         document.getElementById("btnSalvarHorarios")?.addEventListener("click", () => {
@@ -1131,20 +1144,20 @@
                 if (tab === "clientes") atualizarListaClientes();
                 if (tab === "servicos") atualizarListaServicos();
                 if (tab === "financeiro") atualizarUltimosAtendimentos();
-                if (tab === "whatsapp") atualizarListaContatosWhatsApp();
+                if (tab === "lembretes") atualizarListaMensagens();
             });
         });
         
         atualizarAgendaHoje();
         atualizarListaClientes();
         atualizarListaServicos();
-        atualizarListaContatosWhatsApp();
+        atualizarListaMensagens();
         atualizarUltimosAtendimentos();
         atualizarMelhoresClientes();
         
-        const selectRapido = document.getElementById("clienteEnvioRapido");
-        if (selectRapido) {
-            selectRapido.innerHTML = `<option value="">Selecione...</option>` + appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome}</option>`).join('');
+        const selectLembrete = document.getElementById("clienteLembrete");
+        if (selectLembrete) {
+            selectLembrete.innerHTML = `<option value="">Selecione um cliente...</option>` + appData.clientes.map(c => `<option value="${c.id}" data-tel="${c.telefone}" data-nome="${c.nome}">${c.nome} - ${formatarTelefone(c.telefone)}</option>`).join('');
         }
     }
     
@@ -1153,7 +1166,7 @@
         document.getElementById("root").innerHTML = `
             <div class="glass-card" style="max-width:500px;margin:2rem auto;text-align:center;padding:2rem;">
                 <h2 style="color:var(--primary-color);">⭐ TOP Agenda</h2>
-                <div class="info-card" style="margin:1rem 0;"><h3>🎁 Teste Grátis de 7 dias</h3><p style="font-size:0.8rem;">Integração completa com WhatsApp!</p></div>
+                <div class="info-card" style="margin:1rem 0;"><h3>🎁 Teste Grátis de 7 dias</h3><p style="font-size:0.8rem;">Envie lembretes automáticos pelo WhatsApp!</p></div>
                 <div class="form-group"><label>Usuário</label><input type="text" id="newUser"></div>
                 <div class="form-group"><label>Senha</label><input type="password" id="newPass"></div>
                 <div class="form-group"><label>Confirmar</label><input type="password" id="confirmPass"></div>
@@ -1173,7 +1186,6 @@
             appData.usuario = { nome: user, senha: pass };
             appData.empresa = { nome: studio, logoBase64: null };
             appData.agendamentos = [];
-            appData.contatosWhatsApp = [];
             if (chave) { if (!ativarPlanoPorChave(chave).sucesso) ativarTesteGratis(); }
             else ativarTesteGratis();
             appData.tema = "light";
