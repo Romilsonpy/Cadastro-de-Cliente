@@ -16,19 +16,16 @@
             font-family: 'Inter', 'Poppins', 'Segoe UI', system-ui, sans-serif;
         }
 
-        /* Fundo dinâmico */
         body {
             min-height: 100vh;
             padding: 1rem;
             transition: background 0.3s ease;
         }
 
-        /* Fundo sólido padrão */
         body.bg-solid {
             background: #f0f2f5;
         }
 
-        /* Fundo com imagem */
         body.bg-image {
             background-size: cover;
             background-position: center;
@@ -380,23 +377,6 @@
             margin-left: 0.5rem;
         }
 
-        /* Preview de fundo */
-        .bg-preview {
-            width: 60px;
-            height: 60px;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-        .bg-preview:hover {
-            transform: scale(1.05);
-        }
-        .bg-preview.selected {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px var(--bg-card);
-        }
-
         .color-circle {
             width: 40px;
             height: 40px;
@@ -413,11 +393,71 @@
             box-shadow: 0 0 0 2px #333;
         }
 
+        /* Agenda visual - grade de horários com cores VERDE e VERMELHO */
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+            gap: 0.6rem;
+            max-height: 550px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .time-slot {
+            border-radius: 0.6rem;
+            padding: 0.6rem 0.3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        /* Horário LIVRE - VERDE */
+        .time-slot.free {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border-color: #15803d;
+        }
+
+        .time-slot.free:hover {
+            transform: scale(1.02);
+            filter: brightness(1.05);
+        }
+
+        /* Horário OCUPADO - VERMELHO */
+        .time-slot.occupied {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #b91c1c;
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        /* Horário de ALMOÇO - CINZA */
+        .time-slot.blocked {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: #e5e7eb;
+            border-color: #374151;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        body.theme-black .time-slot.free {
+            background: linear-gradient(135deg, #15803d, #166534);
+        }
+
+        body.theme-black .time-slot.occupied {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+        }
+
         @media (max-width: 768px) {
             body { padding: 0.5rem; }
             .tab-pane { padding: 0.8rem; }
             .grid-2 { grid-template-columns: 1fr; }
             .nav-btn { padding: 0.4rem 0.7rem; font-size: 0.7rem; }
+            .agenda-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
         }
     </style>
 </head>
@@ -485,7 +525,7 @@
         licenca: null,
         tema: "light",
         fundo: {
-            tipo: "solid", // solid ou image
+            tipo: "solid",
             cor: "#f0f2f5",
             imagem: null
         },
@@ -541,6 +581,7 @@
         if (!appData.fundo) {
             appData.fundo = { tipo: "solid", cor: "#f0f2f5", imagem: null };
         }
+        if (!appData.agendamentos) appData.agendamentos = [];
         salvarDados();
     }
 
@@ -711,6 +752,15 @@
         return str;
     }
 
+    function formatarDataBR(dataISO) {
+        if (!dataISO) return '';
+        const partes = dataISO.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        return dataISO;
+    }
+
     function renderizarApp() {
         if (!validarLicenca()) {
             document.getElementById("root").innerHTML = `
@@ -737,6 +787,20 @@
         
         const logoHtml = appData.empresa.logoBase64 ? `<img src="${appData.empresa.logoBase64}">` : `<span>✨</span>`;
         
+        // Gerar horários para a agenda visual
+        const horarios = [];
+        let start = new Date(`2000-01-01T${appData.horarioInicio}:00`);
+        const end = new Date(`2000-01-01T${appData.horarioFim}:00`);
+        while (start < end) {
+            const hora = start.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+            const isAlmoco = hora >= appData.horarioAlmocoInicio && hora < appData.horarioAlmocoFim;
+            horarios.push({ horario: hora, isAlmoco });
+            start.setMinutes(start.getMinutes() + 30);
+        }
+        
+        const hoje = new Date().toISOString().slice(0,10);
+        const agendamentosHoje = (appData.agendamentos || []).filter(a => a.data === hoje);
+        
         const html = `
             <div class="glass-card">
                 <div class="header">
@@ -762,22 +826,58 @@
                     <button class="nav-btn" data-tab="config">⚙️ Config</button>
                 </div>
                 
-                <!-- Aba Agenda -->
+                <!-- Aba Agenda com visual em grade - LIVRE (VERDE) e OCUPADO (VERMELHO) -->
                 <div id="tab-agenda" class="tab-pane active">
                     <div class="grid-2">
                         <div class="info-card">
                             <h3>✍️ Novo Agendamento</h3>
                             <form id="formAgendamento">
                                 <div class="form-group"><label>Cliente</label><select id="clienteId" required><option value="">Selecione...</option>${appData.clientes.map(c => `<option value="${c.id}">${c.nome} - ${formatarTelefone(c.telefone)}</option>`).join('')}<option value="novo">➕ NOVO CLIENTE</option></select></div>
-                                <div class="form-group"><label>Data</label><input type="date" id="dataAgenda" value="${new Date().toISOString().slice(0,10)}" required></div>
-                                <div class="form-group"><label>Horário</label><select id="horarioAgenda" required>${gerarOpcoesHorario()}</select></div>
+                                <div class="form-group"><label>Data</label><input type="date" id="dataAgenda" value="${hoje}" required></div>
+                                <div class="form-group"><label>Horário</label><select id="horarioAgenda" required>
+                                    ${horarios.map(h => `<option value="${h.horario}" ${h.isAlmoco ? 'disabled' : ''}>${h.horario} ${h.isAlmoco ? '(Almoço)' : ''}</option>`).join('')}
+                                </select></div>
                                 <div class="form-group"><label>Serviço</label><select id="servicoId" required>${appData.servicos.map(s => `<option value="${s.id}" data-preco="${s.preco}">${s.nome} - R$ ${s.preco}</option>`).join('')}</select></div>
                                 <div class="form-group"><label>Valor (R$)</label><input type="number" id="valorAgenda" step="0.01" required></div>
                                 <div class="form-group"><label>Pagamento</label><select id="formaPagamento"><option value="dinheiro">💰 Dinheiro</option><option value="pix">📱 Pix</option><option value="credito">💳 Crédito</option><option value="debito">💳 Débito</option></select></div>
                                 <button type="submit" class="btn-primary">✅ Agendar</button>
                             </form>
                         </div>
-                        <div class="info-card"><h3>📋 Agenda Hoje</h3><div id="agendaHoje" style="max-height:400px;overflow-y:auto;"></div></div>
+                        <div class="info-card">
+                            <h3>📋 Agenda Hoje · ${formatarDataBR(hoje)}</h3>
+                            <div class="agenda-grid">
+                                ${horarios.map(h => {
+                                    const agendado = agendamentosHoje.find(a => a.horario === h.horario);
+                                    const servico = appData.servicos.find(s => s.id === agendado?.servicoId);
+                                    const cliente = appData.clientes.find(c => c.id === agendado?.clienteId);
+                                    
+                                    let statusClass = '';
+                                    let statusText = '';
+                                    let onclickAttr = '';
+                                    
+                                    if (h.isAlmoco) {
+                                        statusClass = 'blocked';
+                                        statusText = '🍽️ Almoço';
+                                        onclickAttr = '';
+                                    } else if (agendado) {
+                                        statusClass = 'occupied';
+                                        statusText = `${cliente?.nome?.substring(0, 12) || ''}<br>${servico?.nome?.substring(0, 10) || ''}`;
+                                        onclickAttr = '';
+                                    } else {
+                                        statusClass = 'free';
+                                        statusText = '✏️ Livre';
+                                        onclickAttr = `onclick="agendarNesteHorario('${h.horario}')"`;
+                                    }
+                                    
+                                    return `
+                                        <div class="time-slot ${statusClass}" ${onclickAttr}>
+                                            <strong>${h.horario}</strong>
+                                            <div style="font-size: 0.65rem; margin-top: 0.2rem;">${statusText}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -946,6 +1046,14 @@
         `;
         
         document.getElementById("root").innerHTML = html;
+        
+        // Função para agendar rapidamente clicando no horário
+        window.agendarNesteHorario = (horario) => {
+            const selectHorario = document.getElementById("horarioAgenda");
+            if (selectHorario) selectHorario.value = horario;
+            document.querySelector("[data-tab='agenda']").click();
+            document.getElementById("formAgendamento").scrollIntoView({ behavior: 'smooth' });
+        };
         
         // Funções de Fundo
         window.alterarCorFundo = (cor) => {
@@ -1126,35 +1234,6 @@
             }
         };
         
-        function gerarOpcoesHorario() {
-            let opts = '';
-            let start = new Date(`2000-01-01T${appData.horarioInicio}:00`);
-            const end = new Date(`2000-01-01T${appData.horarioFim}:00`);
-            while (start < end) {
-                const hora = start.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
-                const isAlmoco = hora >= appData.horarioAlmocoInicio && hora < appData.horarioAlmocoFim;
-                opts += `<option value="${hora}" ${isAlmoco ? 'disabled' : ''}>${hora} ${isAlmoco ? '(Almoço)' : ''}</option>`;
-                start.setMinutes(start.getMinutes() + 30);
-            }
-            return opts;
-        }
-        
-        function atualizarAgendaHoje() {
-            const hoje = new Date().toISOString().slice(0,10);
-            const container = document.getElementById("agendaHoje");
-            if (!container) return;
-            const agendamentosHoje = (appData.agendamentos || []).filter(a => a.data === hoje);
-            if (agendamentosHoje.length === 0) {
-                container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum agendamento hoje</div>";
-                return;
-            }
-            container.innerHTML = agendamentosHoje.map(a => {
-                const cliente = appData.clientes.find(c => c.id === a.clienteId);
-                const servico = appData.servicos.find(s => s.id === a.servicoId);
-                return `<div class="client-item">⏰ <strong>${a.horario}</strong><br><strong>${cliente?.nome}</strong><br>${servico?.nome} - R$ ${a.valor.toFixed(2)}</div>`;
-            }).join('');
-        }
-        
         function atualizarListaMensagens() {
             const container = document.getElementById("listaMensagens");
             if (!container) return;
@@ -1218,7 +1297,7 @@
             const ultimos = [...(appData.agendamentos || [])].reverse().slice(0,10);
             container.innerHTML = ultimos.map(a => {
                 const c = appData.clientes.find(cl => cl.id === a.clienteId);
-                return `<div class="client-item">📅 ${a.data} ${a.horario}<br><strong>${c?.nome}</strong> - R$ ${a.valor.toFixed(2)}</div>`;
+                return `<div class="client-item">📅 ${formatarDataBR(a.data)} ${a.horario}<br><strong>${c?.nome}</strong> - R$ ${a.valor.toFixed(2)}</div>`;
             }).join('');
             if (ultimos.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum atendimento</div>";
         }
@@ -1236,7 +1315,7 @@
             if (top5.length === 0) container.innerHTML = "<div style='text-align:center;padding:1rem;'>Nenhum dado</div>";
         }
         
-        // Eventos
+        // Eventos do formulário de agendamento
         document.getElementById("formAgendamento")?.addEventListener("submit", (e) => {
             e.preventDefault();
             let clienteId = document.getElementById("clienteId").value;
@@ -1254,17 +1333,30 @@
             const valor = parseFloat(document.getElementById("valorAgenda").value);
             const formaPagamento = document.getElementById("formaPagamento").value;
             
+            // Verificar se já existe agendamento na mesma data e horário
             if ((appData.agendamentos || []).find(a => a.data === data && a.horario === horario)) {
-                alert("❌ Horário já ocupado!");
+                alert("❌ Horário já ocupado! Escolha outro horário.");
                 return;
             }
             
             if (!appData.agendamentos) appData.agendamentos = [];
-            appData.agendamentos.push({ id: Date.now(), clienteId: parseInt(clienteId), data, horario, servicoId, valor, formaPagamento });
+            appData.agendamentos.push({ 
+                id: Date.now(), 
+                clienteId: parseInt(clienteId), 
+                data: data, 
+                horario: horario, 
+                servicoId: servicoId, 
+                valor: valor, 
+                formaPagamento: formaPagamento 
+            });
             const cliente = appData.clientes.find(c => c.id === parseInt(clienteId));
-            if (cliente) { cliente.totalGasto = (cliente.totalGasto || 0) + valor; cliente.totalVisitas = (cliente.totalVisitas || 0) + 1; }
+            if (cliente) { 
+                cliente.totalGasto = (cliente.totalGasto || 0) + valor; 
+                cliente.totalVisitas = (cliente.totalVisitas || 0) + 1; 
+            }
             salvarDados();
             renderizarApp();
+            alert("✅ Agendamento realizado com sucesso!");
         });
         
         document.getElementById("btnNovaMensagem")?.addEventListener("click", () => {
@@ -1288,6 +1380,7 @@
             
             mensagem = mensagem.replace(/{link}/g, gerarLinkAgendamento());
             mensagem = mensagem.replace(/{data}/g, new Date().toLocaleDateString());
+            mensagem = mensagem.replace(/{horario}/g, new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' }));
             
             if (!telefone) {
                 alert("📱 Selecione um cliente ou digite um telefone!");
@@ -1406,7 +1499,6 @@
             });
         });
         
-        atualizarAgendaHoje();
         atualizarListaClientes();
         atualizarListaServicos();
         atualizarListaMensagens();
